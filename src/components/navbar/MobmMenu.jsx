@@ -97,6 +97,7 @@ const MobmMenu = ({ Menus }) => {
                       <li
                         className="p-2 flex-center hover:bg-white/5 rounded-md cursor-pointer gap-x-2"
                         onClick={toggleDrawer}
+                        key={item.name}
                       >
                         <item.icon size={17} />
                         <Link to={item.link}>{item.name}</Link>
