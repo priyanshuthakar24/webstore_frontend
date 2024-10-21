@@ -3,12 +3,18 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-
+import { Authprovider } from './context/Authcontext';
+import { ContextProvider } from './context/ContextProvider';
+import { registerLicense } from '@syncfusion/ej2-base';
 const root = ReactDOM.createRoot(document.getElementById('root'));
+registerLicense(process.env.REACT_APP_SYNC_LINCE)
+
 root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
+  <Authprovider>
+    <ContextProvider>
+      < App />
+    </ContextProvider>
+  </Authprovider>
 );
 
 // If you want to start measuring performance in your app, pass a function
