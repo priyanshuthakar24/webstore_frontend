@@ -6,6 +6,7 @@ import { Login, Signup, ResetPassword, VerifyEmail, ForgotPasswordPage } from '.
 import { useAuth } from './context/Authcontext';
 import AdminLayout from './pages/AdminLayout';
 import Home from './components/Home';
+import ProductFrom from './components/admin/ProductFrom';
 //!  This method check that user is authenticated or not also check that user is Verified or not if not than it will redired to login or verify-email page 
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, userData } = useAuth()
@@ -113,6 +114,9 @@ function App() {
       children: [{
         path: 'ecommerce',
         element: <Home />
+      }, {
+        path: 'addproduct',
+        element: <ProductFrom />
       }]
     }
   ])

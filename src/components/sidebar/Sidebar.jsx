@@ -1,15 +1,14 @@
 import React from "react";
 import { useStateContext } from "../../context/ContextProvider";
 import { Link, NavLink, useNavigate } from "react-router-dom";
-import { MdOutlineCancel } from "react-icons/md";
-import { LogOut, Store } from "lucide-react";
+import { LogOut, Store, X } from "lucide-react";
 import { Tooltip } from "antd";
 import { links } from "../../data/dummy";
 import { useAuth } from "../../context/Authcontext";
+import { motion } from "framer-motion";
 const Sidebar = () => {
   const nav = useNavigate();
-  const { activeMenu, setActiveMenu, screenSize } =
-    useStateContext();
+  const { activeMenu, setActiveMenu, screenSize } = useStateContext();
   const { logout, isAuthenticated } = useAuth();
   const handleCloseSideBar = () => {
     if (activeMenu && screenSize <= 900) {
@@ -25,7 +24,10 @@ const Sidebar = () => {
   const normallink =
     "flex items-center gap-5 pl-4 pt-3 pb-2.5 rounded-lg text-md m-2 text-white hover:bg-white/5";
   return (
-    <div
+    <motion.div
+      initial={{ x: "100%" }}
+      animate={{ x: activeMenu? "0%" : "100%" }}
+      transition={{ duration: 0.3 }}
       className="mx-2 h-screen md:overflow-hidden overflow-auto
         md:hover:overflow-auto pb-10"
     >
@@ -36,7 +38,7 @@ const Sidebar = () => {
             <Link
               to="/"
               onClick={handleCloseSideBar}
-              className=" flex items-center gap-3 ml-3   mt-4 text-xl font-extrabold tracking-tight text-white"
+              className=" flex items-center gap-3 ml-3   mt-2 text-xl font-extrabold tracking-tight text-white"
             >
               <Store />
               <span>WebStore</span>
@@ -48,9 +50,9 @@ const Sidebar = () => {
                   setActiveMenu((prevActiveMenu) => !prevActiveMenu);
                 }}
                 className="text-xl rounded-full p-3 hover:bg-white/5 
-mt-4 block md:hidden"
+mt-2 block md:hidden"
               >
-                <MdOutlineCancel className="text-white" />
+                <X className="text-white" />
               </button>
             </Tooltip>
           </div>
@@ -98,7 +100,7 @@ mt-4 block md:hidden"
           </div>
         </>
       )}
-    </div>
+    </motion.div>
   );
 };
 
