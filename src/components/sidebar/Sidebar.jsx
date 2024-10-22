@@ -28,7 +28,7 @@ const Sidebar = () => {
       initial={{ x: "100%" }}
       animate={{ x: activeMenu? "0%" : "100%" }}
       transition={{ duration: 0.3 }}
-      className="mx-2 h-screen md:overflow-hidden overflow-auto
+      className="ml-2 h-screen md:overflow-hidden overflow-auto
         md:hover:overflow-auto pb-10"
     >
       {activeMenu && (

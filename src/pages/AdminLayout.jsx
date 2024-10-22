@@ -19,7 +19,7 @@ const AdminLayout = () => {
       <div
         className={
           activeMenu
-            ? "min-h-screen  lg:ml-72 w-full"
+            ? "min-h-screen bg-main-bg lg:ml-72 w-full"
             : "bg-main-bg w-full min-h-screen flex-2"
         }
       >

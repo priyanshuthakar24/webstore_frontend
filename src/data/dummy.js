@@ -147,8 +147,8 @@ export const links = [
 ];
 
 export const categories = [
-    "Electronics",
-    "Fashion",
+    "",
+    "",
     "Home and Kitchen",
     "Health and Beauty",
     "Sports and Fitness",
@@ -158,12 +158,37 @@ export const categories = [
     "Office and School Supplies",
     "Pet Supplies",
     "Home Improvement",
-    "Outdoor and Garden",
+    "",
     "Art and Crafts",
     "Food and Beverages",
     "Jewelry and Watches",
-    "Travel and Luggage",
-    "Gifts and Occasions",
-    "Industrial and Scientific",
+    "",
+    "",
+    "",
     "Electronics Accessories",
 ];
+export const newcategory = [
+    {
+        value: "1",
+        label: "Electronics",
+    },
+    {
+        value: "2",
+        label: "Fashion",
+    },
+    {
+        value: "3",
+        label: "Outdoor and Garden",
+    },
+    {
+        value: "4",
+        label: "Industrial and Scientific",
+    },
+    {
+        value: "5",
+        label: "Gifts and Occasions",
+    },
+    {
+        value: "6",
+        label: "Travel and Luggage",
+    }]
