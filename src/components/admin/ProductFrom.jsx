@@ -1,4 +1,4 @@
-import { Form, Input } from "antd";
+import { Form, Input, Select } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import React from "react";
 
@@ -17,11 +17,16 @@ const ProductFrom = () => {
           name="name"
           required={[{ required: true, message: "Please input the name!" }]}
         >
-          <Input placeholder="Product Name" size="large" className="w-full p-2 border rounded" />
+          <Input
+            placeholder="Product Name"
+            size="large"
+            className="w-full p-2 border rounded"
+          />
         </Form.Item>
         <Form.Item label="description" name="description">
           <TextArea rows={2} placeholder="Product Description" />
         </Form.Item>
+        <Select></Select>
       </Form>
     </div>
   );
