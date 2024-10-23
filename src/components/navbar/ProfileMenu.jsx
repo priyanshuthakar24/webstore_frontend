@@ -56,7 +56,7 @@ const ProfileMenu = (props) => {
 
       {/* //! drop down components  */}
       <motion.div
-        className="sub-menu"
+        className={`sub-menu ${userData.isAdmin ? "left-2/3" : ""}`}
         initial="exit"
         animate={isHover ? "enter" : "exit"}
         variants={subMenuAnimate}

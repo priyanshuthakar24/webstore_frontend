@@ -36,7 +36,7 @@ const Sidebar = () => {
           {/* //! navbar heading div */}
           <div className="flex-center gap-16">
             <Link
-              to="/"
+              to="/dashbord/ecommerce"
               onClick={handleCloseSideBar}
               className=" flex items-center gap-3 ml-3   mt-2 text-xl font-extrabold tracking-tight text-white"
             >

@@ -1,4 +1,4 @@
-import { ClipboardPlus, Heart, LayoutDashboard, ShoppingBag, UserRound } from "lucide-react";
+import {  FilePlus2, Heart, LayoutDashboard, ShoppingBag, UserRound } from "lucide-react";
 //! general menu 
 export const Menus = [
     {
@@ -65,7 +65,7 @@ export const links = [
         links: [
             {
                 name: 'addproduct',
-                icon: ClipboardPlus,
+                icon: FilePlus2,
             },
             {
                 name: 'timeline',
@@ -169,26 +169,26 @@ export const categories = [
 ];
 export const newcategory = [
     {
-        value: "1",
+        value: "Electronics",
         label: "Electronics",
     },
     {
-        value: "2",
+        value: "Fashion",
         label: "Fashion",
     },
     {
-        value: "3",
+        value: "Outdoor and Garden",
         label: "Outdoor and Garden",
     },
     {
-        value: "4",
+        value: "Industrial and Scientific",
         label: "Industrial and Scientific",
     },
     {
-        value: "5",
+        value: "Gifts and Occasions",
         label: "Gifts and Occasions",
     },
     {
-        value: "6",
+        value: "Travel and Luggage",
         label: "Travel and Luggage",
     }]
