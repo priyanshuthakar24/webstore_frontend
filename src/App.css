@@ -1,5 +1,8 @@
 @import url('https://cdn.syncfusion.com/ej2/material.css');
 
+/* body{ */
+    /* overflow-x: hidden; */
+/* } */
 .App {
     margin-top: 10rem;
     text-align: center;
@@ -38,7 +41,7 @@
 }
 
 ::-webkit-scrollbar-thumb {
-    background-color: rgb(216, 216, 216);
+    background-color: #fff;
     border-radius: 40px;
 }
 
@@ -46,17 +49,16 @@
     background-color: transparent;
 }
 
+.e-pager .e-currentitem {
+    background-color: #000;
+}
+
+.e-pager .e-currentitem:hover {
+    background-color: #000;
+}
+
 /* color-picker style  */
 
-#preview {
-    background: transparent url('https://ej2.syncfusion.com/react/demos/src/color-picker/images/pen.png') no-repeat;
-    display: inline-block;
-    height: 80px;
-    margin: 10px 0;
-    min-width: 300px;
-    max-width: 600px;
-    background-color: #008000;
-}
 
 .e-input-group:not(.e-float-icon-left),
 .e-input-group.e-success:not(.e-float-icon-left),
@@ -68,3 +70,13 @@
 .e-input-group.e-control-wrapper.e-error:not(.e-float-icon-left) {
     border: none;
 }
+
+/* #preview { */
+/* background: transparent url('https://ej2.syncfusion.com/react/demos/src/color-picker/images/pen.png') no-repeat; */
+/* display: inline-block; */
+/* height: 80px; */
+/* margin: 10px 0; */
+/* min-width: 300px; */
+/* max-width: 600px; */
+/* background-color: #008000; */
+/* } */
