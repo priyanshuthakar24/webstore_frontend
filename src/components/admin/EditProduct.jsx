@@ -1,30 +1,71 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Popconfirm, Button, message } from "antd";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import SingleProductView from "./SingleProductView";
+import ProductForm from "./ProductFrom";
 const EditProduct = () => {
   const { id } = useParams();
   const [productdetail, setProductDetail] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
-  const fetchproductdetail = async () => {
-    const res = await axios.get(
-      `${process.env.REACT_APP_API}/api/admin/productdetail`,
-      {
-        params: { id },
-      }
-    );
-    setProductDetail(res.data);
+  const nav = useNavigate();
+  const fetchProductDetail = useCallback(async () => {
+    try {
+      const res = await axios.get(
+        `${process.env.REACT_APP_API}/api/admin/productdetail`,
+        { params: { id } }
+      );
+      setProductDetail(res.data);
+    } catch (error) {
+      console.error("Failed to fetch product details:", error);
+    }
+  }, [id]); // id is a dependency, so the function updates if `id` changes
+
+  const handleUpdate = async (updatedProduct) => {
+    try {
+      // PUT request to update the product
+      const res = await axios.put(
+        `${process.env.REACT_APP_API}/api/admin/products/${id}`, // Assuming you're passing product ID as param
+        updatedProduct,
+        { withCredentials: true },
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      console.log(res.data.message);
+      message.success(res.data.message);
+      setIsEditing(false); // Exit edit mode after successful update
+      fetchProductDetail(); // Refresh product data after update
+    } catch (error) {
+      message.error(error.response.data.message);
+    }
+  };
+
+  const handleDelete = async () => {
+    try {
+      const res = await axios.delete(
+        `${process.env.REACT_APP_API}/api/admin/deleteproduct/${id}`
+      );
+      message.success(res.data.message);
+      nav("/");
+    } catch (error) {
+      message.error(error.response.data.message);
+    }
   };
   const confirm = (e) => {
-    // handleDelete();
+    handleDelete();
   };
   const cancel = (e) => {
     message.error("Cancel");
   };
+
   useEffect(() => {
-    fetchproductdetail();
-  }, []);
+    fetchProductDetail();
+  }, [fetchProductDetail]);
+
   return (
     <div className="mt-12 text-black">
       {productdetail && (
@@ -78,7 +119,13 @@ rounded-lg shadow-md"
               </Popconfirm>
             </div>
           ) : (
-            <div>editForm</div>
+            <div>
+              <ProductForm
+                initialValues={productdetail}
+                isEditMode={true}
+                onSubmit={handleUpdate}
+              />
+            </div>
           )}
         </>
       )}

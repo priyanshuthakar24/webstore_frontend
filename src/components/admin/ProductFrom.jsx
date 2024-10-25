@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import axios from "axios";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   Form,
@@ -24,7 +23,7 @@ const getBase64 = (file) =>
     reader.onerror = (error) => reject(error);
   });
 
-const ProductForm = () => {
+const ProductForm = ({ initialValues, onSubmit, isEditMode }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [form] = Form.useForm();
 
@@ -33,6 +32,27 @@ const ProductForm = () => {
   const [previewImage, setPreviewImage] = useState("");
   const [mainImageList, setMainImageList] = useState([]);
   const [subImageList, setSubImageList] = useState([]);
+
+  useEffect(() => {
+    // Populate form with initial values when editing
+    if (initialValues) {
+      form.setFieldsValue({
+        ...initialValues,
+        bulletPoints: initialValues.bulletPoints?.map((bp) => ({
+          bulletPoint: bp,
+        })),
+      });
+      // Handle images separately if needed
+      setMainImageList(
+        initialValues.mainImage ? [{ url: initialValues.mainImage.url }] : []
+      );
+      setSubImageList(
+        initialValues.subImages
+          ? initialValues.subImages.map((url) => ({ url: url.url }))
+          : []
+      );
+    }
+  }, [initialValues, form]);
 
   // Preview Handler
   const handlePreview = async (file) => {
@@ -50,12 +70,12 @@ const ProductForm = () => {
     setSubImageList(newFileList);
 
   // Custom value handler to extract the file list from event
-  const normFile = (e) => {
-    if (Array.isArray(e)) {
-      return e;
-    }
-    return e?.fileList;
-  };
+  // const normFile = (e) => {
+  //   if (Array.isArray(e)) {
+  //     return e;
+  //   }
+  //   return e?.fileList;
+  // };
 
   // Validation for minimum sub-images
   const validateSubImages = (_, value) => {
@@ -73,7 +93,7 @@ const ProductForm = () => {
     formData.append("mrp", values.mrp);
     formData.append("salePrice", values.salePrice);
     formData.append("stock", values.stock);
-
+    console.log(values);
     // Map bullet points to an array of strings
     const bulletPointsArray = values.bulletPoints.map(
       (item) => item.bulletPoint
@@ -83,33 +103,27 @@ const ProductForm = () => {
     // Append main image
     if (mainImageList.length > 0) {
       console.log(mainImageList[0].originFileObj);
-      formData.append("mainImage", mainImageList[0].originFileObj);
+      formData.append(
+        "mainImage",
+        mainImageList[0].originFileObj || mainImageList[0].url
+      );
     }
 
     // Append sub-images
     subImageList.forEach((file) => {
-      formData.append("subImages", file.originFileObj);
+      formData.append("subImages", file.originFileObj || file.url);
     });
 
+    setIsLoading(true);
     try {
-      setIsLoading(true);
-      const res = await axios.post(
-        `${process.env.REACT_APP_API}/api/admin/products`,
-        formData,
-        { withCredentials: true },
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-      console.log(res.data.message);
-      message.success(res.data.message);
+      await onSubmit(formData); // Trigger the submission handler passed as prop
+      // console.log(res.data.message);
+      // message.success(res.data.message);
       form.resetFields();
       setMainImageList([]);
       setSubImageList([]);
     } catch (error) {
-      message.error(error.response.data.message);
+      message.error("Failed to submit the form.");
     } finally {
       setIsLoading(false);
     }
@@ -148,7 +162,6 @@ const ProductForm = () => {
             className="w-full p-2 border rounded"
           />
         </Form.Item>
-
         {/* Product Description */}
         <Form.Item
           size="large"
@@ -163,7 +176,6 @@ const ProductForm = () => {
         >
           <TextArea rows={5} placeholder="Product Description" />
         </Form.Item>
-
         {/* Product Category */}
         <Form.Item
           label="Category"
@@ -184,7 +196,6 @@ const ProductForm = () => {
             options={newcategory}
           />
         </Form.Item>
-
         {/* MRP and Stock */}
         <div className="flex justify-between gap-6">
           <Form.Item
@@ -213,7 +224,6 @@ const ProductForm = () => {
             <InputNumber className="w-full" size="large" min={1} />
           </Form.Item>
         </div>
-
         {/* Sale Price */}
         <Form.Item
           label="Sale Price"
@@ -229,7 +239,6 @@ const ProductForm = () => {
             parser={(value) => value?.replace(/\$\s?|(,*)/g, "")}
           />
         </Form.Item>
-
         {/* Bullet Points */}
         <Form.List name="bulletPoints">
           {(fields, { add, remove }) => (
@@ -271,13 +280,12 @@ const ProductForm = () => {
             </>
           )}
         </Form.List>
-
         {/* Main Product Image Upload */}
         <Form.Item
           name="mainImage"
           label="Main Product Image"
-          valuePropName="fileList"
-          getValueFromEvent={normFile}
+          valuePropName="fileListss"
+          // getValueFromEvent={normFile}
           rules={[
             {
               required: true,
@@ -297,11 +305,12 @@ const ProductForm = () => {
         </Form.Item>
 
         {/* Sub Images Upload */}
+
         <Form.Item
           name="subImages"
           label="Sub Images (3 Images)"
-          valuePropName="fileList"
-          getValueFromEvent={normFile}
+          valuePropName="fileListccc"
+          // getValueFromEvent={normFile}
           rules={[
             {
               required: true,
@@ -333,7 +342,6 @@ const ProductForm = () => {
             src={previewImage}
           />
         )}
-
         {/* Submit Button */}
         <Form.Item>
           <Button
@@ -344,7 +352,7 @@ const ProductForm = () => {
             className="w-full"
             loading={isLoading}
           >
-            Submit
+            {isEditMode ? "Update" : "Submit"}
           </Button>
         </Form.Item>
       </Form>

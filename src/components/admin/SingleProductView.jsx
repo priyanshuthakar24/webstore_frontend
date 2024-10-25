@@ -38,7 +38,7 @@ justify-between items-center flex-col
         >
           {props.mainImage && (
             <img
-              src={props.mainImage}
+              src={props.mainImage.url}
               alt={props.name}
               className="border rounded 
 shadow-lg h-60"
@@ -48,8 +48,8 @@ shadow-lg h-60"
             {props.subImages &&
               props.subImages.map((item) => (
                 <img
-                  src={item}
-                  key={item}
+                  src={item.url}
+                  key={item.url}
                   className="border rounded 
                 shadow-lg h-60"
                 />
@@ -59,7 +59,9 @@ shadow-lg h-60"
           <div className="flex flex-row gap-5">
             {props.bulletPoints &&
               props.bulletPoints.map((item) => (
-                <span className="font-bold">{item}</span>
+                <span className="font-bold" key={item}>
+                  {item}
+                </span>
               ))}
           </div>
         </div>
