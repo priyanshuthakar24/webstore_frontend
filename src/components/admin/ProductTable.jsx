@@ -7,16 +7,12 @@ import {
   Sort,
   ContextMenu,
   Filter,
-  Page,
-  ExcelExport,
-  PdfExport,
-  Edit,
   Inject,
   PagerComponent,
   Search,
   Toolbar,
 } from "@syncfusion/ej2-react-grids";
-import { ordersGrid, ordersData } from "../../data/dummy";
+import { ordersGrid } from "../../data/dummy";
 
 import { useStateContext } from "../../context/ContextProvider";
 import { useNavigate } from "react-router-dom";
@@ -54,7 +50,7 @@ const ProductTable = () => {
 
   useEffect(() => {
     fetchProduct(page);
-  }, []);
+  }, [page]);
   const onPageChange = (args) => {
     setPage(args.currentPage);
     fetchProduct(args.currentPage);

@@ -50,7 +50,7 @@ const EditProduct = () => {
         `${process.env.REACT_APP_API}/api/admin/deleteproduct/${id}`
       );
       message.success(res.data.message);
-      nav("/");
+      nav("/dashbord/products");
     } catch (error) {
       message.error(error.response.data.message);
     }
@@ -71,26 +71,21 @@ const EditProduct = () => {
       {productdetail && (
         <>
           {!isEditing ? (
-            <div
-              className="mx-5 mt-20 lg:mt-10 p-5 border 
-rounded-lg shadow-md"
-            >
+            <div className="mx-5 mt-10  p-5 border rounded-lg shadow-md">
               <SingleProductView props={productdetail} />
               <Button
                 // type="primary"
                 variant="solid"
                 color="default"
                 size="large"
-                className="w-20 lg:w-80 mt-4 text-lg 
-    font-medium editbuttoninfo"
+                className="w-20 lg:w-80 mt-4 text-lg font-medium editbuttoninfo"
                 onClick={() => setIsEditing(true)}
               >
                 Edit
               </Button>
               <Popconfirm
                 title="Delete the task"
-                description="Are you sure to delete this 
-    task?"
+                description="Are you sure to delete this  task?"
                 onConfirm={confirm}
                 onCancel={cancel}
                 okText="Yes"
@@ -98,6 +93,7 @@ rounded-lg shadow-md"
                 okButtonProps={{
                   size: "middle",
                   style: {
+                    background: "black",
                     width: 75,
                   },
                 }} // Make the OK button
@@ -109,9 +105,7 @@ rounded-lg shadow-md"
                   variant="solid"
                   color="default"
                   size="large"
-                  className="lg:w-80 mt-4 mx-5 text-lg 
-    font-medium text-white 
-    deletebuttoninfo"
+                  className="lg:w-80 mt-4 mx-5 text-lg  font-medium text-white deletebuttoninfo"
                   //   style={{ background: currentColor }}
                 >
                   Delete
