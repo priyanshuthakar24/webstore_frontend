@@ -23,7 +23,7 @@ const SingleProductView = ({ props }) => {
 
   return (
     <div>
-      <div className="flex gap-10 justify-between flex-col  lg:flex-row ">
+      <div className="flex gap-20  flex-col  lg:flex-row ">
         <ProductView images={productImages} />
         {/* <p>{JSON.stringify(props)}</p> */}
         <div className="flex flex-col gap-5">
@@ -33,25 +33,43 @@ const SingleProductView = ({ props }) => {
           <span>
             {bulletPoints &&
               bulletPoints.map((item) => (
-                <span className=" flex items-center" key={item}>
+                <span className=" flex lg:items-center" key={item}>
                   <Dot size={25} />
                   {item}
                 </span>
               ))}
           </span>
-          <div className="flex lg:gap-6 gap-4 ">
+          <div className="flex lg:gap-6 gap-2 ">
             <span className="line-through text-2xl text-slate-500 ">
-              ₹ {mrp}.00
+              ₹{mrp}.00
             </span>
-            <span className="font-bold text-2xl">₹ {salePrice}.00</span>
+            <span className="font-bold text-2xl">₹{salePrice}.00</span>
             <span
-              className=" text-white font-bold  text-sm rounded-md px-2 flex justify-center items-center "
+              className=" text-white font-bold  text-sm rounded-md px-1 flex justify-center items-center "
               style={{ background: "green" }}
             >
-              {discountprice} % OFF
+              {discountprice}% OFF
             </span>
           </div>
-          <span>Qty : {stock}</span>
+          <table className="border-solid border-2 border-black">
+            <thead className="border-solid border-2 border-black">
+              <tr style={{ border: "2px solid black" }}>
+                <th className="border-solid border-2 border-black">Size</th>
+                <th>Quantity</th>
+              </tr>
+            </thead>
+            <tbody className="border-solid border-2 border-black">
+              {stock &&
+                stock.map((item) => (
+                  <tr className="border-solid border-2 border-black text-center">
+                    <td className="border-solid border-2 border-black">
+                      {item.size}
+                    </td>
+                    <td> {item.quantity}</td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>

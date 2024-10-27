@@ -41,6 +41,7 @@ const ProductForm = ({ initialValues, onSubmit, isEditMode }) => {
         bulletPoints: initialValues.bulletPoints?.map((bp) => ({
           bulletPoint: bp,
         })),
+        stock: initialValues.stock,
       });
       // Handle images separately if needed
       setMainImageList(
@@ -92,7 +93,7 @@ const ProductForm = ({ initialValues, onSubmit, isEditMode }) => {
     formData.append("category", values.category);
     formData.append("mrp", values.mrp);
     formData.append("salePrice", values.salePrice);
-    formData.append("stock", values.stock);
+    formData.append("stock", JSON.stringify(values.stock));
     console.log(values);
     // Map bullet points to an array of strings
     const bulletPointsArray = values.bulletPoints.map(
@@ -146,6 +147,7 @@ const ProductForm = ({ initialValues, onSubmit, isEditMode }) => {
         layout="vertical"
         initialValues={{
           bulletPoints: [{ bulletPoint: "" }], // Load one empty bullet point
+          stock: [{ size: "", quantity: 1 }],
         }}
       >
         {/* Product Name */}
@@ -213,32 +215,81 @@ const ProductForm = ({ initialValues, onSubmit, isEditMode }) => {
               parser={(value) => value?.replace(/\$\s?|(,*)/g, "")}
             />
           </Form.Item>
+          {/* Sale Price */}
           <Form.Item
-            label="Stock"
-            name="stock"
-            rules={[
-              { required: true, message: "Please input the stock quantity!" },
-            ]}
+            label="Sale Price"
+            name="salePrice"
             className="w-1/2"
+            rules={[
+              { required: true, message: "Please input the sale price!" },
+            ]}
           >
-            <InputNumber className="w-full" size="large" min={1} />
+            <InputNumber
+              size="large"
+              className="w-full"
+              formatter={(value) =>
+                `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+              }
+              parser={(value) => value?.replace(/\$\s?|(,*)/g, "")}
+            />
           </Form.Item>
         </div>
-        {/* Sale Price */}
-        <Form.Item
-          label="Sale Price"
-          name="salePrice"
-          rules={[{ required: true, message: "Please input the sale price!" }]}
-        >
-          <InputNumber
-            size="large"
-            className="w-full"
-            formatter={(value) =>
-              `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-            }
-            parser={(value) => value?.replace(/\$\s?|(,*)/g, "")}
-          />
-        </Form.Item>
+        {/* Stock - Sizes and Quantities */}
+        <Form.List name="stock">
+          {(fields, { add, remove }) => (
+            <>
+              {fields.map(({ key, name, ...restField }) => (
+                <Space
+                  key={key}
+                  style={{ display: "flex", marginBottom: 8 }}
+                  align="baseline"
+                >
+                  <Form.Item
+                    {...restField}
+                    name={[name, "size"]}
+                    rules={[{ required: true, message: "Enter size!" }]}
+                  >
+                    <Input
+                      placeholder="Size (e.g., M, L, XL)"
+                      className="uppercase"
+                      onChange={(e) => {
+                        const uppercaseValue = e.target.value.toUpperCase();
+                        form.setFieldsValue({
+                          stock: form
+                            .getFieldValue("stock")
+                            .map((item, index) =>
+                              index === name
+                                ? { ...item, size: uppercaseValue }
+                                : item
+                            ),
+                        });
+                      }}
+                    />
+                  </Form.Item>
+                  <Form.Item
+                    {...restField}
+                    name={[name, "quantity"]}
+                    rules={[{ required: true, message: "Enter quantity!" }]}
+                  >
+                    <InputNumber min={1} placeholder="Quantity" />
+                  </Form.Item>
+                  <MinusCircleOutlined onClick={() => remove(name)} />
+                </Space>
+              ))}
+              <Form.Item>
+                <Button
+                  type="dashed"
+                  onClick={() => add()}
+                  block
+                  icon={<PlusOutlined />}
+                >
+                  Add Size
+                </Button>
+              </Form.Item>
+            </>
+          )}
+        </Form.List>
+
         {/* Bullet Points */}
         <Form.List name="bulletPoints">
           {(fields, { add, remove }) => (

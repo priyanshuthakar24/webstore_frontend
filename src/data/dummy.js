@@ -241,12 +241,12 @@ export const ordersGrid = [
         editType: 'numericedit',
         width: '150',
     },
-    {
-        field: 'stock',
-        headerText: 'Quantity',
-        width: '120',
-        textAlign: 'Center',
-    },
+    // {
+    //     field: 'stock[0].size',
+    //     headerText: 'Quantity',
+    //     width: '120',
+    //     textAlign: 'Center',
+    // },
 
     {
         field: 'category',
