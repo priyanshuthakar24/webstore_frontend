@@ -19,8 +19,8 @@ const AdminLayout = () => {
       <div
         className={
           activeMenu
-            ? "min-h-screen bg-main-bg lg:ml-72 w-full"
-            : "bg-main-bg w-full min-h-screen flex-2"
+            ? "min-h-screen bg-[#EFF2F6] lg:ml-72 w-full"
+            : "bg-[#EFF2F6] w-full min-h-screen flex-2"
         }
       >
         <div className="fixed md:static bg-black shadow-sm dark:bg-main-dark-bg navbar w-full">

@@ -1,11 +1,10 @@
 import './App.css';
 import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom';
-import { RootLayout, Shop, About, Stories, } from './pages/index'
+import { RootLayout, Shop, About, Stories, Home } from './pages/index'
 import { Profile, Wishlist, Order } from './pages/ProfileMenu/index'
 import { Login, Signup, ResetPassword, VerifyEmail, ForgotPasswordPage } from './components/auth/index'
 import { useAuth } from './context/Authcontext';
 import AdminLayout from './pages/AdminLayout';
-import Home from './components/Home';
 import ProductTable from './components/admin/ProductTable';
 import EditProduct from './components/admin/EditProduct';
 import AddProduct from './components/admin/AddProduct';
@@ -54,6 +53,10 @@ function App() {
       path: '/',
       element: <RootLayout />,
       children: [
+        {
+          path: '/',
+          element: <Home />
+        },
         {
           path: 'shop',
           element: <Shop />
