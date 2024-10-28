@@ -24,8 +24,8 @@ const Hero = () => {
       transition={{ duration: 0.5 }}
       className="text-center space-y-3  text-black"
     >
-      <h1 className="text-5xl mt-28 font-bold font-sans ">
-        Better clothing for the planet{" "}
+      <h1 className="text-5xl mt-28 font-bold font-serif ">
+        Better clothing for the Planet
       </h1>
       <p className="text-gray-700 flex flex-col ">
         <span>

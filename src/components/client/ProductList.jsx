@@ -2,7 +2,7 @@ import { message } from "antd";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Scale } from "lucide-react";
+import { Link } from "react-router-dom";
 const ProductList = () => {
   const [isLoading, setIsLoadinng] = useState(false);
   const [productlist, setProductList] = useState([]);
@@ -23,27 +23,55 @@ const ProductList = () => {
   useEffect(() => {
     fetchProduct();
   }, []);
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-    >
-      <div className="grid lg:grid-cols-4 mt-20 place-items-center h-56">
-        {productlist.length > 0 &&
-          productlist.map((item) => (
-            <div className="w-[264.03px] h-[340px]">
-              <div className="w-[264.03px] h-[264.6px] bg-[#c4c4c4]"></div>
-              <div>
-                <span className="text-sm font-bold">₹{item.name}</span>
-              </div>
-              <p>${item.salePrice}</p>
-            </div>
-          ))}
-      </div>
 
-      {/* {isLoading ? <p>Loading...</p> : JSON.stringify(productlist)}  */}
-    </motion.div>
+  return (
+    <div>
+      {isLoading ? (
+        <p>Loadding...</p>
+      ) : (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="grid  grid-cols-2 mx-2 gap-4  lg:grid-cols-5 my-20 place-items-center xs:grid-cols-5 "
+        >
+          {productlist.length > 0 &&
+            productlist.map((item) => (
+              <Link to={`/singleproduct/${item._id}`}>
+                <div className="w-[175px] lg:w-[264.03px] h-[50vh]  rounded-lg shadow-md hover:shadow-xl hover:outline-dotted  ">
+                  <div className="w-[175px] lg:w-[264.03px] h-[35vh] bg-[#c4c4c4] relative rounded-lg">
+                    <img
+                      src={item.mainImage.url}
+                      alt="nopic"
+                      className="h-full object-fit rounded-lg"
+                    />
+                    <span className="bg-red-500 rounded-lg text-sm text-white px-3 py-1 font-bold absolute top-2 right-2">
+                      17% OFF
+                    </span>
+                  </div>
+                  <div className="pl-3">
+                    <span className="text-sm lg:text-lg font-bold text-center text-gray-700 capitalize">
+                      {item.name.slice(0, 20)}
+                      {item.name.length > 23 ? "..." : ""}
+                    </span>
+
+                    <p className="space-x-4 text-right pr-3">
+                      <span className="line-through text-gray-700 ">
+                        ₹{item.mrp}.00
+                      </span>
+                      <span className="font-bold">₹{item.salePrice}.00</span>
+                    </p>
+                    <p className="text-gray-600 capitalize">
+                      {item.description.slice(0, 35)}
+                      {item.description.length > 40 ? "..." : ""}
+                    </p>
+                  </div>
+                </div>
+              </Link>
+            ))}
+        </motion.div>
+      )}
+    </div>
   );
 };
 

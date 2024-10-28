@@ -1,11 +1,12 @@
 import React from "react";
 import { useStateContext } from "../../context/ContextProvider";
 import { Link, NavLink, useNavigate } from "react-router-dom";
-import { LogOut, Store, X } from "lucide-react";
+import { LogOut, Store } from "lucide-react";
 import { Tooltip } from "antd";
 import { links } from "../../data/dummy";
 import { useAuth } from "../../context/Authcontext";
 import { motion } from "framer-motion";
+import { MdOutlineCancel } from "react-icons/md";
 const Sidebar = () => {
   const nav = useNavigate();
   const { activeMenu, setActiveMenu, screenSize } = useStateContext();
@@ -26,7 +27,7 @@ const Sidebar = () => {
   return (
     <motion.div
       initial={{ x: "100%" }}
-      animate={{ x: activeMenu? "0%" : "100%" }}
+      animate={{ x: activeMenu ? "0%" : "100%" }}
       transition={{ duration: 0.3 }}
       className="ml-2 h-screen md:overflow-hidden overflow-auto
         md:hover:overflow-auto pb-10"
@@ -52,7 +53,7 @@ const Sidebar = () => {
                 className="text-xl rounded-full p-3 hover:bg-white/5 
 mt-2 block md:hidden"
               >
-                <X className="text-white" />
+                <MdOutlineCancel className="text-white" />
               </button>
             </Tooltip>
           </div>

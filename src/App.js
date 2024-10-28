@@ -8,6 +8,7 @@ import AdminLayout from './pages/AdminLayout';
 import ProductTable from './components/admin/ProductTable';
 import EditProduct from './components/admin/EditProduct';
 import AddProduct from './components/admin/AddProduct';
+import SingleProduct from './components/client/SingleProduct';
 //!  This method check that user is authenticated or not also check that user is Verified or not if not than it will redired to login or verify-email page 
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, userData } = useAuth()
@@ -56,6 +57,9 @@ function App() {
         {
           path: '/',
           element: <Home />
+        }, {
+          path: '/singleproduct/:id',
+          element: <SingleProduct />
         },
         {
           path: 'shop',
