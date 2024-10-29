@@ -113,10 +113,10 @@ function App() {
       ]
     },
     //! if any route that is not on the above roues than it will redirect to '/' route:- Universel route 
-    // {
-    //   path: "*",
-    //   element: <Navigate to='/' replace />,
-    // },
+    {
+      path: "*",
+      element: <Navigate to='/' replace />,
+    },
     {
       path: '/dashbord',
       element: <AdminProtectedRoute><AdminLayout /></AdminProtectedRoute>,

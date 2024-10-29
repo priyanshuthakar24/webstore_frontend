@@ -39,7 +39,7 @@ const SingleProductView = ({ props }) => {
                 </span>
               ))}
           </span>
-          <div className="flex lg:gap-6 gap-2 ">
+          <div className="flex lg:gap-6 gap-2 pl-3 ">
             <span className="line-through text-2xl text-slate-500 ">
               ₹{mrp}.00
             </span>
