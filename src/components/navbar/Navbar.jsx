@@ -37,7 +37,9 @@ const Navbar = () => {
           {isAuthenticated ? (
             <>
               <ProfileMenu latter={userData.name[0]} />
+              <Link to='/cart'>
               <CartCount count={2} />
+              </Link>
             </>
           ) : (
             <Link to="/auth/login">
