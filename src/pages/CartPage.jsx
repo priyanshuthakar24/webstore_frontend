@@ -1,40 +1,39 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React, { useEffect } from "react";
+import CartItem from "../components/client/CartItem";
+import OrderSummary from "../components/client/OrderSummary";
+import { useCartcontext } from "../context/Cartcontext";
 
 const CartPage = () => {
-  const [cart, setCart] = useState(null);
-
+  const { cart, fetchCart } = useCartcontext();
   useEffect(() => {
-    const fetchCart = async () => {
-      try {
-        const response = await axios.get(
-          `${process.env.REACT_APP_API}/api/cart`,
-          {
-            withCredentials: true,
-          }
-        );
-        setCart(response.data);
-      } catch (error) {
-        console.error("Error fetching cart:", error);
-      }
-    };
-
     fetchCart();
   }, []);
 
   if (!cart) return <p>Loading cart...</p>;
 
   return (
-    <div className="mt-20 text-black">
-      <h1>Your Cart</h1>
-      {cart.items.map((item) => (
-        <div key={item.productId._id}>
-          <p>{item.productId.name}</p>
-          <p>Quantity: {item.quantity}</p>
-          <p>Price: {item.price}</p>
+    <div className="mt-20 text-black ">
+      <div className="grid grid-rows-2 lg:grid-cols-2 place-items-center  ">
+        <div>
+          <div className="space-y-5 mb-5">
+            <h1 className="text-4xl font-bold font-sans">Your Cart</h1>
+            <p>
+              Not ready to checkout ?{" "}
+              <span className="hover:underline hover:cursor-pointer">
+                Continue Shopping
+              </span>
+            </p>
+          </div>
+          {cart.items.length > 0 ? (
+            <CartItem product={cart.items} />
+          ) : (
+            <p>Cart is Empty </p>
+          )}
         </div>
-      ))}
-      <h2>Total: {cart.totalCost}</h2>
+        <div className="flex pt-20  items-start h-full mb-5 lg:mb-0">
+          <OrderSummary product={cart} />
+        </div>
+      </div>
     </div>
   );
 };

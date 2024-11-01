@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import ProductView from "../image/ProductView";
 import { Dot, Heart } from "lucide-react";
-import { message, Rate } from "antd";
+import { Rate } from "antd";
 import CartCount from "../ui/CartCount";
-import axios from "axios";
+import { useCartcontext } from "../../context/Cartcontext";
 const SingleProductView = ({ props }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [quantity, setQuantity] = useState(1);
+  const { addToCart } = useCartcontext();
   const handleIncrement = () => {
     setQuantity((prevCount) => prevCount + 1);
   };
@@ -17,21 +18,9 @@ const SingleProductView = ({ props }) => {
 
   const handleAddToCart = async () => {
     setIsLoading(true);
-    try {
-      const res = await axios.post(
-        `${process.env.REACT_APP_API}/api/cart/add`,
-        { productId: _id, quantity },
-        { withCredentials: true }
-      );
-      if (res) {
-        message.success("product Added to cart");
-        setQuantity(0);
-      }
-    } catch (error) {
-      message.error(error.response.data.message);
-    } finally {
-      setIsLoading(false);
-    }
+    await addToCart(_id, quantity);
+    setQuantity(1);
+    setIsLoading(false);
   };
   const {
     _id,
@@ -132,7 +121,11 @@ const SingleProductView = ({ props }) => {
                 value={quantity}
               />
 
-              <button className="hover:bg-black/5 px-4 py-3 rounded-lg font-sans">
+              <button
+                disabled={isLoading}
+                onClick={handleAddToCart}
+                className="hover:bg-black/5 px-4 py-3 rounded-lg font-sans"
+              >
                 Add To Cart
               </button>
             </div>
