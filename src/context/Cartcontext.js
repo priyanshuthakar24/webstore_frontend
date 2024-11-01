@@ -29,12 +29,12 @@ export const CartcontextProvider = ({ children }) => {
             console.error("Error fetching cart:", error);
         }
     };
-    const addToCart = async (_id, quantity) => {
+    const addToCart = async (_id, quantity, size) => {
         setIsLoading(true);
         try {
             const res = await axios.post(
                 `${process.env.REACT_APP_API}/api/cart/add`,
-                { productId: _id, quantity },
+                { productId: _id, quantity, size },
                 { withCredentials: true }
             );
             if (res) {
@@ -48,10 +48,10 @@ export const CartcontextProvider = ({ children }) => {
         }
     }
 
-    const removeFromCart = async (ID, quantity) => {
+    const removeFromCart = async (ID, quantity, size) => {
         try {
             const res = await axios.delete(
-                `${process.env.REACT_APP_API}/api/cart/remove/${ID}`,
+                `${process.env.REACT_APP_API}/api/cart/remove`, { productId: ID, size },
                 { withCredentials: true }
             );
             if (res) {

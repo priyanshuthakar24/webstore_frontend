@@ -18,7 +18,7 @@ const CartItem = ({ product }) => {
             </div>
             <div className="w-[45vw] lg:w-[20vw] space-y-4">
               <p>{item.productId.name}</p>
-              <p>L</p>
+              <p>{item.size}</p>
               <p>Quantity: {item.quantity}</p>
               <p>$ {item.productId.salePrice}</p>
             </div>

@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import ProductView from "../image/ProductView";
 import { Dot, Heart } from "lucide-react";
-import { Rate } from "antd";
+import { Radio, Rate } from "antd";
 import CartCount from "../ui/CartCount";
 import { useCartcontext } from "../../context/Cartcontext";
 const SingleProductView = ({ props }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [quantity, setQuantity] = useState(1);
+  const [size, setSize] = useState("L");
   const { addToCart } = useCartcontext();
   const handleIncrement = () => {
     setQuantity((prevCount) => prevCount + 1);
@@ -18,10 +19,16 @@ const SingleProductView = ({ props }) => {
 
   const handleAddToCart = async () => {
     setIsLoading(true);
-    await addToCart(_id, quantity);
+    await addToCart(_id, quantity, size);
     setQuantity(1);
     setIsLoading(false);
   };
+  const options = [
+    { label: "S", value: "S" },
+    { label: "M", value: "M" },
+    { label: "L", value: "L" },
+    { label: "XL", value: "XL" },
+  ];
   const {
     _id,
     name,
@@ -58,7 +65,21 @@ const SingleProductView = ({ props }) => {
                 </span>
               ))}
           </span>
-          <p className="lg:pl-3 flex items-center justify-around lg:justify-start gap-5">
+          <span className="w-1/2">
+            <Radio.Group
+              onChange={(e) => {
+                setSize(e.target.value);
+                console.log(e.target.value);
+              }}
+              options={options}
+              defaultValue={"L"}
+              block
+              buttonStyle="outline"
+              optionType="button"
+              size="large"
+            />
+          </span>
+          <div className="lg:pl-3 flex items-center justify-around lg:justify-start gap-5">
             <span className="space-x-5">
               <Rate
                 disabled
@@ -71,7 +92,7 @@ const SingleProductView = ({ props }) => {
             <button className="px-4 py-3  rounded-lg hover:bg-black/5 lg:hidden ">
               <Heart />
             </button>
-          </p>
+          </div>
           <div className="flex lg:gap-6 gap-2 pl-3 ">
             <span className="line-through text-2xl text-slate-500 ">
               ₹{mrp}.00
