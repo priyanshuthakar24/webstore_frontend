@@ -12,28 +12,28 @@ const FilterComponent = ({ onFilterChange }) => {
   };
   const handleFilterClick = (filter) => {
     setSelectedFilter(filter);
-    onFilterChange(filter); // Notify ProductList of the selected filter
+    onFilterChange({ filter, sortOrder: selectedSort }); // Notify ProductList of the selected filter
   };
+  const handleSortChange = (value) => {
+    setSelectedSort(value);
+    onFilterChange({ filter: selectedFilter, sortOrder: value }); // Update sort order and filter together
+  };
+  const [selectedSort, setSelectedSort] = useState(undefined);
   return (
     <>
       <div className="flex items-center gap-5 justify-between mt-20 lg:mt-5 mx-3 lg:mx-16">
         <Select
-          showSearch
           size="large"
           variant="filled"
           className="lg:w-[20rem]  "
           //   style={{ width: "20rem" }}
           placeholder="Sort By"
           optionFilterProp="label"
-          filterSort={(optionA, optionB) =>
-            (optionA?.label ?? "")
-              .toLowerCase()
-              .localeCompare((optionB?.label ?? "").toLowerCase())
-          }
+          onChange={handleSortChange}
           options={[
-            { value: "1", label: "Jack" },
-            { value: "2", label: "Lucy" },
-            { value: "3", label: "Tom" },
+            { value: "Popular", label: "Popular" },
+            { value: "Old", label: "Old" },
+            { value: "New", label: "Latest" },
           ]}
         />
         <ListFilter size={35} onClick={handleClick} />

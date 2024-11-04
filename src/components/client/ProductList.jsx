@@ -7,15 +7,30 @@ import FilterComponent from "../ui/FilterComponent";
 const ProductList = () => {
   const [isLoading, setIsLoadinng] = useState(false);
   const [productlist, setProductList] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState(null);
-  const fetchProduct = async () => {
+  const [filterCriteria, setFilterCriteria] = useState({
+    filter: null,
+    sortOrder: null,
+  });
+  const [page, setPage] = useState(1); // Current page number
+  const [hasMore, setHasMore] = useState(0); // Track if more products are available
+
+  const fetchProduct = async (page = 1) => {
     setIsLoadinng(true);
 
     try {
       const res = await axios.get(
-        `${process.env.REACT_APP_API}/api/admin/allproduct`
+        `${process.env.REACT_APP_API}/api/admin/allproduct`,
+        {
+          params: { page },
+        }
       );
-      setProductList(res.data.productlist);
+      const newProducts = res.data.productlist;
+      setProductList((prev) =>
+        page === 1 ? newProducts : [...prev, ...newProducts]
+      );
+      // Check if more products are available
+
+      setHasMore(res.data.totalCount);
     } catch (error) {
       message.error(error.response.data.message);
     } finally {
@@ -26,18 +41,34 @@ const ProductList = () => {
     return Math.round(((mrp - salePrice) / mrp) * 100);
   };
 
-  // Handle filter change from FilterComponent
-  const handleFilterChange = (filter) => {
-    setSelectedCategory(filter);
+  // Handle filtering and sorting criteria changes from FilterComponent
+  const handleFilterChange = ({ filter, sortOrder }) => {
+    setFilterCriteria({ filter, sortOrder });
   };
 
-  // Filter products based on selected category
-  const filteredProducts = selectedCategory
-    ? productlist.filter((product) => product.category === selectedCategory)
-    : productlist;
+  const handleLoadMore = () => {
+    const nextPage = page + 1;
+    setPage(nextPage);
+    fetchProduct(nextPage);
+  };
+
+  // Apply filter and sort based on criteria
+  const filteredAndSortedProducts = [...productlist]
+    .filter((product) => {
+      return filterCriteria.filter
+        ? product.category === filterCriteria.filter
+        : true;
+    })
+    .sort((a, b) => {
+      if (filterCriteria.sortOrder === "New")
+        return new Date(b.createdAt) - new Date(a.createdAt);
+      if (filterCriteria.sortOrder === "Old")
+        return new Date(a.createdAt) - new Date(b.createdAt);
+      return 0; // No sorting for "Popular" or unspecified
+    });
 
   useEffect(() => {
-    fetchProduct();
+    fetchProduct(1);
   }, []);
 
   return (
@@ -63,23 +94,23 @@ const ProductList = () => {
           <FilterComponent onFilterChange={handleFilterChange} />
           <AnimatePresence mode="wait">
             <motion.div
-              key={selectedCategory} // Re-render and animate when filter changes
+              key={filterCriteria.filter || filterCriteria.sortOrder} // Re-render and animate when filter changes
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.9 }}
               transition={{ duration: 0.3 }}
-              className="grid  grid-cols-2 mx-2 gap-4  lg:grid-cols-5 my-10 place-items-center xs:grid-cols-5 "
+              className="grid  grid-cols-2 mx-2 lg:mx-20 gap-4  lg:grid-cols-4 my-10 place-items-center  "
             >
-              {filteredProducts.length > 0 ? (
-                filteredProducts.map((item) => (
+              {filteredAndSortedProducts.length > 0 ? (
+                filteredAndSortedProducts.map((item) => (
                   <Link to={`/singleproduct/${item._id}`} key={item.name}>
                     <div className="w-[175px] lg:w-[264.03px] h-[52vh]  rounded  hover:shadow  ">
-                      <div className=" px-0 w-[175px] lg:w-[264.03px] h-[35vh] bg-[#c4c4c4] relative rounded-lg">
-                        {/* <img
-                      src={item.mainImage.url}
-                      alt="nopic"
-                      className="h-full object-cover rounded"
-                    /> */}
+                      <div className=" px-0 w-[175px] lg:w-[264.03px] h-[30vh] bg-[#c4c4c4] relative rounded-lg">
+                        <img
+                          src={item.mainImage.url}
+                          alt="nopic"
+                          className="h-full w-full lg:max-w-44  rounded"
+                        />
                         <span className="bg-red-500 rounded-lg text-sm text-white px-3 py-1 font-bold absolute top-2 right-2">
                           {discountprice(item.mrp, item.salePrice)}% OFF
                         </span>
@@ -125,6 +156,21 @@ const ProductList = () => {
               )}
             </motion.div>
           </AnimatePresence>
+          <motion.div
+            whileHover={{ scale: 0.95 }}
+            whileTap={{ scale: 0.95 }}
+            className="flex items-center justify-center mb-5"
+          >
+            {page * 5 < hasMore && (
+              <button
+                type="button"
+                className="border-1 border-black px-14 py-2 font-serif"
+                onClick={handleLoadMore}
+              >
+                Load more Products
+              </button>
+            )}
+          </motion.div>
         </motion.div>
       )}
     </div>

@@ -271,7 +271,7 @@ const ProductForm = ({ initialValues, onSubmit, isEditMode }) => {
                     name={[name, "quantity"]}
                     rules={[{ required: true, message: "Enter quantity!" }]}
                   >
-                    <InputNumber min={1} placeholder="Quantity" />
+                    <InputNumber min={0} placeholder="Quantity" />
                   </Form.Item>
                   <MinusCircleOutlined onClick={() => remove(name)} />
                 </Space>

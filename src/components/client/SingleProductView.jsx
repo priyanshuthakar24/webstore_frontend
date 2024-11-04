@@ -139,37 +139,46 @@ const SingleProductView = ({ props }) => {
                     </button>
                   </div>
                 ) : (
-                  <p>Out of Stock</p>
+                  <p className="hidden  lg:flex">Out of Stock</p>
                 )
               ) : null
             )}
           {/* mobile view  */}
-          <div className="flex flex-col items-center gap-2 lg:hidden mb-10">
-            <div className="flex items-center">
-              <CartCount
-                onIncrement={handleIncrement}
-                onDecrement={handleDecrement}
-                value={quantity}
-              />
+          {stock &&
+            stock.map((item) =>
+              item.size === size ? (
+                item.quantity > 0 ? (
+                  <div className="flex flex-col items-center gap-2 lg:hidden mb-10">
+                    <div className="flex items-center">
+                      <CartCount
+                        onIncrement={handleIncrement}
+                        onDecrement={handleDecrement}
+                        value={quantity}
+                      />
 
-              <button
-                disabled={isLoading}
-                onClick={handleAddToCart}
-                className="hover:bg-black/5 px-4 py-3 rounded-lg font-sans"
-              >
-                Add To Cart
-              </button>
-            </div>
-            <div className="w-full">
-              <button
-                type="button"
-                className="bg-yellow-500 w-full rounded-full text-md font-sans py-2 px-5 hover:shadow-lg"
-                size="large"
-              >
-                Buy Now
-              </button>
-            </div>
-          </div>
+                      <button
+                        disabled={isLoading}
+                        onClick={handleAddToCart}
+                        className="hover:bg-black/5 px-4 py-3 rounded-lg font-sans"
+                      >
+                        Add To Cart
+                      </button>
+                    </div>
+                    <div className="w-full">
+                      <button
+                        type="button"
+                        className="bg-yellow-500 w-full rounded-full text-md font-sans py-2 px-5 hover:shadow-lg"
+                        size="large"
+                      >
+                        Buy Now
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <p className=" mb-10 lg:hidden">Out of Stock</p>
+                )
+              ) : null
+            )}
         </div>
       </div>
     </div>

@@ -33,7 +33,7 @@ const CartItem = ({ product }) => {
               </button>
             </span>
           </div>
-          <hr className="border-2 border-black/5 w-1/2" />
+          <hr className="border-1 border-gray-700 my-5 lg:my-0 lg:border-black/5 w-full" />
         </>
       ))}
     </div>
