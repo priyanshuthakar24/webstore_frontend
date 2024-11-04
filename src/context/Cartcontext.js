@@ -49,10 +49,16 @@ export const CartcontextProvider = ({ children }) => {
     }
 
     const removeFromCart = async (ID, quantity, size) => {
+        console.log(size)
         try {
             const res = await axios.delete(
-                `${process.env.REACT_APP_API}/api/cart/remove`, { productId: ID, size },
-                { withCredentials: true }
+                `${process.env.REACT_APP_API}/api/cart/remove`, {
+                data: {
+                    productId: ID,
+                    size: size
+                }, withCredentials: true
+            },
+
             );
             if (res) {
                 message.success(res.data.message);

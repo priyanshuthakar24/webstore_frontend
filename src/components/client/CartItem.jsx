@@ -4,7 +4,7 @@ import { useCartcontext } from "../../context/Cartcontext";
 const CartItem = ({ product }) => {
   const { removeFromCart } = useCartcontext();
   return (
-    <div className=" flex flex-col  gap-10">
+    <div className=" flex flex-col lg:gap-10">
       {/* {JSON.stringify(product)} */}
       {product.map((item) => (
         <>
@@ -26,7 +26,7 @@ const CartItem = ({ product }) => {
               <button
                 type="button"
                 onClick={() =>
-                  removeFromCart(item.productId._id, item.quantity)
+                  removeFromCart(item.productId._id, item.quantity, item.size)
                 }
               >
                 Remove

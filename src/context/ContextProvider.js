@@ -1,3 +1,5 @@
+import { message } from "antd";
+import axios from "axios";
 import { createContext, useContext, useState } from "react";
 
 
@@ -19,6 +21,7 @@ export const ContextProvider = ({ children }) => {
     const [themeSettings, setThemeSettings] = useState(false);
     const [currentColor, setCurrentColor] = useState('#03C9D7');
     const [page, setPage] = useState(1);
+    const [productDetail, setProductDetail] = useState([]);
     const handleClick = (clicked) => {
         setisClicked({ ...isClicked, [clicked]: true });
     }
@@ -32,8 +35,21 @@ export const ContextProvider = ({ children }) => {
         localStorage.setItem('colorMode', color);
         setThemeSettings(false)
     };
+    const fetchproductdetail = async (id) => {
+        try {
+            const res = await axios.get(
+                `${process.env.REACT_APP_API}/api/admin/productdetail`,
+                {
+                    params: { id },
+                }
+            );
+            setProductDetail(res.data);
+        } catch (error) {
+            message.error(error.response.data.message);
+        }
+    };
 
-    return <StateContext.Provider value={{ currentColor, currentMode, activeMenu, screenSize, setScreenSize, handleClick, isClicked, initalState, setisClicked, setActiveMenu, setMode, setColor, themeSettings, setThemeSettings, user, setuser ,page, setPage}}
+    return <StateContext.Provider value={{ currentColor, currentMode, activeMenu, screenSize, setScreenSize, handleClick, isClicked, initalState, setisClicked, setActiveMenu, setMode, setColor, themeSettings, setThemeSettings, user, setuser, page, setPage, fetchproductdetail, productDetail, setProductDetail }}
     >{children}</StateContext.Provider>
 }
 

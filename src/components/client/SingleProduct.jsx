@@ -1,37 +1,22 @@
-import axios from "axios";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { motion } from "framer-motion";
-import { message } from "antd";
 import SingleProductView from "./SingleProductView";
+import { useStateContext } from "../../context/ContextProvider";
 const SingleProduct = () => {
   const { id } = useParams();
-  const [productDetail, setProductDetail] = useState([]);
+  const { fetchproductdetail, productDetail } = useStateContext();
   const [isLoading, setIsLoadinng] = useState(false);
-  const fetchproductdetail = useCallback(async () => {
-    setIsLoadinng(true);
-    try {
-      const res = await axios.get(
-        `${process.env.REACT_APP_API}/api/admin/productdetail`,
-        {
-          params: { id },
-        }
-      );
-      setProductDetail(res.data);
-    } catch (error) {
-      message.error(error.response.data.message);
-    } finally {
-      setIsLoadinng(false);
-    }
-  }, [id]);
 
   useEffect(() => {
-    fetchproductdetail();
-  }, [fetchproductdetail]);
+    setIsLoadinng(true);
+    fetchproductdetail(id);
+    setIsLoadinng(false);
+  }, []);
   return (
     <>
       {isLoading ? (
-        <p>Loading...</p>
+        <p className="mt-20 text-black">Loading...</p>
       ) : (
         <motion.div
           initial={{ opacity: 0, y: 20 }}

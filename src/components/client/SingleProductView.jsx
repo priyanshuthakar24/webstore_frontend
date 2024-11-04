@@ -4,11 +4,13 @@ import { Dot, Heart } from "lucide-react";
 import { Radio, Rate } from "antd";
 import CartCount from "../ui/CartCount";
 import { useCartcontext } from "../../context/Cartcontext";
+import { useStateContext } from "../../context/ContextProvider";
 const SingleProductView = ({ props }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [quantity, setQuantity] = useState(1);
   const [size, setSize] = useState("L");
   const { addToCart } = useCartcontext();
+  const { fetchproductdetail } = useStateContext();
   const handleIncrement = () => {
     setQuantity((prevCount) => prevCount + 1);
   };
@@ -16,7 +18,11 @@ const SingleProductView = ({ props }) => {
     if (quantity === 0) return;
     setQuantity((prevCount) => prevCount - 1);
   };
-
+  const handleChange = async (e) => {
+    await fetchproductdetail(_id);
+    setSize(e.target.value);
+    console.log(e.target.value);
+  };
   const handleAddToCart = async () => {
     setIsLoading(true);
     await addToCart(_id, quantity, size);
@@ -39,6 +45,7 @@ const SingleProductView = ({ props }) => {
     salePrice,
     description,
     bulletPoints,
+    stock,
   } = props;
   const discountprice = Math.round(((mrp - salePrice) / mrp) * 100);
   // Safely create the product images array with checks
@@ -67,10 +74,7 @@ const SingleProductView = ({ props }) => {
           </span>
           <span className="w-1/2">
             <Radio.Group
-              onChange={(e) => {
-                setSize(e.target.value);
-                console.log(e.target.value);
-              }}
+              onChange={handleChange}
               options={options}
               defaultValue={"L"}
               block
@@ -105,34 +109,40 @@ const SingleProductView = ({ props }) => {
               {discountprice}% OFF
             </span>
           </div>
+          {stock &&
+            stock.map((item) =>
+              item.size === size ? (
+                item.quantity > 0 ? (
+                  <div className="lg:flex items-center gap-10 hidden">
+                    <CartCount
+                      onIncrement={handleIncrement}
+                      onDecrement={handleDecrement}
+                      value={quantity}
+                    />
 
-          {/* add to cart Oprion Desktop */}
-          <div className="lg:flex items-center gap-10 hidden">
-            <CartCount
-              onIncrement={handleIncrement}
-              onDecrement={handleDecrement}
-              value={quantity}
-            />
-
-            <button
-              disabled={isLoading}
-              onClick={handleAddToCart}
-              className="hover:bg-black/5 px-4 py-3 rounded-lg font-sans"
-            >
-              Add To Cart
-            </button>
-            <button
-              type="button"
-              className="bg-yellow-500 rounded-full text-md font-sans py-2 px-5 hover:shadow-lg"
-              size="large"
-            >
-              Buy Now
-            </button>
-            <button className="px-4 py-3 rounded-lg hover:bg-black/5 ">
-              <Heart />
-            </button>
-          </div>
-
+                    <button
+                      disabled={isLoading}
+                      onClick={handleAddToCart}
+                      className="hover:bg-black/5 px-4 py-3 rounded-lg font-sans"
+                    >
+                      Add To Cart
+                    </button>
+                    <button
+                      type="button"
+                      className="bg-yellow-500 rounded-full text-md font-sans py-2 px-5 hover:shadow-lg"
+                      size="large"
+                    >
+                      Buy Now
+                    </button>
+                    <button className="px-4 py-3 rounded-lg hover:bg-black/5 ">
+                      <Heart />
+                    </button>
+                  </div>
+                ) : (
+                  <p>Out of Stock</p>
+                )
+              ) : null
+            )}
           {/* mobile view  */}
           <div className="flex flex-col items-center gap-2 lg:hidden mb-10">
             <div className="flex items-center">
