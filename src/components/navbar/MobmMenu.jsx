@@ -45,7 +45,7 @@ const MobmMenu = ({ Menus }) => {
       {/* //! mobile menu with animation   */}
       <motion.div
         className="fixed left-0 right-0 top-16 overflow-y-auto h-full bg-[#18181A] backdrop-blur text-white p-6"
-        initial={{ x: "100%" }}
+        initial={{ x: "-100%" }}
         animate={{ x: isOpen ? "0%" : "-100%" }}
       >
         <ul>
