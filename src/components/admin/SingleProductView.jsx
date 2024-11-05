@@ -51,18 +51,18 @@ const SingleProductView = ({ props }) => {
               {discountprice}% OFF
             </span>
           </div>
-          <table className="border-solid border-2 border-black">
-            <thead className="border-solid border-2 border-black">
-              <tr style={{ border: "2px solid black" }}>
-                <th className="border-solid border-2 border-black">Size</th>
+          <table className="border-solid border-1 border-black w-1/3">
+            <thead className="border-solid border-1 border-black">
+              <tr style={{ border: "1px solid black" }}>
+                <th className="border-solid border-1 border-black">Size</th>
                 <th>Quantity</th>
               </tr>
             </thead>
-            <tbody className="border-solid border-2 border-black">
+            <tbody className="border-solid border-1 border-black">
               {stock &&
                 stock.map((item) => (
-                  <tr className="border-solid border-2 border-black text-center">
-                    <td className="border-solid border-2 border-black">
+                  <tr className="border-solid border-1 border-black text-center">
+                    <td className="border-solid border-1 border-black">
                       {item.size}
                     </td>
                     <td> {item.quantity}</td>

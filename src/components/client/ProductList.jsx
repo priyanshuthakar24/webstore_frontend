@@ -109,7 +109,7 @@ const ProductList = () => {
                         <img
                           src={item.mainImage.url}
                           alt="nopic"
-                          className="h-full w-full lg:max-w-44  rounded"
+                          className="h-full w-full  rounded"
                         />
                         <span className="bg-red-500 rounded-lg text-sm text-white px-3 py-1 font-bold absolute top-2 right-2">
                           {discountprice(item.mrp, item.salePrice)}% OFF
@@ -161,7 +161,7 @@ const ProductList = () => {
             whileTap={{ scale: 0.95 }}
             className="flex items-center justify-center mb-5"
           >
-            {page * 5 < hasMore && (
+            {page * 10 < hasMore && (
               <button
                 type="button"
                 className="border-1 border-black px-14 py-2 font-serif"

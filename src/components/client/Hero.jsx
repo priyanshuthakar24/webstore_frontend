@@ -14,9 +14,7 @@ const Hero = () => {
     textAlign: "center",
     background: "#C4C4C4",
   };
-  const onChange = (currentSlide) => {
-    console.log(currentSlide);
-  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -43,27 +41,26 @@ const Hero = () => {
       >
         Shop All
       </motion.button>
-        <Carousel
-          autoplay
-          arrows
-          infinite={true}
-          afterChange={onChange}
-          effect="fade"
-          className="w-3/4 mx-auto mt-6"
-        >
-          <div>
-            <h3 style={contentStyle}>1</h3>
-          </div>
-          <div>
-            <h3 style={contentStyle}>2</h3>
-          </div>
-          <div>
-            <h3 style={contentStyle}>3</h3>
-          </div>
-          <div>
-            <h3 style={contentStyle}>4</h3>
-          </div>
-        </Carousel>
+      <Carousel
+        autoplay
+        arrows
+        infinite={true}
+        effect="fade"
+        className="w-3/4 mx-auto mt-6"
+      >
+        <div>
+          <h3 style={contentStyle}>1</h3>
+        </div>
+        <div>
+          <h3 style={contentStyle}>2</h3>
+        </div>
+        <div>
+          <h3 style={contentStyle}>3</h3>
+        </div>
+        <div>
+          <h3 style={contentStyle}>4</h3>
+        </div>
+      </Carousel>
     </motion.div>
   );
 };

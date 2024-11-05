@@ -21,7 +21,6 @@ const SingleProductView = ({ props }) => {
   const handleChange = async (e) => {
     await fetchproductdetail(_id);
     setSize(e.target.value);
-    console.log(e.target.value);
   };
   const handleAddToCart = async () => {
     setIsLoading(true);
@@ -58,9 +57,8 @@ const SingleProductView = ({ props }) => {
     <div>
       <div className="flex gap-20  flex-col  lg:flex-row ">
         <ProductView images={productImages} />
-        {/* <p>{JSON.stringify(props)}</p> */}
         <div className="flex flex-col gap-5">
-          <h1 className="text-2xl font-bold   ">{name}</h1>
+          <h1 className="text-2xl font-bold">{name}</h1>
           <p className="text-gray-600 "> {description}</p>
           <p>{category}</p>
           <span>

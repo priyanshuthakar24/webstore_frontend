@@ -49,7 +49,10 @@ const ProductForm = ({ initialValues, onSubmit, isEditMode }) => {
       );
       setSubImageList(
         initialValues.subImages
-          ? initialValues.subImages.map((url) => ({ url: url.url }))
+          ? initialValues.subImages.map((img) => ({
+              url: img.url,
+              public_id: img.public_id,
+            }))
           : []
       );
     }
@@ -109,7 +112,11 @@ const ProductForm = ({ initialValues, onSubmit, isEditMode }) => {
         mainImageList[0].originFileObj || mainImageList[0].url
       );
     }
+    const existingSubImageIds = subImageList
+      .filter((file) => !file.originFileObj)
+      .map((file) => file.public_id);
 
+    formData.append("existingSubImageIds", JSON.stringify(existingSubImageIds));
     // Append sub-images
     subImageList.forEach((file) => {
       formData.append("subImages", file.originFileObj || file.url);
@@ -147,7 +154,12 @@ const ProductForm = ({ initialValues, onSubmit, isEditMode }) => {
         layout="vertical"
         initialValues={{
           bulletPoints: [{ bulletPoint: "" }], // Load one empty bullet point
-          stock: [{ size: "", quantity: 1 }],
+          stock: [
+            { size: "S", quantity: 0 },
+            { size: "M", quantity: 0 },
+            { size: "L", quantity: 0 },
+            { size: "XL", quantity: 0 },
+          ],
         }}
       >
         {/* Product Name */}
@@ -219,9 +231,20 @@ const ProductForm = ({ initialValues, onSubmit, isEditMode }) => {
           <Form.Item
             label="Sale Price"
             name="salePrice"
+            dependencies={["mrp"]}
             className="w-1/2"
             rules={[
               { required: true, message: "Please input the sale price!" },
+              ({ getFieldValue }) => ({
+                validator(_, value) {
+                  if (!value || getFieldValue("mrp") >= value) {
+                    return Promise.resolve();
+                  }
+                  return Promise.reject(
+                    new Error("Sale Price is Cannot be Grater than Mrp")
+                  );
+                },
+              }),
             ]}
           >
             <InputNumber

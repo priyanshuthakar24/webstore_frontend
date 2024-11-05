@@ -45,22 +45,30 @@ const FilterComponent = ({ onFilterChange }) => {
             animate={{ opacity: 1, y: 10 }}
             exit={{ opacity: 0, y: -25 }}
             transition={{ duration: 0.3 }}
-            className="flex gap-3 items-center group justify-center "
+            className="flex flex-col lg:flex-row justify-center gap-5 items-center"
           >
-            {["Fashion", "Electronics", "Jackets", "Hats"].map((item) => (
-              <motion.button
-                key={item}
-                onClick={() => handleFilterClick(item)}
-                whileTap={{ scale: 0.95 }}
-                transition={{ duration: 0.3 }}
-                type="button"
-                className={`border-black border-2 px-2 lg:px-10 py-2 ${
-                  selectedFilter === item ? "bg-black text-white" : ""
-                }`}
-              >
-                {item}
-              </motion.button>
-            ))}
+            <div className="flex gap-3 items-center group justify-center ">
+              {["Fashion", "Electronics", "Jackets", "Hats"].map((item) => (
+                <motion.button
+                  key={item}
+                  onClick={() => handleFilterClick(item)}
+                  whileTap={{ scale: 0.95 }}
+                  transition={{ duration: 0.3 }}
+                  type="button"
+                  className={`border-black border-2 px-2 lg:px-10 py-2 ${
+                    selectedFilter === item ? "bg-black text-white" : ""
+                  }`}
+                >
+                  {item}
+                </motion.button>
+              ))}
+            </div>
+            <div
+              className="hover:underline hover:text-blue-600 cursor-pointer font-sans text-lg"
+              onClick={() => handleFilterClick(undefined)}
+            >
+              clear Filter
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
