@@ -10,6 +10,7 @@ import EditProduct from './components/admin/EditProduct';
 import AddProduct from './components/admin/AddProduct';
 import SingleProduct from './components/client/SingleProduct';
 import CartPage from './pages/CartPage';
+import AdminPanel from './components/client/orders/Order';
 //!  This method check that user is authenticated or not also check that user is Verified or not if not than it will redired to login or verify-email page 
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, userData } = useAuth()
@@ -137,6 +138,9 @@ function App() {
       }, {
         path: 'productlist/:id',
         element: <EditProduct />
+      }, {
+        path: 'orders',
+        element: <AdminPanel />
       }]
     }
   ])

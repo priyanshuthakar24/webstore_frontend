@@ -1,7 +1,7 @@
 import React from "react";
 import axios from "axios";
 import { Button, message } from "antd";
-import CartItem from "../CartItem";
+// import CartItem from "../CartItem";
 
 function Payment({ orderSummary, shippingInfo, cartItems, onPaymentSuccess }) {
   // Transform cart items to order items format
@@ -47,37 +47,41 @@ function Payment({ orderSummary, shippingInfo, cartItems, onPaymentSuccess }) {
         key: process.env.REACT_APP_RAZORPAY_ID, // Replace with Razorpay key ID
         amount: data.order.totalPrice * 100, // Amount in paisa
         currency: "INR",
-        name: "Your Store",
+        name: "Ecommerce",
         description: "Order Payment",
         order_id: data.razorpayOrderId,
         handler: async function (response) {
-          // Verify payment
-          const paymentData = {
-            order_id: data.razorpayOrderId,
-            payment_id: response.razorpay_payment_id,
-            razorpay_signature: response.razorpay_signature,
-          };
-
-          const result = await axios.post(
-            `${process.env.REACT_APP_API}/api/order/verify-payment`,
-            paymentData,
-            { withCredentials: true }
+          // Payment successful on frontend, display success message
+          message.success(
+            "Payment initiated successfully. Waiting for confirmation."
           );
+          // Verify payment
+          // const paymentData = {
+          //   order_id: data.razorpayOrderId,
+          //   payment_id: response.razorpay_payment_id,
+          //   razorpay_signature: response.razorpay_signature,
+          // };
 
-          if (result.data.success) {
-            message.success("Payment successful!");
-            //   onPaymentSuccess(result.data.order);
-          } else {
-            message.error("Payment verification failed");
-          }
+          // const result = await axios.post(
+          //   `${process.env.REACT_APP_API}/api/order/verify-payment`,
+          //   paymentData,
+          //   { withCredentials: true }
+          // );
+
+          // if (result.data.success) {
+          //   message.success("Payment successful!");
+          //   //   onPaymentSuccess(result.data.order);
+          // } else {
+          //   message.error("Payment verification failed");
+          // }
         },
         prefill: {
-          name: "Customer Name",
-          email: "customer@example.com",
-          contact: "9999999999",
+          name: "Priyanshu Thakar",
+          email: "myemail@example.com",
+          contact: "7600195223",
         },
         theme: {
-          color: "#3399cc",
+          color: "#cc3333",
         },
       };
 
