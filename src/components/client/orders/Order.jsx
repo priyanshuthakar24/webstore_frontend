@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import io from "socket.io-client";
 
-const socket = io.connect("http://192.168.0.106:5000"); // Adjust to your server URL
+const socket = io.connect(`${process.env.REACT_APP_API}`); // Adjust to your server URL
 
 function AdminPanel() {
   const [orders, setOrders] = useState([]);

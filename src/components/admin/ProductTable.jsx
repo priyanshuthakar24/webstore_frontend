@@ -12,7 +12,7 @@ import {
   Search,
   Toolbar,
 } from "@syncfusion/ej2-react-grids";
-import { ordersGrid } from "../../data/dummy";
+import { productGrid } from "../../data/dummy";
 
 import { useStateContext } from "../../context/ContextProvider";
 import { useNavigate } from "react-router-dom";
@@ -84,7 +84,7 @@ const ProductTable = () => {
             rowSelected={handleRowClick}
           >
             <ColumnsDirective>
-              {ordersGrid.map((item, index) => (
+              {productGrid.map((item, index) => (
                 <ColumnDirective key={index} {...item} />
               ))}
             </ColumnsDirective>
