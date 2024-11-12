@@ -13,27 +13,40 @@ import {
   Sort,
   Toolbar,
 } from "@syncfusion/ej2-react-grids";
-import { message, Select } from "antd";
+import { message } from "antd";
+import { ordersGrid } from "../../data/dummy";
+import { useNavigate } from "react-router-dom";
 // import { Table, Select, message } from "antd";
-
-const { Option } = Select;
 
 function AdminOrderList() {
   const [orders, setOrders] = useState([]);
-
+  const navigate = useNavigate();
+  const [page, setPage] = useState(1);
+  const [loading, setisLoading] = useState(false);
+  const [totalRecords, setTotalRecords] = useState(0);
+  const fetchOrders = async (page = 1) => {
+    setisLoading(true);
+    try {
+      const { data } = await axios.get(
+        `${process.env.REACT_APP_API}/api/order/admin/orders`,
+        {
+          params: {
+            page,
+            limit: 20,
+          },
+        }
+      );
+      setOrders(data);
+      setTotalRecords(data.totalCount);
+      setisLoading(false);
+    } catch (error) {
+      message.error("Error fetching orders");
+    }
+  };
+  const onPageChange = async (arg) => {
+    fetchOrders(arg.currentPage);
+  };
   useEffect(() => {
-    const fetchOrders = async () => {
-      try {
-        const { data } = await axios.get(
-          `${process.env.REACT_APP_API}/api/order/admin/orders`
-        );
-        console.log(data);
-        setOrders(data);
-      } catch (error) {
-        message.error("Error fetching orders");
-      }
-    };
-
     fetchOrders();
   }, []);
 
@@ -55,61 +68,22 @@ function AdminOrderList() {
       message.error("Error updating order status");
     }
   };
-
-  // const columns = [
-  //   { title: "Order ID", dataIndex: "_id", key: "_id" },
-  //   {
-  //     title: "Items",
-  //     dataIndex: "orderItems",
-  //     key: "orderItems",
-  //     render: (items) => (
-  //       <ul>
-  //         {items.map((item, index) => (
-  //           <li key={index}>
-  //             {item.name} x {item.quantity}
-  //           </li>
-  //         ))}
-  //       </ul>
-  //     ),
-  //   },
-  //   {
-  //     title: "Total Price",
-  //     dataIndex: "totalPrice",
-  //     key: "totalPrice",
-  //     render: (price) => `₹${price}`,
-  //   },
-  //   {
-  //     title: "Status",
-  //     dataIndex: "status",
-  //     key: "status",
-  //     render: (status, order) => (
-  //       <Select
-  //         value={status}
-  //         onChange={(newStatus) => handleStatusChange(order._id, newStatus)}
-  //         style={{ width: 120 }}
-  //       >
-  //         <Option value="Pending">Pending</Option>
-  //         <Option value="Confirmed">Confirmed</Option>
-  //         <Option value="Shipped">Shipped</Option>
-  //         <Option value="Delivered">Delivered</Option>
-  //       </Select>
-  //     ),
-  //   },
-  //   {
-  //     title: "Created At",
-  //     dataIndex: "createdAt",
-  //     key: "createdAt",
-  //     render: (date) => new Date(date).toLocaleString(),
-  //   },
-  // ];
+  const handleRowClick = async (arg) => {
+    navigate(`/dashbord/orderlist/${arg.data.orderId}`);
+  };
+  const toolbarOptions = ["Search"];
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl mb-4">Manage Orders</h1>
-      {/* <div className="md:m-2 md:m-10 p-2 md:p-10 bg-white rounded-3xl">
+    <div className="lg:mx-12 md:m-3 mt-12 p-2 md:p-5 bg-white rounded-3xl ">
+      <div className="flex justify-center items-center mb-5  ">
+        <h1 className="text-2xl font-bold text-center text-black">
+          Order List
+        </h1>
+      </div>
+      <div className="md:m-2 md:m-10 p-2 md:p-10 bg-white rounded-3xl">
         <GridComponent
           id="gridcomp"
-          dataSource={productdata}
+          dataSource={orders}
           enableStickyHeader={true}
           allowSorting
           allowFiltering
@@ -127,12 +101,11 @@ function AdminOrderList() {
         </GridComponent>
         <PagerComponent
           totalRecordsCount={totalRecords}
-          pageSize={10}
+          pageSize={20}
           currentPage={page}
           click={onPageChange}
         />
-      </div> */}
-      {/* <Table dataSource={orders} columns={columns} rowKey="_id" /> */}
+      </div>
     </div>
   );
 }
