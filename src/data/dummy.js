@@ -149,15 +149,28 @@ export const gridOrderImage = (props) => (
         />
     </div>
 );
-export const gridOrderStatus = (props) => (
-    <button
-        type="button"
-        style={{ background: props.shippingStatus === 'Pending' ? '#FB9678' : 'green' }}
-        className="text-white py-1 px-2 capitalize rounded text-md"
-    >
-        {props.shippingStatus}
-    </button>
-);
+export const gridOrderStatus = (props) => {
+    // Define color mapping for each shipping status
+    const statusColors = {
+        Pending: '#FB9678',     // Orange color for Pending
+        Packed: '#03A9F4',      // Blue color for Packed
+        Shipping: '#FFC107',    // Yellow color for Shipping
+        Delivered: '#4CAF50',   // Green color for Delivered
+    };
+
+    // Determine the background color based on the shipping status
+    const backgroundColor = statusColors[props.shippingStatus] || '#000000'; // Default to black if status is unknown
+
+    return (
+        <button
+            type="button"
+            style={{ background: backgroundColor }}
+            className="text-white py-1 px-2 capitalize rounded text-md"
+        >
+            {props.shippingStatus}
+        </button>
+    );
+};
 export const gridPaymentStatus = (props) => (
     <div className="flex gap-2 justify-Start items-center text-gray-700 capitalize">
         <p style={{ background: props.paymentStatus === "paid" ? 'green' : 'red' }} className="rounded-full h-3 w-3" />
@@ -226,6 +239,9 @@ export const ordersGrid = [
     }, {
         field: 'orderDate',
         headerText: 'Order Date',
+        type: "date",
+        format: "d/M/y",
+        // format: 'yMd',
         width: '120',
     },
     {

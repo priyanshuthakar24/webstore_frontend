@@ -1,17 +1,18 @@
 import { Avatar, Card, Divider, message, Select } from "antd";
 import axios from "axios";
-import { Download, Mail, MapPinned, Truck } from "lucide-react";
+import { Download, Mail, MapPinned } from "lucide-react";
 import React, { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { RiSecurePaymentLine } from "react-icons/ri";
 import { PiTruckTrailerDuotone } from "react-icons/pi";
 import { TbTruckDelivery } from "react-icons/tb";
+import OrderFormModal from "../ui/OrderFormModal";
 const OrderDetailpage = () => {
   const { id } = useParams();
   const [orderData, setorderData] = useState([]);
   const [loading, setLoading] = useState(false);
   const options = [
-    { label: "Pennding", value: "Pennding" },
+    { label: "Pending", value: "Pending" },
     { label: "Packed", value: "Packed" },
     { label: "Shipping", value: "Shipping" },
     { label: "Delivered", value: "Delivered" },
@@ -35,6 +36,21 @@ const OrderDetailpage = () => {
   useEffect(() => {
     fetchOrderdetail();
   }, [fetchOrderdetail]);
+
+  const handleStatusChange = async (value) => {
+    // return console.log(value);
+    try {
+      const { data } = await axios.put(
+        `${process.env.REACT_APP_API}/api/order/admin/${orderData._id}/status`,
+        {
+          status: value,
+        }
+      );
+      message.success(data.message);
+    } catch (error) {
+      message.error("Error updating order status");
+    }
+  };
   return (
     <>
       {loading ? (
@@ -48,8 +64,12 @@ const OrderDetailpage = () => {
               <span className="font-bold">
                 Order # {orderData._id?.slice(-6)}
               </span>
-              <span className="flex gap-5">
+              <span className="flex gap-5 items-center">
+                <OrderFormModal />
+
                 <Select
+                  onChange={handleStatusChange}
+                  defaultValue={orderData.status}
                   options={options}
                   size="large"
                   className="w-full"
@@ -92,7 +112,7 @@ const OrderDetailpage = () => {
                     </td>
                     <td className="pl-5">₹ {item.price}</td>
                     <td className="pl-5">X {item.quantity}</td>
-                    <td className="pl-5">₹ {item.price * item.quantity}.00</td>
+                    <td>₹ {item.price * item.quantity}.00</td>
                   </tr>
                 ))}
                 <tr>
@@ -102,7 +122,10 @@ const OrderDetailpage = () => {
                 </tr>
                 <tr>
                   <td></td>
-                  <td className="space-y-3 text-start lg:text-lg" colSpan={2}>
+                  <td
+                    className="space-y-3 text-center lg:text-lg lg:pl-20"
+                    colSpan={2}
+                  >
                     <p>SubTotal :</p>
                     <p>Shipping :</p>
                     <p> Tax :</p>
@@ -126,7 +149,7 @@ const OrderDetailpage = () => {
 
           {/* Section 2  */}
 
-          <div className="flex mt-5 gap-10 flex-col lg:flex-row ">
+          <div className="flex mt-5 gap-10 flex-col lg:flex-row justify-center ">
             {/* //! customre Detail  */}
             <Card>
               <p className="font-bold  text-base font-sans text-gray-600 ">
