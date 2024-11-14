@@ -50,6 +50,7 @@ function Payment({ orderSummary, shippingInfo, cartItems, onPaymentSuccess }) {
         name: "Ecommerce",
         description: "Order Payment",
         order_id: data.razorpayOrderId,
+        method: ["upi", "card", "netbanking"], // Enable UPI along with other methods
         handler: async function (response) {
           // Payment successful on frontend, display success message
           message.success(
@@ -70,7 +71,7 @@ function Payment({ orderSummary, shippingInfo, cartItems, onPaymentSuccess }) {
 
           // if (result.data.success) {
           //   message.success("Payment successful!");
-          //   //   onPaymentSuccess(result.data.order);
+          //   onPaymentSuccess(result.data.order);
           // } else {
           //   message.error("Payment verification failed");
           // }
@@ -78,7 +79,7 @@ function Payment({ orderSummary, shippingInfo, cartItems, onPaymentSuccess }) {
         prefill: {
           name: "Priyanshu Thakar",
           email: "myemail@example.com",
-          contact: "7600195223",
+          contact: `${shippingInfo.phone}`,
         },
         theme: {
           color: "#cc3333",

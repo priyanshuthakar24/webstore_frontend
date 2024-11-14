@@ -6,7 +6,7 @@ import { useParams } from "react-router-dom";
 
 const { Option } = Select;
 
-const OrderFormModal = ({ onOrderUpdate }) => {
+const OrderFormModal = ({ onOrderUpdate, logisticdata }) => {
   // State to manage modal visibility
   const [isModalVisible, setIsModalVisible] = useState(false);
   const { id } = useParams();
@@ -27,7 +27,7 @@ const OrderFormModal = ({ onOrderUpdate }) => {
       const values = await form.validateFields();
 
       // Send data to the backend (replace '/api/orders' with your actual endpoint)
-      const response = await axios.put(
+      const response = await axios.post(
         `${process.env.REACT_APP_API}/api/order/admin/logisticsdetail`,
         values,
         { params: { id } }
@@ -36,7 +36,7 @@ const OrderFormModal = ({ onOrderUpdate }) => {
       // Assuming the backend returns the updated order data
       if (response.status === 200) {
         message.success("Order successfully created!");
-        // onOrderUpdate(response.data); // Update UI with new data
+        onOrderUpdate(response.data.data); // Update UI with new data
         setIsModalVisible(false); // Close the modal
         form.resetFields(); // Clear the form fields
       }
@@ -69,7 +69,15 @@ const OrderFormModal = ({ onOrderUpdate }) => {
         okText="Submit"
         cancelText="Cancel"
       >
-        <Form form={form} layout="vertical">
+        <Form
+          form={form}
+          layout="vertical"
+          initialValues={{
+            logisticsName: logisticdata?.logisticsName,
+            trackId: logisticdata?.trackId,
+            paymentType: logisticdata?.paymentType,
+          }}
+        >
           {/* Logistics Name Field */}
           <Form.Item
             label="Logistics Name"
@@ -81,8 +89,8 @@ const OrderFormModal = ({ onOrderUpdate }) => {
 
           {/* Order ID Field */}
           <Form.Item
-            label="Order ID"
-            name="orderId"
+            label="Track ID"
+            name="trackId"
             rules={[{ required: true, message: "Please enter order ID" }]}
           >
             <Input placeholder="Enter order ID" />

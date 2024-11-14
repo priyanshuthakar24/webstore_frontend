@@ -46,6 +46,7 @@ function OrderSummary({ cartItems, shippingInfo, onSubmit }) {
       <Divider />
       <div>
         <h2 className="text-center">Address</h2>
+        <p>+91 {shippingInfo.phone}</p>
         <p>{shippingInfo.address},</p>
         <p>{shippingInfo.city},</p>
         <p>{shippingInfo.postalCode},</p>

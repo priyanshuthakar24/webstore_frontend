@@ -1,6 +1,12 @@
 import { Avatar, Card, Divider, message, Select } from "antd";
 import axios from "axios";
-import { Download, Mail, MapPinned } from "lucide-react";
+import {
+  CircleUserRound,
+  Download,
+  Mail,
+  MapPinned,
+  SquareUserRound,
+} from "lucide-react";
 import React, { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { RiSecurePaymentLine } from "react-icons/ri";
@@ -17,6 +23,15 @@ const OrderDetailpage = () => {
     { label: "Shipping", value: "Shipping" },
     { label: "Delivered", value: "Delivered" },
   ];
+
+  const handleOrderUpdate = (newOrderDetails) => {
+    // Directly replace orderData with the new updated object
+    setorderData((prevOrder) => ({
+      ...prevOrder,
+      LogisticDetail: newOrderDetails,
+    }));
+  };
+
   const fetchOrderdetail = useCallback(async () => {
     setLoading(true);
     try {
@@ -65,7 +80,10 @@ const OrderDetailpage = () => {
                 Order # {orderData._id?.slice(-6)}
               </span>
               <span className="flex gap-5 items-center">
-                <OrderFormModal />
+                <OrderFormModal
+                  onOrderUpdate={handleOrderUpdate}
+                  logisticdata={orderData.LogisticDetail}
+                />
 
                 <Select
                   onChange={handleStatusChange}
@@ -149,10 +167,11 @@ const OrderDetailpage = () => {
 
           {/* Section 2  */}
 
-          <div className="flex mt-5 gap-10 flex-col lg:flex-row justify-center ">
+          <div className="flex mt-5 gap-10 flex-col lg:flex-row justify-around ">
             {/* //! customre Detail  */}
             <Card>
-              <p className="font-bold  text-base font-sans text-gray-600 ">
+              <p className="font-bold flex-center gap-5 text-base font-sans text-gray-600 ">
+                <CircleUserRound size={25} />
                 Customer Detail
               </p>
               <Divider className="my-4" />
@@ -183,10 +202,12 @@ const OrderDetailpage = () => {
                 <span className="text-lg capitalize">
                   {orderData.user?.name}
                 </span>
-                <p>{orderData.shippingInfo?.address}</p>
-                <p>{orderData.shippingInfo?.city}</p>
-                <p>{orderData.shippingInfo?.postalCode}</p>
-                <p>{orderData.shippingInfo?.country}</p>
+                <span className="lg:text-lg">
+                  <p>{orderData.shippingInfo?.address}</p>
+                  <p>{orderData.shippingInfo?.city}</p>
+                  <p>{orderData.shippingInfo?.postalCode}</p>
+                  <p>{orderData.shippingInfo?.country}</p>
+                </span>
               </div>
             </Card>
             {/* //!payment Detail  */}
@@ -200,19 +221,19 @@ const OrderDetailpage = () => {
                 <p className="text-base capitalize">
                   Transactions : #{orderData.paymentInfo?.id}
                 </p>
-                <p>
-                  Payment Method:
-                  {/* {orderData.shippingInfo.address} */}
-                </p>
-                <p>
-                  Payment Holder Name:
-                  {/* {orderData.shippingInfo.city} */}
-                </p>
+                <p>Payment Method : {orderData.paymentInfo?.method}</p>
+                <p>Payment Holder Number: {orderData.paymentInfo?.contact}</p>
+                {orderData.paymentInfo?.cardlast4?
                 <p>
                   <span>Card Number:</span>
-                  <span>XXXX XXXX XXXX XXXX </span>
-                  {/* {orderData.shippingInfo.postalCode} */}
+                  <span>{" "}
+                    XXXX XXXX XXXX{" "}
+                    {orderData.paymentInfo?.cardlast4
+                      ? orderData.paymentInfo?.cardlast4
+                      : "XXXX"}{" "}
+                  </span>
                 </p>
+                  :null}
                 <p className="text-black/75">
                   Total Amount: ₹ {orderData.totalPrice}.00
                 </p>
@@ -229,9 +250,11 @@ const OrderDetailpage = () => {
                 <span className="flex-center justify-center">
                   <PiTruckTrailerDuotone size={35} />
                 </span>
-                <p className="text-lg">RQK Logistics</p>
-                <p>ID: MFDS1400457854</p>
-                <p>Payment Mode : Debit Card</p>
+                <p className="text-lg">
+                  {orderData.LogisticDetail?.logisticsName}
+                </p>
+                <p>ID: {orderData.LogisticDetail?.trackId}</p>
+                <p>Payment Mode : {orderData.LogisticDetail?.paymentType}</p>
               </div>
             </Card>
           </div>
@@ -241,4 +264,4 @@ const OrderDetailpage = () => {
   );
 };
 
-export default OrderDetailpage;
+export default OrderDetailpage; 

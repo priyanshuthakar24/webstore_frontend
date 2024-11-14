@@ -1,5 +1,6 @@
-import { FilePlus2, Heart, LayoutDashboard, ShoppingBag, UserRound } from "lucide-react";
+import {  Heart, LayoutDashboard, Package, Shirt, ShoppingBag, UserRound } from "lucide-react";
 
+import { MdAssignmentAdd, MdOutlineAddHome } from "react-icons/md";
 
 
 //! general menu 
@@ -68,15 +69,15 @@ export const links = [
         links: [
             {
                 name: 'addproduct',
-                icon: FilePlus2,
+                icon: MdOutlineAddHome  ,
             },
             {
                 name: 'products',
-                icon: LayoutDashboard,
+                icon: Shirt,
             },
             {
                 name: 'orders',
-                icon: LayoutDashboard,
+                icon: Package,
             },
             {
                 name: 'employees',
@@ -182,7 +183,7 @@ export const GridCustomer = (props) => (
     <p className="capitalize">{props.customerName}</p>
 )
 export const GridOrder = (props) => (
-    <p className="font-sans font-bold"># {props.orderId.slice(-6)}</p>
+    <p className="font-sans font-bold"># {props?.orderId.slice(-6)}</p>
 )
 
 // //! product table grid 

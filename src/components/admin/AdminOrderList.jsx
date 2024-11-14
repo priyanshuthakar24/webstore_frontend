@@ -16,6 +16,8 @@ import {
 import { message } from "antd";
 import { ordersGrid } from "../../data/dummy";
 import { useNavigate } from "react-router-dom";
+import io from "socket.io-client";
+const socket = io.connect(`${process.env.REACT_APP_API}`); // Adjust to your server URL
 
 function AdminOrderList() {
   const [orders, setOrders] = useState([]);
@@ -23,6 +25,7 @@ function AdminOrderList() {
   const [page, setPage] = useState(1);
   const [loading, setisLoading] = useState(false);
   const [totalRecords, setTotalRecords] = useState(0);
+
   const fetchOrders = async (page = 1) => {
     setisLoading(true);
     try {
@@ -48,6 +51,20 @@ function AdminOrderList() {
   };
   useEffect(() => {
     fetchOrders();
+
+    // Listen for real-time order updates
+    socket.on("orderUpdate", (data) => {
+      console.log("Received order update:", data); // Log the received data
+
+      if (data.allorder) {
+        alert(`New order update: ${data.message}`);
+        // Safely update orders by ensuring prevOrders is an array
+        setOrders(data.allorder);
+      }
+    });
+
+    // Clean up on component unmount
+    return () => socket.off("orderUpdate");
   }, []);
 
   const handleRowClick = async (arg) => {
@@ -69,9 +86,9 @@ function AdminOrderList() {
           <div className="md:m-2 md:m-10 p-2 md:p-10 bg-white rounded-3xl">
             <GridComponent
               id="gridcomp"
-              dataSource={orders}
+              dataSource={orders || []}
               enableStickyHeader={true}
-              allowSorting
+              allowSorting={true}
               allowFiltering
               toolbar={toolbarOptions}
               rowSelected={handleRowClick}
