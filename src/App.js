@@ -14,6 +14,7 @@ import AdminPanel from './components/client/orders/Order';
 import AdminOrders from './components/admin/AdminOrderList';
 import AdminOrderList from './components/admin/AdminOrderList';
 import OrderDetailpage from './components/admin/OrderDetailpage';
+import NewOrderpage from './components/admin/NewOrderpage';
 //!  This method check that user is authenticated or not also check that user is Verified or not if not than it will redired to login or verify-email page 
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, userData } = useAuth()
@@ -147,6 +148,9 @@ function App() {
       }, {
         path: 'orderlist/:id',
         element: <OrderDetailpage />
+      }, {
+        path: 'newOrder',
+        element: <NewOrderpage />
       }]
     }
   ])

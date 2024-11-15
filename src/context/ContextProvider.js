@@ -22,6 +22,7 @@ export const ContextProvider = ({ children }) => {
     const [currentColor, setCurrentColor] = useState('#03C9D7');
     const [page, setPage] = useState(1);
     const [productDetail, setProductDetail] = useState([]);
+    const [notifications, setNotifications] = useState([]);
     const handleClick = (clicked) => {
         setisClicked({ ...isClicked, [clicked]: true });
     }
@@ -49,7 +50,14 @@ export const ContextProvider = ({ children }) => {
         }
     };
 
-    return <StateContext.Provider value={{ currentColor, currentMode, activeMenu, screenSize, setScreenSize, handleClick, isClicked, initalState, setisClicked, setActiveMenu, setMode, setColor, themeSettings, setThemeSettings, user, setuser, page, setPage, fetchproductdetail, productDetail, setProductDetail }}
+    const addNotification = (notification) => {
+        setNotifications((prev) => [...prev, notification]);
+    };
+
+    const clearNotifications = () => {
+        setNotifications([]);
+    };
+    return <StateContext.Provider value={{ currentColor, currentMode, activeMenu, screenSize, setScreenSize, handleClick, isClicked, initalState, setisClicked, setActiveMenu, setMode, setColor, themeSettings, setThemeSettings, user, setuser, page, setPage, fetchproductdetail, productDetail, setProductDetail, notifications, addNotification, clearNotifications }}
     >{children}</StateContext.Provider>
 }
 

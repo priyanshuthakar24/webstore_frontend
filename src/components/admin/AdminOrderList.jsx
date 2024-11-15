@@ -17,6 +17,7 @@ import { message } from "antd";
 import { ordersGrid } from "../../data/dummy";
 import { useNavigate } from "react-router-dom";
 import io from "socket.io-client";
+import { useStateContext } from "../../context/ContextProvider";
 const socket = io.connect(`${process.env.REACT_APP_API}`); // Adjust to your server URL
 
 function AdminOrderList() {
@@ -29,7 +30,7 @@ function AdminOrderList() {
   const fetchOrders = async (page = 1) => {
     setisLoading(true);
     try {
-      const { data } = await axios.get(
+      const res = await axios.get(
         `${process.env.REACT_APP_API}/api/order/admin/orders`,
         {
           params: {
@@ -38,8 +39,8 @@ function AdminOrderList() {
           },
         }
       );
-      setOrders(data);
-      setTotalRecords(data.totalCount);
+      setOrders(res.data.result);
+      setTotalRecords(res.data.totalCount);
       setisLoading(false);
     } catch (error) {
       message.error("Error fetching orders");
@@ -54,13 +55,22 @@ function AdminOrderList() {
 
     // Listen for real-time order updates
     socket.on("orderUpdate", (data) => {
-      console.log("Received order update:", data); // Log the received data
+      alert(`New order update: ${data.message}`);
 
-      if (data.allorder) {
-        alert(`New order update: ${data.message}`);
-        // Safely update orders by ensuring prevOrders is an array
-        setOrders(data.allorder);
-      }
+      // Check that all required fields are in the result object, add default values if missing
+      const newOrder = {
+        orderId: data.result.orderId || "N/A",
+        orderDate: data.result.orderDate || "Unknown date",
+        paymentStatus: data.result.paymentStatus || "unpaid",
+        paymentId: data.result.paymentId || "No Payment ID",
+        totalAmount: data.result.totalAmount || 0,
+        shippingStatus: data.result.shippingStatus || "Pending",
+        customerName: data.result.customerName || "Unknown Customer",
+      };
+
+      // Update total records count and prepend the new order
+      setTotalRecords((prev) => prev + 1);
+      setOrders((prevOrders) => [newOrder, ...prevOrders]);
     });
 
     // Clean up on component unmount
@@ -85,8 +95,9 @@ function AdminOrderList() {
           </div>
           <div className="md:m-2 md:m-10 p-2 md:p-10 bg-white rounded-3xl">
             <GridComponent
+              key={orders.length} // Force re-render by updating key
               id="gridcomp"
-              dataSource={orders || []}
+              dataSource={orders}
               enableStickyHeader={true}
               allowSorting={true}
               allowFiltering

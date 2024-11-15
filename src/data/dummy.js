@@ -1,6 +1,6 @@
-import {  Heart, LayoutDashboard, Package, Shirt, ShoppingBag, UserRound } from "lucide-react";
+import { Heart, LayoutDashboard, Package, PackagePlus, Shirt, ShoppingBag, UserRound } from "lucide-react";
 
-import { MdAssignmentAdd, MdOutlineAddHome } from "react-icons/md";
+import { MdOutlineAddHome } from "react-icons/md";
 
 
 //! general menu 
@@ -46,11 +46,7 @@ export const adminMenu = [
         name: 'Dashbord',
         icon: LayoutDashboard
     },
-    {
-        link: 'contact',
-        name: 'contact',
-        icon: LayoutDashboard
-    }
+
 ]
 
 export const links = [
@@ -69,7 +65,7 @@ export const links = [
         links: [
             {
                 name: 'addproduct',
-                icon: MdOutlineAddHome  ,
+                icon: MdOutlineAddHome,
             },
             {
                 name: 'products',
@@ -80,8 +76,8 @@ export const links = [
                 icon: Package,
             },
             {
-                name: 'employees',
-                icon: Heart,
+                name: 'newOrder',
+                icon: PackagePlus,
             },
             // {
             //     name: 'customers',
@@ -151,16 +147,14 @@ export const gridOrderImage = (props) => (
     </div>
 );
 export const gridOrderStatus = (props) => {
-    // Define color mapping for each shipping status
     const statusColors = {
-        Pending: '#FB9678',     // Orange color for Pending
-        Packed: '#03A9F4',      // Blue color for Packed
-        Shipping: '#FFC107',    // Yellow color for Shipping
-        Delivered: '#4CAF50',   // Green color for Delivered
+        Pending: '#FB9678',
+        Packed: '#03A9F4',
+        Shipping: '#FFC107',
+        Delivered: '#4CAF50',
     };
 
-    // Determine the background color based on the shipping status
-    const backgroundColor = statusColors[props.shippingStatus] || '#000000'; // Default to black if status is unknown
+    const backgroundColor = statusColors[props.shippingStatus] || '#000000';
 
     return (
         <button
@@ -168,23 +162,29 @@ export const gridOrderStatus = (props) => {
             style={{ background: backgroundColor }}
             className="text-white py-1 px-2 capitalize rounded text-md"
         >
-            {props.shippingStatus}
+            {props.shippingStatus || "Pending"}
         </button>
     );
 };
+
 export const gridPaymentStatus = (props) => (
-    <div className="flex gap-2 justify-Start items-center text-gray-700 capitalize">
-        <p style={{ background: props.paymentStatus === "paid" ? 'green' : 'red' }} className="rounded-full h-3 w-3" />
-        <p>{props.paymentStatus}</p>
+    <div className="flex gap-2 justify-start items-center text-gray-700 capitalize">
+        <p
+            style={{ background: props.paymentStatus === "paid" ? 'green' : 'red' }}
+            className="rounded-full h-3 w-3"
+        />
+        <p>{props.paymentStatus || "unpaid"}</p>
     </div>
-)
+);
 
 export const GridCustomer = (props) => (
-    <p className="capitalize">{props.customerName}</p>
-)
+    <p className="capitalize">{props.customerName || "Unknown Customer"}</p>
+);
+
 export const GridOrder = (props) => (
-    <p className="font-sans font-bold"># {props?.orderId.slice(-6)}</p>
-)
+    <p className="font-sans font-bold"># {props.orderId ? props.orderId.slice(-6) : "N/A"}</p>
+);
+
 
 // //! product table grid 
 export const productGrid = [
@@ -236,37 +236,40 @@ export const ordersGrid = [
         template: GridOrder,
         headerText: 'Order ID',
         width: '150',
-        // textAlign: 'Center'
-    }, {
+    },
+    {
         field: 'orderDate',
         headerText: 'Order Date',
         type: "date",
         format: "d/M/y",
-        // format: 'yMd',
         width: '120',
     },
     {
         template: GridCustomer,
         headerText: 'Customer Name',
         width: '100',
-    }, {
+    },
+    {
         headerText: 'Payment Status',
         template: gridPaymentStatus,
         width: '100',
-    }, {
+    },
+    {
         field: 'paymentId',
         headerText: 'Payment ID',
         width: '150',
-    }, {
+    },
+    {
         field: 'totalAmount',
         headerText: 'Total Amount',
         format: 'C2',
         width: '100'
     },
     {
-        headerText: 'shippingStatus',
+        headerText: 'Shipping Status',
         template: gridOrderStatus,
         textAlign: 'Center',
         width: '120'
     },
-]
+];
+

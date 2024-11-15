@@ -42,6 +42,8 @@ function AddressForm({ onSubmit, shippingInfo }) {
       >
         <InputNumber
           addonBefore={prefixSelector}
+          maxLength={10}
+          minLength={10}
           style={{
             width: "100%",
           }}
