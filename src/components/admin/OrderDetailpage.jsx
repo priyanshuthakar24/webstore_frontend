@@ -5,7 +5,6 @@ import {
   Download,
   Mail,
   MapPinned,
-  SquareUserRound,
 } from "lucide-react";
 import React, { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";

@@ -10,8 +10,6 @@ import EditProduct from './components/admin/EditProduct';
 import AddProduct from './components/admin/AddProduct';
 import SingleProduct from './components/client/SingleProduct';
 import CartPage from './pages/CartPage';
-import AdminPanel from './components/client/orders/Order';
-import AdminOrders from './components/admin/AdminOrderList';
 import AdminOrderList from './components/admin/AdminOrderList';
 import OrderDetailpage from './components/admin/OrderDetailpage';
 import NewOrderpage from './components/admin/NewOrderpage';
@@ -70,17 +68,12 @@ function App() {
           path: '/cart',
           element: <CartPage />
         },
-
         {
           path: 'shop',
           element: <Shop />
         }, {
           path: 'stories',
           element: <Stories />
-        },
-        {
-          path: 'shop',
-          element: <Shop />
         },
         {
           path: 'about',

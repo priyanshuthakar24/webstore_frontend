@@ -17,7 +17,6 @@ import { message } from "antd";
 import { ordersGrid } from "../../data/dummy";
 import { useNavigate } from "react-router-dom";
 import io from "socket.io-client";
-import { useStateContext } from "../../context/ContextProvider";
 const socket = io.connect(`${process.env.REACT_APP_API}`); // Adjust to your server URL
 
 function AdminOrderList() {

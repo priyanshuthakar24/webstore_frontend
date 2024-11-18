@@ -1,6 +1,6 @@
 import { Button, Input, message } from "antd";
 import React, { useState } from "react";
-import axios from "axios";
+
 const Coupan = ({ product, onSubmit }) => {
   const [coupan, setcoupan] = useState(0);
   const handleSubmit = () => {

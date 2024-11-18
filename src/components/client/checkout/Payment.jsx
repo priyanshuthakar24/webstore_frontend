@@ -1,7 +1,6 @@
 import React from "react";
 import axios from "axios";
 import { Button, message } from "antd";
-// import CartItem from "../CartItem";
 
 function Payment({ orderSummary, shippingInfo, cartItems, onPaymentSuccess }) {
   // Transform cart items to order items format
