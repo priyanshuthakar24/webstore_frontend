@@ -36,7 +36,7 @@ const OrderDetailpage = () => {
     setLoading(true);
     try {
       const res = await axios.get(
-        `${process.env.REACT_APP_API}/api/order/admin`,
+        `${process.env.REACT_APP_API}/api/order/admin/orderdetail`,
         {
           params: { id },
         }

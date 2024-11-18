@@ -10,7 +10,7 @@ const NewOrderpage = () => {
   const fetchNewOrder = async () => {
     try {
       const res = await axios.get(
-        `${process.env.REACT_APP_API}/api/admin/order/neworder`
+        `${process.env.REACT_APP_API}/api/admin/notification/neworder`
       );
       if (res) {
         setOrder(res.data.notification);
@@ -23,7 +23,7 @@ const NewOrderpage = () => {
     console.log(id);
     try {
       const res = await axios.delete(
-        `${process.env.REACT_APP_API}/api/admin/order/remove`,
+        `${process.env.REACT_APP_API}/api/admin/notification/remove`,
         { params: { id } }
       );
       if (res) {
