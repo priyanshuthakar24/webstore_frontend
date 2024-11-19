@@ -19,7 +19,7 @@ const SingleProductView = ({ props }) => {
     setQuantity((prevCount) => prevCount - 1);
   };
   const handleChange = async (e) => {
-    await fetchproductdetail(_id);
+    // await fetchproductdetail(_id);
     setSize(e.target.value);
   };
   const handleAddToCart = async () => {

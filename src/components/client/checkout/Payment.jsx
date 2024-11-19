@@ -1,9 +1,21 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Button, message } from "antd";
 
 function Payment({ orderSummary, shippingInfo, cartItems, onPaymentSuccess }) {
   // Transform cart items to order items format
+  const [orderTotalPrice, setorderTotalPrice] = useState([]);
+  let pricecal = 0;
+  const totalpricecal = () => {
+    pricecal =
+      cartItems.totalCost * 0.1 +
+      orderSummary.shippingPrice +
+      cartItems.totalCost;
+    return setorderTotalPrice(pricecal);
+  };
+  useEffect(() => {
+    totalpricecal();
+  }, [cartItems]);
   const orderItems = cartItems.items.map((item) => ({
     product: item.productId._id, // Use the product ID only
     quantity: item.quantity,
@@ -37,7 +49,7 @@ function Payment({ orderSummary, shippingInfo, cartItems, onPaymentSuccess }) {
           itemsPrice: orderSummary.itemsPrice,
           taxPrice: orderSummary.taxPrice,
           shippingPrice: orderSummary.shippingPrice,
-          totalPrice: orderSummary.totalPrice,
+          totalPrice: orderTotalPrice,
         },
         { withCredentials: true }
       );
@@ -95,16 +107,17 @@ function Payment({ orderSummary, shippingInfo, cartItems, onPaymentSuccess }) {
   return (
     <div className="mt-4 space-y-4">
       <h2 className="font-sans text-lg">Complete Payment</h2>
-
+      {cartItems.items.length <= 0 && <p>Please add some Product in cart</p>}
       <Button
         type="primary"
+        disabled={cartItems.items.length <= 0}
         onClick={handlePayment}
         className="w-full"
         color="default"
         variant="solid"
         size="large"
       >
-        Pay ₹{orderSummary.totalPrice}
+        Pay ₹{orderTotalPrice}
       </Button>
     </div>
   );
