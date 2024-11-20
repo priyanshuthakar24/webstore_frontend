@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import {  Modal, Form, Input, Select, message, } from "antd";
+import { Modal, Form, Input, Select, message } from "antd";
 import axios from "axios";
 import { FilePenLine } from "lucide-react";
 import { useParams } from "react-router-dom";
@@ -63,7 +63,7 @@ const OrderFormModal = ({ onOrderUpdate, logisticdata }) => {
       {/* Modal with form inside */}
       <Modal
         title="Create Order"
-        visible={isModalVisible}
+        open={isModalVisible}
         onOk={handleOk}
         onCancel={handleCancel}
         okText="Submit"
