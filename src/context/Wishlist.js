@@ -29,6 +29,7 @@ export const WishlistcontextProvider = ({ children }) => {
             }, { withCredentials: true });
             if (response) {
                 setWishlistarray(response.data.wishlist);
+                setWishlist((prevWishlist) => prevWishlist.filter((item) => item._id !== productId));
                 message.success(response.data.message)
             }
         } catch (error) {
