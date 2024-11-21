@@ -7,15 +7,18 @@ import { Authprovider } from './context/Authcontext';
 import { ContextProvider } from './context/ContextProvider';
 import { registerLicense } from '@syncfusion/ej2-base';
 import { CartcontextProvider } from './context/Cartcontext';
+import { WishlistcontextProvider } from './context/Wishlist';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 registerLicense(process.env.REACT_APP_SYNC_LINCE)
 
 root.render(
   <Authprovider>
     <ContextProvider>
-      <CartcontextProvider>
-        < App />
-      </CartcontextProvider>
+      <WishlistcontextProvider>
+        <CartcontextProvider>
+          < App />
+        </CartcontextProvider>
+      </WishlistcontextProvider>
     </ContextProvider>
   </Authprovider>
 );

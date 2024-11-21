@@ -32,7 +32,7 @@ function AdminPanel() {
   }, []);
 
   return (
-    <div className="mt-20 text-[#495057] lg:mx-20 mx-4">
+    <div className="my-20 text-[#495057] lg:mx-20 mx-4">
       <h1 className="text-4xl font-sans m-6">Your Order</h1>
       {/* {JSON.stringify(orders)} */}
       <div className="space-y-10">

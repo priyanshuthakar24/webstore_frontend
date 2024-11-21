@@ -1,16 +1,17 @@
 import React, { useState } from "react";
 import ProductView from "../image/ProductView";
-import { Dot, Heart } from "lucide-react";
+import { Dot } from "lucide-react";
 import { Radio, Rate } from "antd";
 import CartCount from "../ui/CartCount";
 import { useCartcontext } from "../../context/Cartcontext";
 import { useStateContext } from "../../context/ContextProvider";
+import Wishlistui from "../ui/Wishlistui";
+
 const SingleProductView = ({ props }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [quantity, setQuantity] = useState(1);
   const [size, setSize] = useState("L");
   const { addToCart } = useCartcontext();
-  const { fetchproductdetail } = useStateContext();
   const handleIncrement = () => {
     setQuantity((prevCount) => prevCount + 1);
   };
@@ -91,9 +92,9 @@ const SingleProductView = ({ props }) => {
               />
               <span>4</span>
             </span>
-            <button className="px-4 py-3  rounded-lg hover:bg-black/5 lg:hidden ">
-              <Heart />
-            </button>
+            <p className="lg:hidden">
+              <Wishlistui product={_id} />
+            </p>
           </div>
           <div className="flex lg:gap-6 gap-2 pl-3 ">
             <span className="line-through text-2xl text-slate-500 ">
@@ -132,9 +133,7 @@ const SingleProductView = ({ props }) => {
                     >
                       Buy Now
                     </button>
-                    <button className="px-4 py-3 rounded-lg hover:bg-black/5 ">
-                      <Heart />
-                    </button>
+                    <Wishlistui product={_id} />
                   </div>
                 ) : (
                   <p className="hidden  lg:flex">Out of Stock</p>

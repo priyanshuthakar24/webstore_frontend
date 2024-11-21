@@ -1,16 +1,10 @@
-import { Button, Card, Divider, Modal } from "antd";
+import { Button, Card, Divider, Modal, Result } from "antd";
 import React, { useState } from "react";
-import { CheckCircleTwoTone } from "@ant-design/icons";
 const Ordermodel = ({ orderdata }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const handleOk = () => {
-    setIsModalVisible(false);
-  };
+
   const showModal = () => {
     setIsModalVisible(true);
-  };
-  const handleCancel = () => {
-    setIsModalVisible(false);
   };
 
   return (
@@ -31,21 +25,21 @@ const Ordermodel = ({ orderdata }) => {
         footer=""
       >
         <div>
-          {/* {JSON.stringify(orderdata)} */}
-          <Card className="mt-2">
-            <CheckCircleTwoTone twoToneColor="#52c41a" size={30} />
-            <p>{orderdata.paymentInfo.id}</p>
-          </Card>
+          <Result
+            status="success"
+            title=" Purchased Successfully!"
+            subTitle={orderdata.paymentInfo.id}
+          />
           {orderdata.orderItems?.map((item) => (
-            <p className="flex-center justify-between">
-              <p className="text-xs lg:text-base text-wrap">
-                {item.product.name}
+            <>
+              <p className="grid grid-cols-3 gap-2">
+                <p>{item.product.name}</p>
+                <p className="text-end">X {item.quantity}</p>
+                <p className="text-end">₹ {item.price * item.quantity}.00</p>
               </p>
-              <p>X {item.quantity}</p>
-              <p>₹ {item.price * item.quantity}.00</p>
-            </p>
+              <Divider className="m-4" />
+            </>
           ))}
-          <Divider />
           <p className="grid  grid-cols-2 gap-2">
             <Card>
               <span>ItemPrice : </span>
