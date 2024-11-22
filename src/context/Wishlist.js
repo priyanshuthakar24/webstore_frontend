@@ -18,7 +18,7 @@ export const WishlistcontextProvider = ({ children }) => {
                 message.success(response.data.message)
             }
         } catch (error) {
-            console.error('Error adding to wishlist:', error);
+            message.info(error.response.data.message)
         }
     };
 

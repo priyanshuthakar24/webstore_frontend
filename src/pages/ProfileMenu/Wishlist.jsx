@@ -35,7 +35,7 @@ const Wishlist = () => {
               <th className="lg:pb-5 lg:px-5">Add To Cart</th>
               <th className="lg:pb-5 lg:px-5">Remove</th>
             </thead>
-            {wishlist.lenght > 0 ? (
+            {wishlist.length > 0 ? (
               wishlist.map((item) => (
                 <tbody>
                   <td className="flex items-center gap-3 lg:gap-10 my-5 ">

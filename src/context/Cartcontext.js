@@ -42,7 +42,7 @@ export const CartcontextProvider = ({ children }) => {
                 setcartcount((preCount) => preCount + quantity)
             }
         } catch (error) {
-            message.error(error.response.data.message);
+            message.info(error.response.data.message);
         } finally {
             setIsLoading(false);
         }

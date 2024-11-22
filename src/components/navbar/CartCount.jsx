@@ -15,7 +15,7 @@ const CartCount = (props) => {
 
   const cartquantity = (item) => {
     let quantity = 0;
-    item.map((item) => (quantity += item.quantity));
+    item?.map((item) => (quantity += item.quantity));
     return setcartcount(quantity);
   };
   useEffect(() => {

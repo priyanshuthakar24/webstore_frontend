@@ -9,24 +9,24 @@ import {
   Inject,
   PagerComponent,
   Resize,
-  Search,
   Sort,
   Toolbar,
 } from "@syncfusion/ej2-react-grids";
 import { message } from "antd";
 import { ordersGrid } from "../../data/dummy";
 import { useNavigate } from "react-router-dom";
+import { Input } from "antd";
 import io from "socket.io-client";
 const socket = io.connect(`${process.env.REACT_APP_API}`); // Adjust to your server URL
-
 function AdminOrderList() {
+  const { Search } = Input;
   const [orders, setOrders] = useState([]);
   const navigate = useNavigate();
   const [page, setPage] = useState(1);
   const [loading, setisLoading] = useState(false);
   const [totalRecords, setTotalRecords] = useState(0);
-
-  const fetchOrders = async (page = 1) => {
+  const [searchTerm, setSearchTerm] = useState(""); // State for the search term
+  const fetchOrders = async (page = 1, search = "") => {
     setisLoading(true);
     try {
       const res = await axios.get(
@@ -35,6 +35,7 @@ function AdminOrderList() {
           params: {
             page,
             limit: 20,
+            search, // Pass the search term to the API
           },
         }
       );
@@ -79,18 +80,56 @@ function AdminOrderList() {
   const handleRowClick = async (arg) => {
     navigate(`/dashbord/orderlist/${arg.data.orderId}`);
   };
-  const toolbarOptions = ["Search"];
 
+  // Fetch orders function (includes search functionality)
+  const fetchsearchOrders = async (page = 1, search = "") => {
+    setisLoading(true);
+    try {
+      const res = await axios.get(
+        `${process.env.REACT_APP_API}/api/search/order`,
+        {
+          params: {
+            page,
+            limit: 20,
+            search, // Pass the search term to the API
+          },
+        }
+      );
+      setOrders(res.data.result);
+      setTotalRecords(res.data.totalCount);
+    } catch (error) {
+      message.error("Error fetching orders");
+    } finally {
+      setisLoading(false);
+    }
+  };
+  // const toolbarOptions = ["Search"];
+  const handleSearch = (value) => {
+    setSearchTerm(value);
+    fetchsearchOrders(1, value);
+  };
   return (
     <>
       {loading ? (
         <p> Loading...</p>
       ) : (
         <div className="lg:mx-12 md:m-3 mt-12 p-2 md:p-5 bg-white rounded-3xl ">
-          <div className="flex justify-center items-center mb-5  ">
+          <div className="flex justify-center items-center my-5  ">
             <h1 className="text-2xl font-bold text-center text-black">
               Order List
             </h1>
+          </div>
+          <div className=" flex  justify-between">
+            <div></div>
+            <Search
+              placeholder="input search text"
+              // allowClear
+              // enterButton="Search"
+              size="large"
+              // variant="
+              onSearch={handleSearch}
+              className="w-1/4 text-black"
+            />
           </div>
           <div className="md:m-2 md:m-10 p-2 md:p-10 bg-white rounded-3xl">
             <GridComponent
@@ -100,7 +139,7 @@ function AdminOrderList() {
               enableStickyHeader={true}
               allowSorting={true}
               allowFiltering
-              toolbar={toolbarOptions}
+              // toolbar={toolbarOptions}
               rowSelected={handleRowClick}
             >
               <ColumnsDirective>
@@ -108,9 +147,7 @@ function AdminOrderList() {
                   <ColumnDirective key={index} {...item} />
                 ))}
               </ColumnsDirective>
-              <Inject
-                services={[Toolbar, Search, Resize, Sort, ContextMenu, Filter]}
-              />
+              <Inject services={[Toolbar, Resize, Sort, ContextMenu, Filter]} />
             </GridComponent>
             <PagerComponent
               totalRecordsCount={totalRecords}

@@ -6,7 +6,7 @@ const CartItem = ({ product }) => {
   return (
     <div className=" flex flex-col lg:gap-10">
       {/* {JSON.stringify(product)} */}
-      {product.map((item) => (
+      {product?.map((item) => (
         <>
           <div className="flex gap-5 " key={item.productId._id}>
             <div className="bg-[#c4c4c4]  w-[23vw] lg:w-[10vw] lg:h-[25vh]">

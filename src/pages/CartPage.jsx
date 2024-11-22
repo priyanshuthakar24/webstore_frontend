@@ -33,7 +33,7 @@ const CartPage = () => {
               </NavLink>
             </p>
           </div>
-          {cart.items.length > 0 ? (
+          {cart.items?.length > 0 ? (
             <CartItem product={cart.items} />
           ) : (
             <p>Cart is Empty </p>
