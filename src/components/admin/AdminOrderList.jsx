@@ -12,7 +12,7 @@ import {
   Sort,
   Toolbar,
 } from "@syncfusion/ej2-react-grids";
-import { message } from "antd";
+import { Button, message } from "antd";
 import { ordersGrid } from "../../data/dummy";
 import { useNavigate } from "react-router-dom";
 import { Input } from "antd";
@@ -32,10 +32,11 @@ function AdminOrderList() {
       const res = await axios.get(
         `${process.env.REACT_APP_API}/api/order/admin/orders`,
         {
+          withCredentials: true,
           params: {
             page,
             limit: 20,
-            search, // Pass the search term to the API
+            // search, // Pass the search term to the API
           },
         }
       );
@@ -88,6 +89,7 @@ function AdminOrderList() {
       const res = await axios.get(
         `${process.env.REACT_APP_API}/api/search/order`,
         {
+          withCredentials: true,
           params: {
             page,
             limit: 20,
@@ -98,7 +100,7 @@ function AdminOrderList() {
       setOrders(res.data.result);
       setTotalRecords(res.data.totalCount);
     } catch (error) {
-      message.error("Error fetching orders");
+      message.error(error.response.data);
     } finally {
       setisLoading(false);
     }
@@ -115,19 +117,27 @@ function AdminOrderList() {
       ) : (
         <div className="lg:mx-12 md:m-3 mt-12 p-2 md:p-5 bg-white rounded-3xl ">
           <div className="flex justify-center items-center my-5  ">
-            <h1 className="text-2xl font-bold text-center text-black">
+            <h1 className="text-2xl font-bold font-sans text-center text-black">
               Order List
             </h1>
           </div>
           <div className=" flex  justify-between">
             <div></div>
             <Search
-              placeholder="input search text"
-              // allowClear
-              // enterButton="Search"
+              placeholder="Order ID"
+              allowClear={true}
+              defaultValue={searchTerm}
+              enterButton={
+                <Button
+                  type="primary"
+                  style={{ backgroundColor: "black", borderColor: "black" }}
+                >
+                  Search
+                </Button>
+              }
               size="large"
-              // variant="
               onSearch={handleSearch}
+              // onClear={fetchOrders}
               className="w-1/4 text-black"
             />
           </div>

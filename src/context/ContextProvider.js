@@ -39,7 +39,7 @@ export const ContextProvider = ({ children }) => {
     const fetchproductdetail = async (id) => {
         try {
             const res = await axios.get(
-                `${process.env.REACT_APP_API}/api/admin/productdetail`,
+                `${process.env.REACT_APP_API}/api/user/productdetail`,
                 {
                     params: { id },
                 }

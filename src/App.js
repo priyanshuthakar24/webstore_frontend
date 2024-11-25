@@ -13,6 +13,7 @@ import CartPage from './pages/CartPage';
 import AdminOrderList from './components/admin/AdminOrderList';
 import OrderDetailpage from './components/admin/OrderDetailpage';
 import NewOrderpage from './components/admin/NewOrderpage';
+import SearchProduct from './components/ui/SearchProduct';
 //!  This method check that user is authenticated or not also check that user is Verified or not if not than it will redired to login or verify-email page 
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, userData } = useAuth()
@@ -78,6 +79,10 @@ function App() {
         {
           path: 'about',
           element: <About />
+        },
+        {
+          path: 'searchproduct',
+          element: <SearchProduct />
         },
         {
           path: 'profile',

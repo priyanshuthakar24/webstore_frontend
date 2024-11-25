@@ -1,11 +1,6 @@
 import { Avatar, Card, Divider, message, Select } from "antd";
 import axios from "axios";
-import {
-  CircleUserRound,
-  Download,
-  Mail,
-  MapPinned,
-} from "lucide-react";
+import { CircleUserRound, Download, Mail, MapPinned } from "lucide-react";
 import React, { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { RiSecurePaymentLine } from "react-icons/ri";
@@ -36,9 +31,7 @@ const OrderDetailpage = () => {
     try {
       const res = await axios.get(
         `${process.env.REACT_APP_API}/api/order/admin/orderdetail`,
-        {
-          params: { id },
-        }
+        { withCredentials: true, params: { id } }
       );
       setorderData(res.data);
     } catch (error) {
@@ -58,6 +51,9 @@ const OrderDetailpage = () => {
         `${process.env.REACT_APP_API}/api/order/admin/${orderData._id}/status`,
         {
           status: value,
+        },
+        {
+          withCredentials: true,
         }
       );
       message.success(data.message);
@@ -222,17 +218,18 @@ const OrderDetailpage = () => {
                 </p>
                 <p>Payment Method : {orderData.paymentInfo?.method}</p>
                 <p>Payment Holder Number: {orderData.paymentInfo?.contact}</p>
-                {orderData.paymentInfo?.cardlast4?
-                <p>
-                  <span>Card Number:</span>
-                  <span>{" "}
-                    XXXX XXXX XXXX{" "}
-                    {orderData.paymentInfo?.cardlast4
-                      ? orderData.paymentInfo?.cardlast4
-                      : "XXXX"}{" "}
-                  </span>
-                </p>
-                  :null}
+                {orderData.paymentInfo?.cardlast4 ? (
+                  <p>
+                    <span>Card Number:</span>
+                    <span>
+                      {" "}
+                      XXXX XXXX XXXX{" "}
+                      {orderData.paymentInfo?.cardlast4
+                        ? orderData.paymentInfo?.cardlast4
+                        : "XXXX"}{" "}
+                    </span>
+                  </p>
+                ) : null}
                 <p className="text-black/75">
                   Total Amount: ₹ {orderData.totalPrice}.00
                 </p>
@@ -263,4 +260,4 @@ const OrderDetailpage = () => {
   );
 };
 
-export default OrderDetailpage; 
+export default OrderDetailpage;

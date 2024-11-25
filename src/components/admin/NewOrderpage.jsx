@@ -10,7 +10,8 @@ const NewOrderpage = () => {
   const fetchNewOrder = async () => {
     try {
       const res = await axios.get(
-        `${process.env.REACT_APP_API}/api/admin/notification/neworder`
+        `${process.env.REACT_APP_API}/api/admin/notification/neworder`,
+        { withCredentials: true }
       );
       if (res) {
         setOrder(res.data.notification);
@@ -24,7 +25,7 @@ const NewOrderpage = () => {
     try {
       const res = await axios.delete(
         `${process.env.REACT_APP_API}/api/admin/notification/remove`,
-        { params: { id } }
+        { withCredentials: true, params: { id } }
       );
       if (res) {
         const newdata = order.filter((item) => item._id !== id);

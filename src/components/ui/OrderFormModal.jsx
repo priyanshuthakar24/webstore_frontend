@@ -30,7 +30,7 @@ const OrderFormModal = ({ onOrderUpdate, logisticdata }) => {
       const response = await axios.post(
         `${process.env.REACT_APP_API}/api/order/admin/logisticsdetail`,
         values,
-        { params: { id } }
+        { withCredentials: true, params: { id } }
       );
 
       // Assuming the backend returns the updated order data

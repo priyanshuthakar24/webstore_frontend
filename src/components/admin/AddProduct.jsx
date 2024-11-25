@@ -10,6 +10,7 @@ const AddProduct = () => {
         `${process.env.REACT_APP_API}/api/admin/addproduct`,
         AddProduct,
         {
+          withCredentials: true,
           headers: {
             "Content-Type": "multipart/form-data",
           },

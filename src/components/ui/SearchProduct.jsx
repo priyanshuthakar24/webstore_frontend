@@ -1,42 +1,19 @@
-import { message, Rate } from "antd";
-import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import { useLocation, Link } from "react-router-dom";
+import { Rate } from "antd";
 import { AnimatePresence, motion } from "framer-motion";
-import { Link } from "react-router-dom";
-import FilterComponent from "../ui/FilterComponent";
-const ProductList = () => {
+import FilterComponent from "./FilterComponent";
+const SearchProduct = () => {
+  const location = useLocation();
+  const productlist = location.state?.products || []; // Retrieve passed data
   const [isLoading, setIsLoadinng] = useState(false);
-  const [productlist, setProductList] = useState([]);
+  // const [productlist, setProductList] = useState([]);
   const [filterCriteria, setFilterCriteria] = useState({
     filter: null,
     sortOrder: null,
   });
   const [page, setPage] = useState(1); // Current page number
   const [hasMore, setHasMore] = useState(0); // Track if more products are available
-
-  const fetchProduct = async (page = 1) => {
-    setIsLoadinng(true);
-
-    try {
-      const res = await axios.get(
-        `${process.env.REACT_APP_API}/api/user/shop`,
-        {
-          params: { page },
-        }
-      );
-      const newProducts = res.data.productlist;
-      setProductList((prev) =>
-        page === 1 ? newProducts : [...prev, ...newProducts]
-      );
-      // Check if more products are available
-
-      setHasMore(res.data.totalCount);
-    } catch (error) {
-      message.error(error.response.data.message);
-    } finally {
-      setIsLoadinng(false);
-    }
-  };
   const discountprice = (mrp, salePrice) => {
     return Math.round(((mrp - salePrice) / mrp) * 100);
   };
@@ -49,7 +26,7 @@ const ProductList = () => {
   const handleLoadMore = () => {
     const nextPage = page + 1;
     setPage(nextPage);
-    fetchProduct(nextPage);
+    // fetchProduct(nextPage);
   };
 
   // Apply filter and sort based on criteria
@@ -66,11 +43,6 @@ const ProductList = () => {
         return new Date(a.createdAt) - new Date(b.createdAt);
       return 0; // No sorting for "Popular" or unspecified
     });
-
-  useEffect(() => {
-    fetchProduct(1);
-  }, []);
-
   return (
     <div>
       {isLoading ? (
@@ -80,6 +52,7 @@ const ProductList = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
+          className="text-black"
         >
           <div className="bg-black text-white border-t-1 border-white space-y-4 p-10 pl-24 hidden lg:flex flex-col">
             <p className="text-5xl font-sans">Shop Men’s</p>
@@ -177,4 +150,4 @@ const ProductList = () => {
   );
 };
 
-export default ProductList;
+export default SearchProduct;

@@ -32,6 +32,7 @@ const ProductTable = () => {
       const response = await axios.get(
         `${process.env.REACT_APP_API}/api/admin/allproduct`,
         {
+          withCredentials: true,
           params: {
             page,
             limit: 10,

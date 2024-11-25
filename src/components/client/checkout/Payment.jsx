@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Button, message } from "antd";
+import { useNavigate } from "react-router-dom";
 
 function Payment({ orderSummary, shippingInfo, cartItems, onPaymentSuccess }) {
+  const nav = useNavigate();
   // Transform cart items to order items format
   const [orderTotalPrice, setorderTotalPrice] = useState([]);
   let pricecal = 0;
@@ -67,6 +69,7 @@ function Payment({ orderSummary, shippingInfo, cartItems, onPaymentSuccess }) {
           message.success(
             "Payment initiated successfully. Waiting for confirmation."
           );
+          nav("/orders");
           // Verify payment
           // const paymentData = {
           //   order_id: data.razorpayOrderId,

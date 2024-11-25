@@ -13,7 +13,7 @@ const EditProduct = () => {
     try {
       const res = await axios.get(
         `${process.env.REACT_APP_API}/api/admin/productdetail`,
-        { params: { id } }
+        { withCredentials: true, params: { id } }
       );
       setProductDetail(res.data);
     } catch (error) {
@@ -47,7 +47,8 @@ const EditProduct = () => {
   const handleDelete = async () => {
     try {
       const res = await axios.delete(
-        `${process.env.REACT_APP_API}/api/admin/deleteproduct/${id}`
+        `${process.env.REACT_APP_API}/api/admin/deleteproduct/${id}`,
+        { withCredentials: true }
       );
       message.success(res.data.message);
       nav("/dashbord/products");
