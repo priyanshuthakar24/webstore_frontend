@@ -90,7 +90,6 @@ const ProductList = () => {
               our line-up of timeless pieces.{" "}
             </p>
           </div>
-
           <FilterComponent onFilterChange={handleFilterChange} />
           <AnimatePresence mode="wait">
             <motion.div
@@ -135,7 +134,8 @@ const ProductList = () => {
                         </p>
                         <Rate
                           disabled
-                          defaultValue={4}
+                          allowHalf
+                          defaultValue={item.averageRating}
                           className="text-yellow-500 text-sm"
                         />
 

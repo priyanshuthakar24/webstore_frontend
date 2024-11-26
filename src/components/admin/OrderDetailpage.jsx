@@ -71,9 +71,7 @@ const OrderDetailpage = () => {
           {/* {JSON.stringify(orderData)} */}
           <div className="shadow">
             <div className="bg-white  py-4  flex-center justify-between px-3">
-              <span className="font-bold">
-                Order # {orderData._id?.slice(-6)}
-              </span>
+              <span className="font-bold">Order # {orderData.lastSixOfId}</span>
               <span className="flex gap-5 items-center">
                 <OrderFormModal
                   onOrderUpdate={handleOrderUpdate}

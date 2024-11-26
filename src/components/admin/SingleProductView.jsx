@@ -1,6 +1,7 @@
 import React from "react";
 import ProductView from "../image/ProductView";
 import { Dot } from "lucide-react";
+import { Rate } from "antd";
 
 const SingleProductView = ({ props }) => {
   const {
@@ -13,6 +14,7 @@ const SingleProductView = ({ props }) => {
     stock,
     description,
     bulletPoints,
+    averageRating,
   } = props;
   const discountprice = Math.round(((mrp - salePrice) / mrp) * 100);
   // Safely create the product images array with checks
@@ -50,6 +52,10 @@ const SingleProductView = ({ props }) => {
             >
               {discountprice}% OFF
             </span>
+          </div>
+          <div className="flex-center gap-5">
+            <Rate value={averageRating} allowHalf disabled />
+            <span>{averageRating}</span>
           </div>
           <table className="border-solid border-1 border-black w-1/3">
             <thead className="border-solid border-1 border-black">

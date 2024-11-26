@@ -2,14 +2,15 @@
 
 import React, { useEffect, useState } from "react";
 import io from "socket.io-client";
-import { Button, Card, Divider } from "antd";
+import { useAuth } from "../../../context/Authcontext";
+import { Card, Divider } from "antd";
 import axios from "axios";
-import FormateDate from "../../ui/FormateDate";
 import moment from "moment";
 import Ordermodel from "./Ordermodel";
+import { Link } from "react-router-dom";
 const socket = io.connect(`${process.env.REACT_APP_API}`); // Adjust to your server URL
-
 function AdminPanel() {
+  const { isAuthenticated } = useAuth();
   const [orders, setOrders] = useState([]);
   const fetchorders = async () => {
     const res = await axios.get(
@@ -34,7 +35,6 @@ function AdminPanel() {
   return (
     <div className="my-20 text-[#495057] lg:mx-20 mx-4">
       <h1 className="text-4xl font-sans m-6">Your Order</h1>
-      {/* {JSON.stringify(orders)} */}
       <div className="space-y-10">
         {orders.length > 0 ? (
           orders?.map((item) => (
@@ -107,6 +107,14 @@ function AdminPanel() {
                             Quantity :{" "}
                           </span>
                           {iteminfo.quantity}
+                        </p>
+                        <p>
+                          <Link
+                            to={`/add-reviews/${iteminfo.product._id}`}
+                            className="lg:text-xl text-xs hover:underline text-blue-500"
+                          >
+                            {isAuthenticated ? "Add Review" : ""}
+                          </Link>
                         </p>
                       </div>
                       <div className=" lg:text-xl font-bold font-sans">

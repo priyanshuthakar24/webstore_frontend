@@ -56,8 +56,6 @@ function AdminOrderList() {
 
     // Listen for real-time order updates
     socket.on("orderUpdate", (data) => {
-      alert(`New order update: ${data.message}`);
-
       // Check that all required fields are in the result object, add default values if missing
       const newOrder = {
         orderId: data.result.orderId || "N/A",
@@ -121,7 +119,7 @@ function AdminOrderList() {
               Order List
             </h1>
           </div>
-          <div className=" flex  justify-between">
+          <div className="flex justify-between">
             <div></div>
             <Search
               placeholder="Order ID"
@@ -138,7 +136,7 @@ function AdminOrderList() {
               size="large"
               onSearch={handleSearch}
               // onClear={fetchOrders}
-              className="w-1/4 text-black"
+              className="lg:w-1/4 text-black"
             />
           </div>
           <div className="md:m-2 md:m-10 p-2 md:p-10 bg-white rounded-3xl">

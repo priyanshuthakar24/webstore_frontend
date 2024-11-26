@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import ProductView from "../image/ProductView";
 import { Dot } from "lucide-react";
-import { Radio, Rate } from "antd";
+import { Avatar, Divider, Radio, Rate } from "antd";
 import CartCount from "../ui/CartCount";
 import { useCartcontext } from "../../context/Cartcontext";
-import { useStateContext } from "../../context/ContextProvider";
 import Wishlistui from "../ui/Wishlistui";
+import moment from "moment";
 
 const SingleProductView = ({ props }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -46,6 +46,8 @@ const SingleProductView = ({ props }) => {
     description,
     bulletPoints,
     stock,
+    reviews,
+    averageRating,
   } = props;
   const discountprice = Math.round(((mrp - salePrice) / mrp) * 100);
   // Safely create the product images array with checks
@@ -56,6 +58,7 @@ const SingleProductView = ({ props }) => {
 
   return (
     <div>
+      {/* Prodduct Detail componets  */}
       <div className="flex gap-20  flex-col  lg:flex-row ">
         <ProductView images={productImages} />
         <div className="flex flex-col gap-5">
@@ -86,11 +89,11 @@ const SingleProductView = ({ props }) => {
             <span className="space-x-5">
               <Rate
                 disabled
-                defaultValue={4.5}
+                value={averageRating}
                 allowHalf
                 className="text-yellow-500 "
               />
-              <span>4</span>
+              <span>{averageRating}</span>
             </span>
             <p className="lg:hidden">
               <Wishlistui product={_id} />
@@ -176,6 +179,36 @@ const SingleProductView = ({ props }) => {
                 )
               ) : null
             )}
+        </div>
+      </div>
+      {/* Product Review Componets */}
+      <div className="my-5">
+        <div className="flex-center justify-between">
+          <p className="text-xl font-bold">Reviews</p>
+        </div>
+        <Divider />
+        <div>
+          {reviews?.map((item) => (
+            <div className="mb-3">
+              <div className="flex-center gap-5 mb-2">
+                <Avatar shape="square" size={45}>
+                  {item?.name[0].toUpperCase()}
+                </Avatar>
+                <p>
+                  <p className="font-bold capitalize">{item.name}</p>
+                  <span>{moment(item.createdAt).format("DD MMM yyyy")}</span>
+                </p>
+              </div>
+              <div>
+                <Rate
+                  value={item.rating}
+                  disabled
+                  className="text-yellow-500 "
+                />
+                <p>{item.comment}</p>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </div>

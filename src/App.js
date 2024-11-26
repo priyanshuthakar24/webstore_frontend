@@ -14,6 +14,7 @@ import AdminOrderList from './components/admin/AdminOrderList';
 import OrderDetailpage from './components/admin/OrderDetailpage';
 import NewOrderpage from './components/admin/NewOrderpage';
 import SearchProduct from './components/ui/SearchProduct';
+import ReviewForm from './components/client/reviews/ReviewForm';
 //!  This method check that user is authenticated or not also check that user is Verified or not if not than it will redired to login or verify-email page 
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, userData } = useAuth()
@@ -63,10 +64,10 @@ function App() {
           path: '/',
           element: <Home />
         }, {
-          path: '/singleproduct/:id',
+          path: 'singleproduct/:id',
           element: <SingleProduct />
         }, {
-          path: '/cart',
+          path: 'cart',
           element: <CartPage />
         },
         {
@@ -83,6 +84,9 @@ function App() {
         {
           path: 'searchproduct',
           element: <SearchProduct />
+        }, {
+          path: 'add-reviews/:id',
+          element: <ReviewForm />
         },
         {
           path: 'profile',
