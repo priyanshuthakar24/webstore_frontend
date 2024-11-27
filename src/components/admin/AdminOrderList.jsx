@@ -18,14 +18,18 @@ import { useNavigate } from "react-router-dom";
 import { Input } from "antd";
 import io from "socket.io-client";
 const socket = io.connect(`${process.env.REACT_APP_API}`); // Adjust to your server URL
+
 function AdminOrderList() {
   const { Search } = Input;
-  const [orders, setOrders] = useState([]);
   const navigate = useNavigate();
-  const [page, setPage] = useState(1);
-  const [loading, setisLoading] = useState(false);
+
+  const [orders, setOrders] = useState([]);
   const [totalRecords, setTotalRecords] = useState(0);
+  const [page, setPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState(""); // State for the search term
+  const [loading, setisLoading] = useState(false);
+
+  // //! fetch all the order
   const fetchOrders = async (page = 1, search = "") => {
     setisLoading(true);
     try {
@@ -36,25 +40,65 @@ function AdminOrderList() {
           params: {
             page,
             limit: 20,
-            // search, // Pass the search term to the API
           },
         }
       );
-      setOrders(res.data.result);
-      setTotalRecords(res.data.totalCount);
-      setisLoading(false);
+      if (res) {
+        setOrders(res.data.result);
+        setTotalRecords(res.data.totalCount);
+        setisLoading(false);
+      }
     } catch (error) {
       message.error("Error fetching orders");
     }
   };
+
+  // //! Fetch orders function (search functionality)
+  const fetchsearchOrders = async (page = 1, search = "") => {
+    setisLoading(true);
+    try {
+      const res = await axios.get(
+        `${process.env.REACT_APP_API}/api/search/order`,
+        {
+          withCredentials: true,
+          params: {
+            page,
+            limit: 20,
+            search, // Pass the search term to the API
+          },
+        }
+      );
+      if (res) {
+        setOrders(res.data.result);
+        setTotalRecords(res.data.totalCount);
+      }
+    } catch (error) {
+      message.error(error.response.data);
+    } finally {
+      setisLoading(false);
+    }
+  };
+
+  // //! on page change another ordre will fetch
   const onPageChange = async (arg) => {
     setPage(arg.currentPage);
     fetchOrders(arg.currentPage);
   };
+
+  //  //!search function that will call the fetchsearchorders api
+  const handleSearch = (value) => {
+    setSearchTerm(value);
+    fetchsearchOrders(1, value);
+  };
+
+  // //!navigate to single order page
+  const handleRowClick = async (arg) => {
+    navigate(`/dashbord/orderlist/${arg.data.orderId}`);
+  };
+
   useEffect(() => {
     fetchOrders();
-
-    // Listen for real-time order updates
+    // //? Listen for real-time order updates
     socket.on("orderUpdate", (data) => {
       // Check that all required fields are in the result object, add default values if missing
       const newOrder = {
@@ -76,38 +120,6 @@ function AdminOrderList() {
     return () => socket.off("orderUpdate");
   }, []);
 
-  const handleRowClick = async (arg) => {
-    navigate(`/dashbord/orderlist/${arg.data.orderId}`);
-  };
-
-  // Fetch orders function (includes search functionality)
-  const fetchsearchOrders = async (page = 1, search = "") => {
-    setisLoading(true);
-    try {
-      const res = await axios.get(
-        `${process.env.REACT_APP_API}/api/search/order`,
-        {
-          withCredentials: true,
-          params: {
-            page,
-            limit: 20,
-            search, // Pass the search term to the API
-          },
-        }
-      );
-      setOrders(res.data.result);
-      setTotalRecords(res.data.totalCount);
-    } catch (error) {
-      message.error(error.response.data);
-    } finally {
-      setisLoading(false);
-    }
-  };
-  // const toolbarOptions = ["Search"];
-  const handleSearch = (value) => {
-    setSearchTerm(value);
-    fetchsearchOrders(1, value);
-  };
   return (
     <>
       {loading ? (
@@ -135,7 +147,6 @@ function AdminOrderList() {
               }
               size="large"
               onSearch={handleSearch}
-              // onClear={fetchOrders}
               className="lg:w-1/4 text-black"
             />
           </div>
@@ -147,7 +158,6 @@ function AdminOrderList() {
               enableStickyHeader={true}
               allowSorting={true}
               allowFiltering
-              // toolbar={toolbarOptions}
               rowSelected={handleRowClick}
             >
               <ColumnsDirective>

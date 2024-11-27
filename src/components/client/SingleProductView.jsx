@@ -1,49 +1,28 @@
 import React, { useState } from "react";
-import ProductView from "../image/ProductView";
-import { Dot } from "lucide-react";
-import { Avatar, Button, Divider, Radio, Rate, message } from "antd";
-import CartCount from "../ui/CartCount";
-import { useCartcontext } from "../../context/Cartcontext";
-import Wishlistui from "../ui/Wishlistui";
-import moment from "moment";
-import InstantCheckout from "./checkout/InstantCheckout";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import moment from "moment";
+
+import ProductView from "../image/ProductView";
+import CartCount from "../ui/CartCount";
+import Wishlistui from "../ui/Wishlistui";
+import InstantCheckout from "./checkout/InstantCheckout";
+import { useCartcontext } from "../../context/Cartcontext";
+
+import { Avatar, Button, Divider, Radio, Rate, message } from "antd";
+import { Dot } from "lucide-react";
 
 const SingleProductView = ({ props }) => {
   const nav = useNavigate();
+
+  const { addToCart } = useCartcontext();
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [quantity, setQuantity] = useState(1);
   const [size, setSize] = useState("L");
-  const { addToCart } = useCartcontext();
 
-  const handleBuyNow = () => {
-    setIsModalOpen(true);
-  };
-  const handleIncrement = () => {
-    setQuantity((prevCount) => prevCount + 1);
-  };
-  const handleDecrement = () => {
-    if (quantity === 0) return;
-    setQuantity((prevCount) => prevCount - 1);
-  };
-  const handleChange = async (e) => {
-    // await fetchproductdetail(_id);
-    setSize(e.target.value);
-  };
-  const handleAddToCart = async () => {
-    setIsLoading(true);
-    await addToCart(_id, quantity, size);
-    setQuantity(1);
-    setIsLoading(false);
-  };
-  const options = [
-    { label: "S", value: "S" },
-    { label: "M", value: "M" },
-    { label: "L", value: "L" },
-    { label: "XL", value: "XL" },
-  ];
+  // !get the data as props form the single product page
   const {
     _id,
     name,
@@ -58,7 +37,46 @@ const SingleProductView = ({ props }) => {
     reviews,
     averageRating,
   } = props;
+
+  //  ! will add the product to the cart also in the backend
+  const handleAddToCart = async () => {
+    setIsLoading(true);
+    await addToCart(_id, quantity, size);
+    setQuantity(1);
+    setIsLoading(false);
+  };
+
+  // will open the instant checkout page
+  const handleBuyNow = () => {
+    setIsModalOpen(true);
+  };
+
+  // incremet the product count
+  const handleIncrement = () => {
+    setQuantity((prevCount) => prevCount + 1);
+  };
+
+  // decremnet the product count
+  const handleDecrement = () => {
+    if (quantity === 0) return;
+    setQuantity((prevCount) => prevCount - 1);
+  };
+
+  // set the size
+  const handleChange = async (e) => {
+    setSize(e.target.value);
+  };
+
+  // siez option
+  const options = [
+    { label: "S", value: "S" },
+    { label: "M", value: "M" },
+    { label: "L", value: "L" },
+    { label: "XL", value: "XL" },
+  ];
+
   const discountprice = Math.round(((mrp - salePrice) / mrp) * 100);
+
   // Safely create the product images array with checks
   const productImages = [
     mainImage?.url || "", // Main image URL with fallback to an empty string
@@ -75,6 +93,8 @@ const SingleProductView = ({ props }) => {
       document.body.appendChild(script);
     });
   };
+
+  // !handle payment method for instant checkout
   const handlePayment = async ({
     shippingInfo,
     totalPrice,
@@ -83,11 +103,13 @@ const SingleProductView = ({ props }) => {
     itemsPrice,
   }) => {
     setIsLoading(true);
+
     const isScriptLoaded = await loadRazorpayScript();
     if (!isScriptLoaded) {
       message.error("Failed to load Razorpay SDK");
       return;
     }
+
     try {
       const orderItems = [
         {
@@ -127,11 +149,13 @@ const SingleProductView = ({ props }) => {
           );
           nav("/orders");
         },
+
         prefill: {
           name: "Priyanshu Thakar",
           email: "myemail@example.com",
           contact: `${shippingInfo.phone}`,
         },
+
         theme: {
           color: "#cc3333",
         },
@@ -151,12 +175,7 @@ const SingleProductView = ({ props }) => {
     <div>
       {/* Prodduct Detail componets  */}
       <div className="flex gap-20  flex-col  lg:flex-row ">
-        {/* <div> */}
-        <ProductView
-          images={productImages}
-          // style={{ width: "600px", height: "500px" }}
-        />
-        {/* </div> */}
+        <ProductView images={productImages} />
         <div className="flex flex-col gap-5">
           <h1 className="text-2xl font-bold">{name}</h1>
           <p className="text-gray-600 "> {description}</p>
@@ -225,9 +244,9 @@ const SingleProductView = ({ props }) => {
                     >
                       Add To Cart
                     </button>
+
                     {/* buy now model and logic  */}
                     <Button
-                      // type='primary'
                       color="default"
                       variant="solid"
                       onClick={handleBuyNow}
@@ -255,6 +274,7 @@ const SingleProductView = ({ props }) => {
                 )
               ) : null
             )}
+
           {/* mobile view  */}
           {stock &&
             stock.map((item) =>
@@ -295,6 +315,7 @@ const SingleProductView = ({ props }) => {
             )}
         </div>
       </div>
+
       {/* Product Review Componets */}
       <div className="my-5">
         <div className="flex-center justify-between">

@@ -1,13 +1,17 @@
 import React from "react";
+
 import { useWishlist } from "../../context/Wishlist";
+
 import { Heart } from "lucide-react";
 import { FaHeart } from "react-icons/fa";
 
 const Wishlistui = ({ product }) => {
   const { wishlistarray, addToWishlist, removeFromWishlist } = useWishlist();
+
   const isInWishlist = wishlistarray?.some(
     (item) => item.toString() === product
   );
+
   const handleWishlist = () => {
     if (isInWishlist) {
       removeFromWishlist(product);

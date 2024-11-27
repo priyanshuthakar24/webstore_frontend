@@ -1,32 +1,32 @@
 import React, { useState } from "react";
-import { Modal, Form, Input, Select, message } from "antd";
-import axios from "axios";
-import { FilePenLine } from "lucide-react";
 import { useParams } from "react-router-dom";
+import axios from "axios";
+
+import { Modal, Form, Input, Select, message } from "antd";
+import { FilePenLine } from "lucide-react";
 
 const { Option } = Select;
 
 const OrderFormModal = ({ onOrderUpdate, logisticdata }) => {
-  // State to manage modal visibility
-  const [isModalVisible, setIsModalVisible] = useState(false);
   const { id } = useParams();
 
   // Form instance to manage form values and state
   const [form] = Form.useForm();
+
+  // State to manage modal visibility
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   // Show modal function
   const showModal = () => {
     setIsModalVisible(true);
   };
 
-  // Handle form submission
+  // ! Handle form submission
   const handleOk = async () => {
     try {
-      console.log(id);
       // Validate the form fields
       const values = await form.validateFields();
 
-      // Send data to the backend (replace '/api/orders' with your actual endpoint)
       const response = await axios.post(
         `${process.env.REACT_APP_API}/api/order/admin/logisticsdetail`,
         values,
@@ -58,7 +58,6 @@ const OrderFormModal = ({ onOrderUpdate, logisticdata }) => {
       <span onClick={showModal} className="text-gray-600">
         <FilePenLine size={25} />
       </span>
-      {/* </Button> */}
 
       {/* Modal with form inside */}
       <Modal

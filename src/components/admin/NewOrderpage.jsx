@@ -1,12 +1,17 @@
-import { Button, Card, message } from "antd";
-import axios from "axios";
 import React, { useEffect, useState } from "react";
-import FormateDate from "../ui/FormateDate";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+
+import FormateDate from "../ui/FormateDate";
+
+import { Button, Card, message } from "antd";
 
 const NewOrderpage = () => {
   const navigate = useNavigate();
+
   const [order, setOrder] = useState([]);
+
+  // //! fetch neworder from the backend
   const fetchNewOrder = async () => {
     try {
       const res = await axios.get(
@@ -20,8 +25,9 @@ const NewOrderpage = () => {
       message.error(error.response.data.message);
     }
   };
+
+  // //! remove the new order form the backend
   const handleRemove = async (id) => {
-    console.log(id);
     try {
       const res = await axios.delete(
         `${process.env.REACT_APP_API}/api/admin/notification/remove`,
@@ -41,12 +47,13 @@ const NewOrderpage = () => {
     fetchNewOrder();
   }, []);
 
+  // //? onclike of the order message will nevigate to order detail page
   const handleRowClick = async (value) => {
     navigate(`/dashbord/orderlist/${value}`);
   };
+
   return (
     <div className="mt-20 mx-5">
-      {/* {JSON.stringify(order)} */}
       <h1 className="text-center mb-5 font-bold text-2xl text-gray-600">
         NewOrderpage
       </h1>

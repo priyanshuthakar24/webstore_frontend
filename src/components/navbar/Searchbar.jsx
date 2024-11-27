@@ -1,25 +1,22 @@
 import React, { useState } from "react";
-import { Search } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
+import { Search } from "lucide-react";
+import { message } from "antd";
+
 const Searchbar = () => {
-  const [query, setQuery] = useState("");
   const navigate = useNavigate();
-  // function search(e) {
-  //   e.preventDefault();
-  //   var lowerCase = e.target.value.toLowerCase();
-  //   setQuery(lowerCase);
-  // }
+
+  const [query, setQuery] = useState("");
+
   const search = async () => {
     if (query.trim() === "") {
-      console.log("Search query is empty");
+      message.info("Search query is empty");
       return;
     }
 
     try {
-      console.log("Fetching data for:", query);
-
       // Make your API call here
       const response = await axios.get(
         `${process.env.REACT_APP_API}/api/search/product`,
@@ -35,6 +32,7 @@ const Searchbar = () => {
       }
     } catch (error) {
       console.error("Error fetching data:", error);
+      message.error(error.response.data.message);
     }
   };
 

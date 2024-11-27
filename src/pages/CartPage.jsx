@@ -1,11 +1,14 @@
 import React, { useEffect } from "react";
-import CartItem from "../components/client/CartItem";
-import { useCartcontext } from "../context/Cartcontext";
 import { NavLink } from "react-router-dom";
 import { motion } from "framer-motion";
+
+import CartItem from "../components/client/CartItem";
 import Checkout from "../components/client/checkout/Checkout";
+import { useCartcontext } from "../context/Cartcontext";
+
 const CartPage = () => {
   const { cart, fetchCart } = useCartcontext();
+
   useEffect(() => {
     fetchCart();
   }, []);
@@ -41,7 +44,6 @@ const CartPage = () => {
         </div>
         <div className=" flex lg:pt-20 items-start h-full mb-5 lg:mb-0">
           <Checkout cartItems={cart} />
-          {/* <OrderSummary product={cart} /> */}
         </div>
       </div>
     </motion.div>

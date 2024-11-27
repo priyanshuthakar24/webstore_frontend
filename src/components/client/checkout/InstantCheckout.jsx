@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+
 import {
   Modal,
   Steps,
@@ -22,9 +23,11 @@ const InstantCheckout = ({
   isLoading,
 }) => {
   const { Option } = Select;
-  const [currentStep, setCurrentStep] = useState(0);
   const [form] = Form.useForm();
+
+  const [currentStep, setCurrentStep] = useState(0);
   const [shippingInfo, setShippingInfo] = useState({});
+
   const itemsPrice = product.salePrice * quantity;
   const tax = Math.round(product.salePrice * quantity * 0.18); // Example 18% tax
   const shippingCharge = 50; // Flat shipping charge
@@ -44,6 +47,7 @@ const InstantCheckout = ({
       setCurrentStep(currentStep + 1);
     }
   };
+
   const prefixSelector = (
     <Form.Item name="prefix" noStyle>
       <Select
@@ -53,7 +57,6 @@ const InstantCheckout = ({
         defaultValue={"+91"}
       >
         <Option value="86">+91</Option>
-        {/* <Option value="87">+87</Option> */}
       </Select>
     </Form.Item>
   );

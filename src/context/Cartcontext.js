@@ -1,6 +1,7 @@
-import { message } from "antd";
-import axios from "axios";
 import { createContext, useContext, useState } from "react";
+import axios from "axios";
+
+import { message } from "antd";
 
 
 const Cartcontext = createContext();
@@ -8,12 +9,11 @@ const Cartcontext = createContext();
 
 export const CartcontextProvider = ({ children }) => {
 
-
     const [cartcount, setcartcount] = useState(0);
     const [cart, setCart] = useState(null);
-
     const [isLoading, setIsLoading] = useState(false)
 
+    // ! Fetch the cart detail 
     const fetchCart = async () => {
         try {
             const response = await axios.get(
@@ -29,6 +29,8 @@ export const CartcontextProvider = ({ children }) => {
             console.error("Error fetching cart:", error);
         }
     };
+
+    // ! Add the product to cart 
     const addToCart = async (_id, quantity, size) => {
         setIsLoading(true);
         try {
@@ -48,8 +50,8 @@ export const CartcontextProvider = ({ children }) => {
         }
     }
 
+    // ! Remove the product from the cart
     const removeFromCart = async (ID, quantity, size) => {
-        console.log(size)
         try {
             const res = await axios.delete(
                 `${process.env.REACT_APP_API}/api/cart/remove`, {
@@ -57,9 +59,7 @@ export const CartcontextProvider = ({ children }) => {
                     productId: ID,
                     size: size
                 }, withCredentials: true
-            },
-
-            );
+            });
             if (res) {
                 message.success(res.data.message);
                 setcartcount((preCount) => preCount - quantity)

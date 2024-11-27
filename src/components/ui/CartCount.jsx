@@ -1,5 +1,6 @@
-import { Minus, Plus } from "lucide-react";
 import React from "react";
+
+import { Minus, Plus } from "lucide-react";
 
 const CartCount = ({ onIncrement, onDecrement, value }) => {
   return (

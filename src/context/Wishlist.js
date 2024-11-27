@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 import axios from "axios";
+
 import { message } from 'antd';
 
 
@@ -8,6 +9,8 @@ const Wishlistcontext = createContext();
 export const WishlistcontextProvider = ({ children }) => {
     const [wishlist, setWishlist] = useState([]);
     const [wishlistarray, setWishlistarray] = useState();
+
+    // ! Product will add to wishlist
     const addToWishlist = async (productId) => {
         try {
             const response = await axios.post(`${process.env.REACT_APP_API}/api/wishlist/add`, {
@@ -22,6 +25,7 @@ export const WishlistcontextProvider = ({ children }) => {
         }
     };
 
+    //! Handle remove product from wishlist
     const removeFromWishlist = async (productId) => {
         try {
             const response = await axios.post(`${process.env.REACT_APP_API}/api/wishlist/remove`, {
@@ -36,6 +40,8 @@ export const WishlistcontextProvider = ({ children }) => {
             console.error('Error removing from wishlist:', error);
         }
     };
+
+    // ! fetch the wishlist data according to login user 
     const fetchWishlist = async () => {
         try {
             const response = await axios.get(`${process.env.REACT_APP_API}/api/wishlist/all`, { withCredentials: true });
@@ -47,9 +53,11 @@ export const WishlistcontextProvider = ({ children }) => {
             console.error('Error fetching wishlist:', error);
         }
     };
+
     useEffect(() => {
         fetchWishlist()
     }, [setWishlist])
+
     return (<Wishlistcontext.Provider value={{ addToWishlist, wishlist, fetchWishlist, removeFromWishlist, wishlistarray, setWishlistarray }} >{children}</Wishlistcontext.Provider>)
 }
 

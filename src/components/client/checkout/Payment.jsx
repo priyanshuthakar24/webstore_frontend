@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Button, message } from "antd";
 import { useNavigate } from "react-router-dom";
 
-function Payment({ orderSummary, shippingInfo, cartItems, onPaymentSuccess }) {
+import { Button, message } from "antd";
+
+function Payment({ orderSummary, shippingInfo, cartItems }) {
   const nav = useNavigate();
+
   // Transform cart items to order items format
   const [orderTotalPrice, setorderTotalPrice] = useState([]);
+
   let pricecal = 0;
+  // ?calculate the toalalPrice
   const totalpricecal = () => {
     pricecal =
       cartItems.totalCost * 0.1 +
@@ -15,15 +19,15 @@ function Payment({ orderSummary, shippingInfo, cartItems, onPaymentSuccess }) {
       cartItems.totalCost;
     return setorderTotalPrice(pricecal);
   };
-  useEffect(() => {
-    totalpricecal();
-  }, [cartItems]);
+  // map the cartItems
   const orderItems = cartItems.items.map((item) => ({
     product: item.productId._id, // Use the product ID only
     quantity: item.quantity,
     price: item.price,
     size: item.size,
   }));
+
+  // ! razopay script method
   const loadRazorpayScript = () => {
     return new Promise((resolve) => {
       const script = document.createElement("script");
@@ -34,6 +38,7 @@ function Payment({ orderSummary, shippingInfo, cartItems, onPaymentSuccess }) {
     });
   };
 
+  // ! handle razoprpay payment method
   const handlePayment = async () => {
     const isScriptLoaded = await loadRazorpayScript();
     if (!isScriptLoaded) {
@@ -70,25 +75,6 @@ function Payment({ orderSummary, shippingInfo, cartItems, onPaymentSuccess }) {
             "Payment initiated successfully. Waiting for confirmation."
           );
           nav("/orders");
-          // Verify payment
-          // const paymentData = {
-          //   order_id: data.razorpayOrderId,
-          //   payment_id: response.razorpay_payment_id,
-          //   razorpay_signature: response.razorpay_signature,
-          // };
-
-          // const result = await axios.post(
-          //   `${process.env.REACT_APP_API}/api/order/verify-payment`,
-          //   paymentData,
-          //   { withCredentials: true }
-          // );
-
-          // if (result.data.success) {
-          //   message.success("Payment successful!");
-          //   onPaymentSuccess(result.data.order);
-          // } else {
-          //   message.error("Payment verification failed");
-          // }
         },
         prefill: {
           name: "Priyanshu Thakar",
@@ -106,6 +92,10 @@ function Payment({ orderSummary, shippingInfo, cartItems, onPaymentSuccess }) {
       message.error(error.response.data.message);
     }
   };
+
+  useEffect(() => {
+    totalpricecal();
+  }, [cartItems]);
 
   return (
     <div className="mt-4 space-y-4">

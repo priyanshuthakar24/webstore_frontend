@@ -16,8 +16,9 @@ const AddProduct = () => {
           },
         }
       );
-      console.log(res.data);
-      message.success(res.data.message);
+      if (res) {
+        message.success(res.data.message);
+      }
     } catch (error) {
       console.log(error);
       message.error(error.response.data.message);

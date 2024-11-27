@@ -1,20 +1,14 @@
 import './App.css';
 import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom';
-import { RootLayout, Shop, About, Stories, Home } from './pages/index'
+import { RootLayout, Shop, About, Stories, Home, CartPage, AdminLayout } from './pages/index'
 import { Profile, Wishlist, Order } from './pages/ProfileMenu/index'
 import { Login, Signup, ResetPassword, VerifyEmail, ForgotPasswordPage } from './components/auth/index'
+import { ProductTable, EditProduct, AddProduct, AdminOrderList, OrderDetailpage, NewOrderpage } from './components/admin/index'
+import { SingleProduct, ReviewForm } from './components/client/index';
+import { SearchProduct } from './components/ui/index'
 import { useAuth } from './context/Authcontext';
-import AdminLayout from './pages/AdminLayout';
-import ProductTable from './components/admin/ProductTable';
-import EditProduct from './components/admin/EditProduct';
-import AddProduct from './components/admin/AddProduct';
-import SingleProduct from './components/client/SingleProduct';
-import CartPage from './pages/CartPage';
-import AdminOrderList from './components/admin/AdminOrderList';
-import OrderDetailpage from './components/admin/OrderDetailpage';
-import NewOrderpage from './components/admin/NewOrderpage';
-import SearchProduct from './components/ui/SearchProduct';
-import ReviewForm from './components/client/reviews/ReviewForm';
+
+
 //!  This method check that user is authenticated or not also check that user is Verified or not if not than it will redired to login or verify-email page 
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, userData } = useAuth()
@@ -26,6 +20,7 @@ const ProtectedRoute = ({ children }) => {
   }
   return children;
 }
+
 //! Admin Protaction Route
 const AdminProtectedRoute = ({ children }) => {
   const { isAuthenticated, userData } = useAuth()
@@ -63,17 +58,20 @@ function App() {
         {
           path: '/',
           element: <Home />
-        }, {
-          path: 'singleproduct/:id',
-          element: <SingleProduct />
-        }, {
-          path: 'cart',
-          element: <CartPage />
         },
         {
           path: 'shop',
           element: <Shop />
-        }, {
+        },
+        {
+          path: 'singleproduct/:id',
+          element: <SingleProduct />
+        },
+        {
+          path: 'cart',
+          element: <CartPage />
+        },
+        {
           path: 'stories',
           element: <Stories />
         },
@@ -84,15 +82,15 @@ function App() {
         {
           path: 'searchproduct',
           element: <SearchProduct />
-        }, {
+        },
+        {
           path: 'add-reviews/:id',
           element: <ReviewForm />
         },
+        // ? Profile Menu Route 
         {
           path: 'profile',
-          element: <ProtectedRoute>
-            <Profile />
-          </ProtectedRoute>
+          element: <ProtectedRoute><Profile /></ProtectedRoute>
         },
         {
           path: 'wishlist',
@@ -102,6 +100,7 @@ function App() {
           path: 'orders',
           element: <ProtectedRoute><Order /></ProtectedRoute>
         },
+        // ? Login route 
         {
           path: 'auth/login',
           element: <RedirectAuthenticatedUser><Login /></RedirectAuthenticatedUser >,
@@ -124,38 +123,50 @@ function App() {
         },
       ]
     },
-    //! if any route that is not on the above roues than it will redirect to '/' route:- Universel route 
+
+    //! If any route that is not on the above roues than it will redirect to '/' route:- Universel route 
     {
       path: "*",
       element: <Navigate to='/' replace />,
     },
+
+    // ! Admin dashbord route 
     {
       path: '/dashbord',
       element: <AdminProtectedRoute><AdminLayout /></AdminProtectedRoute>,
-      children: [{
-        path: 'ecommerce',
-        element: <Home />
-      }, {
-        path: 'addproduct',
-        element: <AddProduct />
-      }, {
-        path: 'products',
-        element: <ProductTable />
-      }, {
-        path: 'productlist/:id',
-        element: <EditProduct />
-      }, {
-        path: 'orders',
-        element: <AdminOrderList />
-      }, {
-        path: 'orderlist/:id',
-        element: <OrderDetailpage />
-      }, {
-        path: 'newOrder',
-        element: <NewOrderpage />
-      }]
+      children: [
+        {
+          path: 'ecommerce',
+          element: <Home />
+        },
+        {
+          path: 'addproduct',
+          element: <AddProduct />
+        },
+        {
+          path: 'products',
+          element: <ProductTable />
+        },
+        {
+          path: 'productlist/:id',
+          element: <EditProduct />
+        },
+        {
+          path: 'orders',
+          element: <AdminOrderList />
+        },
+        {
+          path: 'orderlist/:id',
+          element: <OrderDetailpage />
+        },
+        {
+          path: 'newOrder',
+          element: <NewOrderpage />
+        }
+      ]
     }
   ])
+
   return (
     <RouterProvider router={route} />
   );

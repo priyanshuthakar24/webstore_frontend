@@ -1,17 +1,20 @@
 // Example React component for Admin Panel
-
 import React, { useEffect, useState } from "react";
-import io from "socket.io-client";
-import { useAuth } from "../../../context/Authcontext";
-import { Card, Divider } from "antd";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import moment from "moment";
+
+import { useAuth } from "../../../context/Authcontext";
 import Ordermodel from "./Ordermodel";
-import { Link } from "react-router-dom";
-const socket = io.connect(`${process.env.REACT_APP_API}`); // Adjust to your server URL
+
+import { Card, Divider } from "antd";
+
 function AdminPanel() {
   const { isAuthenticated } = useAuth();
+
   const [orders, setOrders] = useState([]);
+
+  //  ! fet the order for the user
   const fetchorders = async () => {
     const res = await axios.get(
       `${process.env.REACT_APP_API}/api/order/userorder`,
@@ -21,15 +24,9 @@ function AdminPanel() {
       setOrders(res.data);
     }
   };
+
   useEffect(() => {
     fetchorders();
-    // Listen for real-time order updates
-    // socket.on("orderUpdate", (data) => {
-    // alert(`New order update: ${data.message}`);
-    // setOrders((prevOrders) => [...prevOrders, data.order]);
-    // });
-    // Clean up on component unmount
-    // return () => socket.off("orderUpdate");
   }, []);
 
   return (
@@ -89,6 +86,7 @@ function AdminPanel() {
                       <img
                         src={iteminfo.product.mainImage?.url}
                         className="h-full w-full rounded"
+                        alt="no Product"
                       />
                     </div>
                     <div className="flex justify-between w-full">

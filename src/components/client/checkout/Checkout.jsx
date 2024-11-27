@@ -1,9 +1,11 @@
 import React, { useState } from "react";
-import { Steps, Button, message, Card } from "antd";
+
+import Coupan from "./Coupan";
 import AddressForm from "./AddressForm";
 import OrderSummary from "./OrderSummary";
 import Payment from "./Payment";
-import Coupan from "./Coupan";
+
+import { Steps, Button, Card } from "antd";
 
 const { Step } = Steps;
 
@@ -17,6 +19,7 @@ function Checkout({ cartItems, onPaymentSuccess }) {
     totalPrice: 0,
   });
   const [coupan, setCoupanCode] = useState("");
+
   const nextStep = () => setCurrentStep(currentStep + 1);
   const prevStep = () => setCurrentStep(currentStep - 1);
 
@@ -29,10 +32,12 @@ function Checkout({ cartItems, onPaymentSuccess }) {
     setOrderSummary(summary);
     nextStep();
   };
+
   const handleCoupanCode = (coupan) => {
     setCoupanCode(coupan);
     nextStep();
   };
+
   const steps = [
     {
       title: "Coupan",
@@ -42,6 +47,7 @@ function Checkout({ cartItems, onPaymentSuccess }) {
       title: "Address",
       content: (
         <AddressForm
+          coupan={coupan}
           onSubmit={handleAddressSubmit}
           shippingInfo={shippingInfo}
         />

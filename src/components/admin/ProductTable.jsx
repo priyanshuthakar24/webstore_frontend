@@ -1,4 +1,10 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+
+import { productGrid } from "../../data/dummy";
+import { useStateContext } from "../../context/ContextProvider";
+
 import {
   GridComponent,
   ColumnsDirective,
@@ -12,20 +18,18 @@ import {
   Search,
   Toolbar,
 } from "@syncfusion/ej2-react-grids";
-import { productGrid } from "../../data/dummy";
-
-import { useStateContext } from "../../context/ContextProvider";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import { message } from "antd";
 
 const ProductTable = () => {
   const navigate = useNavigate();
+
   const { page, setPage } = useStateContext();
+
   const [loading, setisLoading] = useState(false);
   const [totalRecords, setTotalRecords] = useState(0);
   const [productdata, setProductdata] = useState([]);
 
+  //  ! fetchProduct data
   const fetchProduct = async (page) => {
     setisLoading(true);
     try {
@@ -48,24 +52,27 @@ const ProductTable = () => {
       message.error(error.response.data.message);
     }
   };
-
-  useEffect(() => {
-    fetchProduct(page);
-  }, [page]);
+  //  ! on pagechange again fetch product will call
   const onPageChange = (args) => {
     setPage(args.currentPage);
     fetchProduct(args.currentPage);
   };
 
+  // ! will navigate to single product page
   const handleRowClick = async (arg) => {
     navigate(`/dashbord/productlist/${arg.data._id}`);
   };
+
+  // syncfusion toolbarOption
   const toolbarOptions = ["Search"];
+
+  useEffect(() => {
+    fetchProduct(page);
+  }, [page]);
 
   return (
     <div className="lg:mx-12 md:m-3 mt-12 p-2 md:p-5 bg-white rounded-3xl ">
       <div className="flex justify-center items-center mb-5  ">
-        {/* <div className='pl-5'></div> */}
         <h1 className="text-2xl font-bold text-center text-black">
           Products List
         </h1>

@@ -1,7 +1,9 @@
 import React from "react";
+
 import ProductView from "../image/ProductView";
-import { Dot } from "lucide-react";
+
 import { Rate } from "antd";
+import { Dot } from "lucide-react";
 
 const SingleProductView = ({ props }) => {
   const {
@@ -16,7 +18,9 @@ const SingleProductView = ({ props }) => {
     bulletPoints,
     averageRating,
   } = props;
+
   const discountprice = Math.round(((mrp - salePrice) / mrp) * 100);
+
   // Safely create the product images array with checks
   const productImages = [
     mainImage?.url || "", // Main image URL with fallback to an empty string
@@ -27,7 +31,6 @@ const SingleProductView = ({ props }) => {
     <div>
       <div className="flex gap-20  flex-col  lg:flex-row ">
         <ProductView images={productImages} />
-        {/* <p>{JSON.stringify(props)}</p> */}
         <div className="flex flex-col gap-5">
           <h1 className="text-2xl font-bold   ">{name}</h1>
           <p className="text-gray-600 "> {description}</p>

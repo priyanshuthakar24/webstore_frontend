@@ -1,9 +1,12 @@
-import { message, Rate } from "antd";
-import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import axios from "axios";
+
 import FilterComponent from "../ui/FilterComponent";
+
+import { message, Rate } from "antd";
+import { AnimatePresence, motion } from "framer-motion";
+
 const ProductList = () => {
   const [isLoading, setIsLoadinng] = useState(false);
   const [productlist, setProductList] = useState([]);
@@ -14,9 +17,9 @@ const ProductList = () => {
   const [page, setPage] = useState(1); // Current page number
   const [hasMore, setHasMore] = useState(0); // Track if more products are available
 
+  //  !Fetch the product list for the user
   const fetchProduct = async (page = 1) => {
     setIsLoadinng(true);
-
     try {
       const res = await axios.get(
         `${process.env.REACT_APP_API}/api/user/shop`,
@@ -24,19 +27,22 @@ const ProductList = () => {
           params: { page },
         }
       );
-      const newProducts = res.data.productlist;
-      setProductList((prev) =>
-        page === 1 ? newProducts : [...prev, ...newProducts]
-      );
-      // Check if more products are available
-
-      setHasMore(res.data.totalCount);
+      if (res) {
+        const newProducts = res.data.productlist;
+        setProductList((prev) =>
+          page === 1 ? newProducts : [...prev, ...newProducts]
+        );
+        // Check if more products are available
+        setHasMore(res.data.totalCount);
+      }
     } catch (error) {
       message.error(error.response.data.message);
     } finally {
       setIsLoadinng(false);
     }
   };
+
+  //  calculate the discount precentage
   const discountprice = (mrp, salePrice) => {
     return Math.round(((mrp - salePrice) / mrp) * 100);
   };
@@ -44,12 +50,6 @@ const ProductList = () => {
   // Handle filtering and sorting criteria changes from FilterComponent
   const handleFilterChange = ({ filter, sortOrder }) => {
     setFilterCriteria({ filter, sortOrder });
-  };
-
-  const handleLoadMore = () => {
-    const nextPage = page + 1;
-    setPage(nextPage);
-    fetchProduct(nextPage);
   };
 
   // Apply filter and sort based on criteria
@@ -66,6 +66,13 @@ const ProductList = () => {
         return new Date(a.createdAt) - new Date(b.createdAt);
       return 0; // No sorting for "Popular" or unspecified
     });
+
+  // !calculate product length and gave the result
+  const handleLoadMore = () => {
+    const nextPage = page + 1;
+    setPage(nextPage);
+    fetchProduct(nextPage);
+  };
 
   useEffect(() => {
     fetchProduct(1);
@@ -121,7 +128,6 @@ const ProductList = () => {
                         </span>
                         <span className="text-sm  text-center text-gray-700 capitalize lg:hidden">
                           {item.name.slice(0, 20)}
-                          {/* {item.name.length > 23 ? "..." : ""} */}
                         </span>
 
                         <p className="space-x-4 ">

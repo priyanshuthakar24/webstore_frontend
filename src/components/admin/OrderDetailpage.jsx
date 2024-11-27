@@ -1,16 +1,19 @@
-import { Avatar, Card, Divider, message, Select } from "antd";
-import axios from "axios";
-import { CircleUserRound, Download, Mail, MapPinned } from "lucide-react";
 import React, { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import axios from "axios";
+
+import OrderFormModal from "../ui/OrderFormModal";
+
+import { Avatar, Card, Divider, message, Select } from "antd";
+
+import { CircleUserRound, Download, Mail, MapPinned } from "lucide-react";
 import { RiSecurePaymentLine } from "react-icons/ri";
 import { PiTruckTrailerDuotone } from "react-icons/pi";
 import { TbTruckDelivery } from "react-icons/tb";
-import OrderFormModal from "../ui/OrderFormModal";
+
 const OrderDetailpage = () => {
   const { id } = useParams();
-  const [orderData, setorderData] = useState([]);
-  const [loading, setLoading] = useState(false);
+
   const options = [
     { label: "Pending", value: "Pending" },
     { label: "Packed", value: "Packed" },
@@ -18,14 +21,10 @@ const OrderDetailpage = () => {
     { label: "Delivered", value: "Delivered" },
   ];
 
-  const handleOrderUpdate = (newOrderDetails) => {
-    // Directly replace orderData with the new updated object
-    setorderData((prevOrder) => ({
-      ...prevOrder,
-      LogisticDetail: newOrderDetails,
-    }));
-  };
+  const [orderData, setorderData] = useState([]);
+  const [loading, setLoading] = useState(false);
 
+  // //! get the single order detail page
   const fetchOrderdetail = useCallback(async () => {
     setLoading(true);
     try {
@@ -33,19 +32,18 @@ const OrderDetailpage = () => {
         `${process.env.REACT_APP_API}/api/order/admin/orderdetail`,
         { withCredentials: true, params: { id } }
       );
-      setorderData(res.data);
+      if (res) {
+        setorderData(res.data);
+      }
     } catch (error) {
       message.error(error);
     } finally {
       setLoading(false);
     }
   }, [id]);
-  useEffect(() => {
-    fetchOrderdetail();
-  }, [fetchOrderdetail]);
 
+  // //! updete the order status shipped ,dilivered
   const handleStatusChange = async (value) => {
-    // return console.log(value);
     try {
       const { data } = await axios.put(
         `${process.env.REACT_APP_API}/api/order/admin/${orderData._id}/status`,
@@ -56,11 +54,26 @@ const OrderDetailpage = () => {
           withCredentials: true,
         }
       );
-      message.success(data.message);
+      if (data) {
+        message.success(data.message);
+      }
     } catch (error) {
       message.error("Error updating order status");
     }
   };
+
+  // //? Directly replace orderData with the new updated object
+  const handleOrderUpdate = (newOrderDetails) => {
+    setorderData((prevOrder) => ({
+      ...prevOrder,
+      LogisticDetail: newOrderDetails,
+    }));
+  };
+
+  useEffect(() => {
+    fetchOrderdetail();
+  }, [fetchOrderdetail]);
+
   return (
     <>
       {loading ? (
@@ -68,7 +81,6 @@ const OrderDetailpage = () => {
       ) : (
         <div className="my-20 mx-4  text-[#495057]">
           <h1 className="font-bold text-gray-700 mb-5">OrderDetail Page</h1>
-          {/* {JSON.stringify(orderData)} */}
           <div className="shadow">
             <div className="bg-white  py-4  flex-center justify-between px-3">
               <span className="font-bold">Order # {orderData.lastSixOfId}</span>
@@ -158,8 +170,7 @@ const OrderDetailpage = () => {
             </table>
           </div>
 
-          {/* Section 2  */}
-
+          {/* //! Section 2  */}
           <div className="flex mt-5 gap-10 flex-col lg:flex-row justify-around ">
             {/* //! customre Detail  */}
             <Card>

@@ -1,11 +1,12 @@
 import React from "react";
+
 import { useCartcontext } from "../../context/Cartcontext";
 
 const CartItem = ({ product }) => {
   const { removeFromCart } = useCartcontext();
+
   return (
     <div className=" flex flex-col lg:gap-10">
-      {/* {JSON.stringify(product)} */}
       {product?.map((item) => (
         <>
           <div className="flex gap-5 " key={item.productId._id}>

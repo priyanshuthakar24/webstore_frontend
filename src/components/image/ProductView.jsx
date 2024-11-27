@@ -1,14 +1,7 @@
 import React, { useState } from "react";
-import ImageGallery from "react-image-gallery";
-import "react-image-gallery/styles/css/image-gallery.css"; // Import styles
 
 const ProductView = ({ images, style }) => {
   const [currentImage, setCurrentImage] = useState(0);
-  // Prepare images in the required format
-  // const galleryImages = images.map((img) => ({
-  //   original: img,
-  //   thumbnail: img,
-  // }));
 
   return (
     <div className="lg:p-5">
@@ -21,6 +14,7 @@ const ProductView = ({ images, style }) => {
             onMouseOver={(e) => setCurrentImage(0)}
             // onClick={() => setCurrentImage(0)}
             className="rounded-md cursor-pointer"
+            alt="no Product"
           />
           <img
             src={images[1]}
@@ -29,6 +23,7 @@ const ProductView = ({ images, style }) => {
             onMouseOver={(e) => setCurrentImage(1)}
             // onClick={() => setCurrentImage(1)}
             className="rounded-md cursor-pointer"
+            alt="no Product"
           />
           <img
             src={images[2]}
@@ -37,6 +32,7 @@ const ProductView = ({ images, style }) => {
             onMouseOver={(e) => setCurrentImage(2)}
             // onClick={() => setCurrentImage(2)}
             className="rounded-md cursor-pointer"
+            alt="no Product"
           />
           <img
             src={images[3]}
@@ -45,27 +41,19 @@ const ProductView = ({ images, style }) => {
             onMouseOver={(e) => setCurrentImage(3)}
             // onClick={() => setCurrentImage(3)}
             className="rounded-md cursor-pointer"
+            alt="no Product"
           />
         </div>
         <div className="h-[40vh] lg:h-[60vh] lg:w-[20vw]">
           <img
             src={images[currentImage]}
-            alt=""
+            alt="no Product"
             // width={480}
             // height={480}
             className="w-full h-full rounded-md"
           />
         </div>
       </div>
-      {/* <ImageGallery
-        items={galleryImages}
-        showPlayButton={false}
-        showFullscreenButton={true}
-        showThumbnails={true}
-        showNav={false}
-        thumbnailPosition="bottom"
-        slideOnThumbnailOver={true} // Slide to image on thumbnail hover
-      /> */}
     </div>
   );
 };

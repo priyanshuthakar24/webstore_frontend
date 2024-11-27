@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { motion } from "framer-motion";
+
 import SingleProductView from "./SingleProductView";
 import { useStateContext } from "../../context/ContextProvider";
+
+import { motion } from "framer-motion";
+
 const SingleProduct = () => {
   const { id } = useParams();
+
   const { fetchproductdetail, productDetail } = useStateContext();
+
   const [isLoading, setIsLoadinng] = useState(false);
 
   useEffect(() => {
@@ -13,6 +18,7 @@ const SingleProduct = () => {
     fetchproductdetail(id);
     setIsLoadinng(false);
   }, []);
+
   return (
     <>
       {isLoading ? (

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Button, Divider, Card } from "antd";
+
+import { Button, Divider } from "antd";
 
 function OrderSummary({ cartItems, shippingInfo, onSubmit }) {
   const [summary, setSummary] = useState({
@@ -9,11 +10,11 @@ function OrderSummary({ cartItems, shippingInfo, onSubmit }) {
     totalPrice: 0,
   });
 
+  const handleNext = () => {
+    onSubmit(summary);
+  };
+
   useEffect(() => {
-    // const itemsPrice = cartItems.reduce(
-    //   (acc, item) => acc + item.price * item.quantity,
-    //   0
-    // );
     const itemsPrice = cartItems.totalCost;
     const taxPrice = itemsPrice * 0.1; // Example tax rate of 10%
     const totalPrice = itemsPrice + summary.shippingPrice + taxPrice;
@@ -26,12 +27,7 @@ function OrderSummary({ cartItems, shippingInfo, onSubmit }) {
     });
   }, [cartItems]);
 
-  const handleNext = () => {
-    onSubmit(summary);
-  };
-
   return (
-    // <Card>
     <div className="text-base">
       <h2 className="text-center font-sans lg:text-4xl  text-2xl text-black/45">
         Order Summary
@@ -83,7 +79,6 @@ function OrderSummary({ cartItems, shippingInfo, onSubmit }) {
         Proceed to Payment
       </Button>
     </div>
-    // </Card>
   );
 }
 

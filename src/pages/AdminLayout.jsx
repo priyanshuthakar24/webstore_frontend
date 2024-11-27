@@ -1,23 +1,28 @@
 import React, { useEffect } from "react";
-import Sidebar from "../components/sidebar/Sidebar";
-import { useStateContext } from "../context/ContextProvider";
 import { Outlet } from "react-router-dom";
+
+import Sidebar from "../components/sidebar/Sidebar";
 import Navbar from "../components/sidebar/Navbar";
+import { useStateContext } from "../context/ContextProvider";
+
 import { notification } from "antd";
+
 import io from "socket.io-client";
 const socket = io.connect(`${process.env.REACT_APP_API}`); // Your backend server URL
 
 const AdminLayout = () => {
   const { activeMenu } = useStateContext();
+
   // Handle Notifications
   const openNotification = (orderId) => {
     notification.info({
       message: "New Order Notification",
       description: `A new order has been placed. Order ID: ${orderId}`,
       placement: "topRight",
-      duration:0,
+      duration: 0,
     });
   };
+
   useEffect(() => {
     socket.on("orderUpdate", (data) => {
       // Extract the order ID and trigger a notification
@@ -27,6 +32,7 @@ const AdminLayout = () => {
 
     return () => socket.off("orderUpdate"); // Cleanup on unmount
   }, []);
+
   return (
     <div className="flex relative">
       {/* //! sidebar  components  */}

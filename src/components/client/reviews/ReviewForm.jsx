@@ -1,18 +1,25 @@
 import React, { useEffect, useState } from "react";
-import { Rate, Button, Input, Form, notification, Card } from "antd";
-import axios from "axios";
 import { useParams } from "react-router-dom";
-import { useAuth } from "../../../context/Authcontext";
+import axios from "axios";
 import { motion } from "framer-motion";
+
+import { useAuth } from "../../../context/Authcontext";
+
+import { Rate, Button, Input, Form, notification, Card } from "antd";
+
 const { TextArea } = Input;
 
 const ReviewForm = () => {
   const [form] = Form.useForm();
-  const { userData } = useAuth();
-  const [loading, setLoading] = useState(false);
-  const [product, setProduct] = useState([]);
+
   const { id } = useParams();
 
+  const { userData } = useAuth();
+
+  const [loading, setLoading] = useState(false);
+  const [product, setProduct] = useState([]);
+
+  // ! fech the user review if the user have already filled it
   const fetchreviews = async () => {
     const res = await axios.get(
       `${process.env.REACT_APP_API}/api/review/userreview`,
@@ -28,20 +35,7 @@ const ReviewForm = () => {
     }
   };
 
-  useEffect(() => {
-    fetchreviews();
-  }, []);
-
-  // Prefill the form with user's existing review
-  useEffect(() => {
-    if (product.reviews?.length > 0) {
-      form.setFieldsValue({
-        rating: product?.reviews[0]?.rating,
-        comment: product?.reviews[0]?.comment,
-      });
-    }
-  }, [product.reviews, form]);
-
+  // ! submit the review and show the notification
   const handleSubmit = async (values) => {
     const { rating, comment } = values;
     setLoading(true);
@@ -62,7 +56,6 @@ const ReviewForm = () => {
         });
 
         form.resetFields();
-        // onReviewAdded(); // Callback to refresh reviews list
       }
     } catch (error) {
       notification.error({
@@ -73,6 +66,21 @@ const ReviewForm = () => {
       setLoading(false);
     }
   };
+
+  // ?will fetch the review
+  useEffect(() => {
+    fetchreviews();
+  }, []);
+
+  // !Prefill the form with user's existing review
+  useEffect(() => {
+    if (product.reviews?.length > 0) {
+      form.setFieldsValue({
+        rating: product?.reviews[0]?.rating,
+        comment: product?.reviews[0]?.comment,
+      });
+    }
+  }, [product.reviews, form]);
 
   return (
     <motion.div
@@ -94,7 +102,7 @@ const ReviewForm = () => {
                 className="h-full w-auto rounded-lg"
               />
             </div>
-            <p className="text-lg  ">{product?.name}</p>
+            <p className="text-lg">{product?.name}</p>
           </div>
 
           <Form
@@ -129,7 +137,6 @@ const ReviewForm = () => {
                 htmlType="submit"
                 loading={loading}
                 size="large"
-                //   className="bg-blue-500 hover:bg-blue-600 border-none px-6 py-2 rounded text-white"
               >
                 {product.reviews?.length > 0
                   ? "Update Review"

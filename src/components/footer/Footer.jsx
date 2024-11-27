@@ -1,5 +1,6 @@
-import { Divider, Input } from "antd";
 import React from "react";
+
+import { Divider, Input } from "antd";
 
 const Footer = () => {
   return (

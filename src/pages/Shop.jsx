@@ -1,4 +1,5 @@
 import React from "react";
+
 import ProductList from "../components/client/ProductList";
 
 const Shop = () => {

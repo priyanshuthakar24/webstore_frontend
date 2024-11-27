@@ -1,11 +1,14 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+
 import { message } from 'antd';
+
 const useSignup = () => {
+    const nav = useNavigate();
+
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(null);
-    const nav = useNavigate();
 
     const signupUser = async (values) => {
         try {
@@ -14,7 +17,6 @@ const useSignup = () => {
             const response = await axios.post(`${process.env.REACT_APP_API}/api/auth/signup`, values, {
                 withCredentials: true
             });
-            console.log(response);
             if (response.status === 201) {
                 message.success(response.data.message);
                 return nav('/auth/verify-email');

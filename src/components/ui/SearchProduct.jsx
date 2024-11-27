@@ -1,19 +1,26 @@
 import React, { useState } from "react";
 import { useLocation, Link } from "react-router-dom";
-import { Rate } from "antd";
 import { AnimatePresence, motion } from "framer-motion";
+
 import FilterComponent from "./FilterComponent";
+
+import { Rate } from "antd";
+
 const SearchProduct = () => {
   const location = useLocation();
+
   const productlist = location.state?.products || []; // Retrieve passed data
+
   const [isLoading, setIsLoadinng] = useState(false);
-  // const [productlist, setProductList] = useState([]);
+
   const [filterCriteria, setFilterCriteria] = useState({
     filter: null,
     sortOrder: null,
   });
+
   const [page, setPage] = useState(1); // Current page number
   const [hasMore, setHasMore] = useState(0); // Track if more products are available
+
   const discountprice = (mrp, salePrice) => {
     return Math.round(((mrp - salePrice) / mrp) * 100);
   };
@@ -26,7 +33,6 @@ const SearchProduct = () => {
   const handleLoadMore = () => {
     const nextPage = page + 1;
     setPage(nextPage);
-    // fetchProduct(nextPage);
   };
 
   // Apply filter and sort based on criteria
@@ -43,6 +49,7 @@ const SearchProduct = () => {
         return new Date(a.createdAt) - new Date(b.createdAt);
       return 0; // No sorting for "Popular" or unspecified
     });
+
   return (
     <div>
       {isLoading ? (
@@ -95,7 +102,6 @@ const SearchProduct = () => {
                         </span>
                         <span className="text-sm  text-center text-gray-700 capitalize lg:hidden">
                           {item.name.slice(0, 20)}
-                          {/* {item.name.length > 23 ? "..." : ""} */}
                         </span>
 
                         <p className="space-x-4 ">

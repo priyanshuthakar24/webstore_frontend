@@ -1,18 +1,23 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+
 import { motion } from "framer-motion";
 import { Carousel } from "antd";
+
 const Hero = () => {
   const nav = useNavigate();
-  const handleclick = () => {
-    nav("/shop");
-  };
+
   const contentStyle = {
     height: "60vh",
     color: "#000",
     lineHeight: "160px",
     textAlign: "center",
     background: "#C4C4C4",
+  };
+
+  // will navigate to shop page
+  const handleclick = () => {
+    nav("/shop");
   };
 
   return (

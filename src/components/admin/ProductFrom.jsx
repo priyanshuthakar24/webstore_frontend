@@ -1,4 +1,7 @@
 import React, { useEffect, useState } from "react";
+
+import { newcategory } from "../../data/dummy";
+
 import {
   Button,
   Form,
@@ -10,11 +13,11 @@ import {
   Image,
   message,
 } from "antd";
-import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import TextArea from "antd/es/input/TextArea";
-import { newcategory } from "../../data/dummy";
 
-// Utility function to convert image to Base64
+import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
+
+// ? whne u click preview imaeg Utility function to convert image to Base64
 const getBase64 = (file) =>
   new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -23,40 +26,18 @@ const getBase64 = (file) =>
     reader.onerror = (error) => reject(error);
   });
 
+//  product Form components start here ..
+
 const ProductForm = ({ initialValues, onSubmit, isEditMode }) => {
-  const [isLoading, setIsLoading] = useState(false);
   const [form] = Form.useForm();
+
+  const [isLoading, setIsLoading] = useState(false);
 
   // States for preview
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [mainImageList, setMainImageList] = useState([]);
   const [subImageList, setSubImageList] = useState([]);
-
-  useEffect(() => {
-    // Populate form with initial values when editing
-    if (initialValues) {
-      form.setFieldsValue({
-        ...initialValues,
-        bulletPoints: initialValues.bulletPoints?.map((bp) => ({
-          bulletPoint: bp,
-        })),
-        stock: initialValues.stock,
-      });
-      // Handle images separately if needed
-      setMainImageList(
-        initialValues.mainImage ? [{ url: initialValues.mainImage.url }] : []
-      );
-      setSubImageList(
-        initialValues.subImages
-          ? initialValues.subImages.map((img) => ({
-              url: img.url,
-              public_id: img.public_id,
-            }))
-          : []
-      );
-    }
-  }, [initialValues, form]);
 
   // Preview Handler
   const handlePreview = async (file) => {
@@ -67,21 +48,13 @@ const ProductForm = ({ initialValues, onSubmit, isEditMode }) => {
     setPreviewOpen(true);
   };
 
-  // Image Upload Handlers
+  // ? Image Upload Handlers wil set the image into the state
   const handleMainImageChange = ({ fileList: newFileList }) =>
     setMainImageList(newFileList);
   const handleSubImageChange = ({ fileList: newFileList }) =>
     setSubImageList(newFileList);
 
-  // Custom value handler to extract the file list from event
-  // const normFile = (e) => {
-  //   if (Array.isArray(e)) {
-  //     return e;
-  //   }
-  //   return e?.fileList;
-  // };
-
-  // Validation for minimum sub-images
+  // ? Validation for minimum 3 sub-images
   const validateSubImages = (_, value) => {
     if (subImageList.length < 3) {
       return Promise.reject(new Error("Please upload exactly 3 sub-images!"));
@@ -89,22 +62,24 @@ const ProductForm = ({ initialValues, onSubmit, isEditMode }) => {
     return Promise.resolve();
   };
 
+  //! form submit function for new and update form
   const handleSubmit = async (values) => {
     const formData = new FormData();
+
     formData.append("name", values.name);
     formData.append("description", values.description);
     formData.append("category", values.category);
     formData.append("mrp", values.mrp);
     formData.append("salePrice", values.salePrice);
     formData.append("stock", JSON.stringify(values.stock));
-    console.log(values);
+
     // Map bullet points to an array of strings
     const bulletPointsArray = values.bulletPoints.map(
       (item) => item.bulletPoint
     );
     formData.append("bulletPoints", JSON.stringify(bulletPointsArray));
 
-    // Append main image
+    // Append mainImage
     if (mainImageList.length > 0) {
       console.log(mainImageList[0].originFileObj);
       formData.append(
@@ -117,7 +92,8 @@ const ProductForm = ({ initialValues, onSubmit, isEditMode }) => {
       .map((file) => file.public_id);
 
     formData.append("existingSubImageIds", JSON.stringify(existingSubImageIds));
-    // Append sub-images
+
+    // Append sub-Images
     subImageList.forEach((file) => {
       formData.append("subImages", file.originFileObj || file.url);
     });
@@ -125,8 +101,6 @@ const ProductForm = ({ initialValues, onSubmit, isEditMode }) => {
     setIsLoading(true);
     try {
       await onSubmit(formData); // Trigger the submission handler passed as prop
-      // console.log(res.data.message);
-      // message.success(res.data.message);
       form.resetFields();
       setMainImageList([]);
       setSubImageList([]);
@@ -143,6 +117,32 @@ const ProductForm = ({ initialValues, onSubmit, isEditMode }) => {
       <div style={{ marginTop: 8 }}>Upload</div>
     </div>
   );
+
+  useEffect(() => {
+    // Populate form with initial values when editing
+    if (initialValues) {
+      form.setFieldsValue({
+        ...initialValues,
+        bulletPoints: initialValues.bulletPoints?.map((bp) => ({
+          bulletPoint: bp,
+        })),
+        stock: initialValues.stock,
+      });
+
+      // Handle images separately if needed
+      setMainImageList(
+        initialValues.mainImage ? [{ url: initialValues.mainImage.url }] : []
+      );
+      setSubImageList(
+        initialValues.subImages
+          ? initialValues.subImages.map((img) => ({
+              url: img.url,
+              public_id: img.public_id,
+            }))
+          : []
+      );
+    }
+  }, [initialValues, form]);
 
   return (
     <div className="mt-12 max-w-4xl mx-auto lg:mb-10 p-5 bg-white rounded-lg shadow-lg">
@@ -176,6 +176,7 @@ const ProductForm = ({ initialValues, onSubmit, isEditMode }) => {
             className="w-full p-2 border rounded"
           />
         </Form.Item>
+
         {/* Product Description */}
         <Form.Item
           size="large"
@@ -190,6 +191,7 @@ const ProductForm = ({ initialValues, onSubmit, isEditMode }) => {
         >
           <TextArea rows={5} placeholder="Product Description" />
         </Form.Item>
+
         {/* Product Category */}
         <Form.Item
           label="Category"
@@ -210,7 +212,8 @@ const ProductForm = ({ initialValues, onSubmit, isEditMode }) => {
             options={newcategory}
           />
         </Form.Item>
-        {/* MRP and Stock */}
+
+        {/* Product MRP  */}
         <div className="flex justify-between gap-6">
           <Form.Item
             label="MRP"
@@ -227,6 +230,7 @@ const ProductForm = ({ initialValues, onSubmit, isEditMode }) => {
               parser={(value) => value?.replace(/\$\s?|(,*)/g, "")}
             />
           </Form.Item>
+
           {/* Sale Price */}
           <Form.Item
             label="Sale Price"
@@ -257,6 +261,7 @@ const ProductForm = ({ initialValues, onSubmit, isEditMode }) => {
             />
           </Form.Item>
         </div>
+
         {/* Stock - Sizes and Quantities */}
         <Form.List name="stock">
           {(fields, { add, remove }) => (
@@ -354,6 +359,7 @@ const ProductForm = ({ initialValues, onSubmit, isEditMode }) => {
             </>
           )}
         </Form.List>
+
         {/* Main Product Image Upload */}
         <Form.Item
           name="mainImage"
@@ -379,7 +385,6 @@ const ProductForm = ({ initialValues, onSubmit, isEditMode }) => {
         </Form.Item>
 
         {/* Sub Images Upload */}
-
         <Form.Item
           name="subImages"
           label="Sub Images (3 Images)"
@@ -416,6 +421,7 @@ const ProductForm = ({ initialValues, onSubmit, isEditMode }) => {
             src={previewImage}
           />
         )}
+
         {/* Submit Button */}
         <Form.Item>
           <Button

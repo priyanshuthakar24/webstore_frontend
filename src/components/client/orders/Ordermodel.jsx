@@ -1,5 +1,7 @@
-import { Button, Card, Divider, Modal, Result } from "antd";
 import React, { useState } from "react";
+
+import { Button, Card, Divider, Modal, Result } from "antd";
+
 const Ordermodel = ({ orderdata }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
 

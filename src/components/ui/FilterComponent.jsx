@@ -1,24 +1,28 @@
 import { useState } from "react";
-import { Select } from "antd";
-
 import { motion, AnimatePresence } from "framer-motion";
+
+import { Select } from "antd";
 import { ListFilter } from "lucide-react";
 
 const FilterComponent = ({ onFilterChange }) => {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [selectedFilter, setSelectedFilter] = useState(undefined);
+  const [selectedSort, setSelectedSort] = useState(undefined);
+
   const handleClick = () => {
     setIsFilterOpen(!isFilterOpen);
   };
+
   const handleFilterClick = (filter) => {
     setSelectedFilter(filter);
     onFilterChange({ filter, sortOrder: selectedSort }); // Notify ProductList of the selected filter
   };
+
   const handleSortChange = (value) => {
     setSelectedSort(value);
     onFilterChange({ filter: selectedFilter, sortOrder: value }); // Update sort order and filter together
   };
-  const [selectedSort, setSelectedSort] = useState(undefined);
+
   return (
     <>
       <div className="flex items-center gap-5 justify-between mt-20 lg:mt-5 mx-3 lg:mx-16">
@@ -26,7 +30,6 @@ const FilterComponent = ({ onFilterChange }) => {
           size="large"
           variant="filled"
           className="lg:w-[20rem]  "
-          //   style={{ width: "20rem" }}
           placeholder="Sort By"
           optionFilterProp="label"
           onChange={handleSortChange}

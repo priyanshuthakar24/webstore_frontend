@@ -1,28 +1,36 @@
-import { Button, Card } from "antd";
 import React, { useEffect, useState } from "react";
+
 import { useWishlist } from "../../context/Wishlist";
 import { useCartcontext } from "../../context/Cartcontext";
+
+import { Button, Card } from "antd";
 import { Trash2 } from "lucide-react";
 
 const Wishlist = () => {
+  const { addToCart } = useCartcontext();
+
+  const { wishlist, fetchWishlist, removeFromWishlist } = useWishlist();
+
   const [isLoading, setIsLoading] = useState(false);
   const [quantity, setQuantity] = useState(1);
-  const [size, setSize] = useState("L");
-  const { wishlist, setwishlist, fetchWishlist, removeFromWishlist } =
-    useWishlist();
-  const { addToCart } = useCartcontext();
+  // const [size, setSize] = useState("L");
+  const size = "L";
+
   useEffect(() => {
     fetchWishlist();
   }, []);
+
   const handleAddToCart = async (_id) => {
     setIsLoading(true);
     await addToCart(_id, quantity, size);
     setQuantity(1);
     setIsLoading(false);
   };
+
   const handleRemovewishlist = async (_id) => {
     removeFromWishlist(_id);
   };
+
   return (
     <div className="my-20 text-black mx-0">
       <h1 className="text-4xl font-sans mb-5 text-center">My Wishlist</h1>
@@ -41,8 +49,9 @@ const Wishlist = () => {
                   <td className="flex items-center gap-3 lg:gap-10 my-5 ">
                     <div className="lg:h-[20vh] w-[20vw]  lg:w-auto">
                       <img
-                        src={item.mainImage.url}
+                        src={item?.mainImage.url}
                         className="w-full h-full "
+                        alt="productt Img"
                       />
                     </div>
                     <div className="w-full lg:w-1/2">

@@ -1,6 +1,8 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import axios from "axios";
+
 import { message } from "antd";
+
 const AuthContext = createContext();
 
 export const Authprovider = ({ children }) => {
@@ -39,7 +41,7 @@ export const Authprovider = ({ children }) => {
         setUserData(newData);
         setIsAuthenticated(true);
     }
-    
+
     //! logout logic to remove the cookie from the browser 
     const logout = async () => {
         try {
