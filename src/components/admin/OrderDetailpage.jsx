@@ -198,6 +198,7 @@ const OrderDetailpage = () => {
                 <span className="lg:text-lg">
                   <p>{orderData.shippingInfo?.address}</p>
                   <p>{orderData.shippingInfo?.city}</p>
+                  <p>{orderData.shippingInfo?.state}</p>
                   <p>{orderData.shippingInfo?.postalCode}</p>
                   <p>{orderData.shippingInfo?.country}</p>
                 </span>

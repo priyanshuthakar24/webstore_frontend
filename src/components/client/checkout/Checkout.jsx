@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Steps, Button, message } from "antd";
+import { Steps, Button, message, Card } from "antd";
 import AddressForm from "./AddressForm";
 import OrderSummary from "./OrderSummary";
 import Payment from "./Payment";
@@ -50,11 +50,13 @@ function Checkout({ cartItems, onPaymentSuccess }) {
     {
       title: "Order Summary",
       content: (
-        <OrderSummary
-          cartItems={cartItems}
-          shippingInfo={shippingInfo}
-          onSubmit={handleOrderSummary}
-        />
+        <Card>
+          <OrderSummary
+            cartItems={cartItems}
+            shippingInfo={shippingInfo}
+            onSubmit={handleOrderSummary}
+          />
+        </Card>
       ),
     },
     {
@@ -71,9 +73,13 @@ function Checkout({ cartItems, onPaymentSuccess }) {
   ];
 
   return (
-    <div className="max-w-2xl mx-auto ">
+    <div className="lg:max-w-2xl mx-auto mt-8 lg:mt-0 ">
       <div className="px-4">
-        <Steps progressDot direction="horizontal" current={currentStep}>
+        <Steps
+          direction="horizontal"
+          current={currentStep}
+          className="custom-steps"
+        >
           {steps.map((item, index) => (
             <Step key={index} title={item.title} />
           ))}

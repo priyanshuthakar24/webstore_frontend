@@ -22,9 +22,8 @@ const SingleProduct = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="mt-20 mx-5 text-black flex flex-col gap-5 lg:flex-row items-center lg:justify-between lg:mx-24"
+          className="mt-20 mx-5 lg:mx-auto text-black lg:max-w-[70vw]"
         >
-          <div></div>
           <SingleProductView props={productDetail} />
         </motion.div>
       )}

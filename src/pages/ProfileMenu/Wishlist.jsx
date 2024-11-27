@@ -27,7 +27,7 @@ const Wishlist = () => {
     <div className="my-20 text-black mx-0">
       <h1 className="text-4xl font-sans mb-5 text-center">My Wishlist</h1>
       <div className="flex justify-center">
-        <Card>
+        <Card className="lg:w-2/3">
           <table className="space-y-5 w-full">
             <thead className="border-b-1 lg:text-base text-xs ">
               <th className="lg:pb-5 text-center  ">Product Name</th>

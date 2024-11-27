@@ -1,17 +1,26 @@
 import React, { useState } from "react";
 import ProductView from "../image/ProductView";
 import { Dot } from "lucide-react";
-import { Avatar, Divider, Radio, Rate } from "antd";
+import { Avatar, Button, Divider, Radio, Rate, message } from "antd";
 import CartCount from "../ui/CartCount";
 import { useCartcontext } from "../../context/Cartcontext";
 import Wishlistui from "../ui/Wishlistui";
 import moment from "moment";
+import InstantCheckout from "./checkout/InstantCheckout";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const SingleProductView = ({ props }) => {
+  const nav = useNavigate();
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [quantity, setQuantity] = useState(1);
   const [size, setSize] = useState("L");
   const { addToCart } = useCartcontext();
+
+  const handleBuyNow = () => {
+    setIsModalOpen(true);
+  };
   const handleIncrement = () => {
     setQuantity((prevCount) => prevCount + 1);
   };
@@ -56,11 +65,98 @@ const SingleProductView = ({ props }) => {
     ...(subImages ? subImages.map((image) => image.url) : []), // Map through subImages if available
   ].filter((url) => url); // Remove any empty strings in case of missing URLs
 
+  // //! razorpay instant checkout
+  const loadRazorpayScript = () => {
+    return new Promise((resolve) => {
+      const script = document.createElement("script");
+      script.src = "https://checkout.razorpay.com/v1/checkout.js";
+      script.onload = () => resolve(true);
+      script.onerror = () => resolve(false);
+      document.body.appendChild(script);
+    });
+  };
+  const handlePayment = async ({
+    shippingInfo,
+    totalPrice,
+    tax,
+    shippingCharge,
+    itemsPrice,
+  }) => {
+    setIsLoading(true);
+    const isScriptLoaded = await loadRazorpayScript();
+    if (!isScriptLoaded) {
+      message.error("Failed to load Razorpay SDK");
+      return;
+    }
+    try {
+      const orderItems = [
+        {
+          product: props._id,
+          quantity,
+          price: props.salePrice,
+          size,
+        },
+      ];
+
+      const { data } = await axios.post(
+        `${process.env.REACT_APP_API}/api/order/create-order`,
+        {
+          orderItems,
+          shippingInfo,
+          totalPrice,
+          itemsPrice: itemsPrice,
+          taxPrice: tax,
+          shippingPrice: shippingCharge,
+        },
+        { withCredentials: true }
+      );
+
+      const options = {
+        key: process.env.REACT_APP_RAZORPAY_ID, // Replace with Razorpay key ID
+        amount: data.order.totalPrice * 100, // Amount in paisa
+        currency: "INR",
+        name: "Pinku",
+        description: "Order Payment",
+        // image: mainImage?.url,
+        order_id: data.razorpayOrderId,
+        method: ["upi", "card", "netbanking"], // Enable UPI along with other methods
+        handler: async function (response) {
+          // Payment successful on frontend, display success message
+          message.success(
+            "Payment initiated successfully. Waiting for confirmation."
+          );
+          nav("/orders");
+        },
+        prefill: {
+          name: "Priyanshu Thakar",
+          email: "myemail@example.com",
+          contact: `${shippingInfo.phone}`,
+        },
+        theme: {
+          color: "#cc3333",
+        },
+      };
+
+      const razorpay = new window.Razorpay(options);
+      razorpay.open();
+    } catch (error) {
+      console.error("Payment Error: ", error);
+      message.error(error.response.data.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div>
       {/* Prodduct Detail componets  */}
       <div className="flex gap-20  flex-col  lg:flex-row ">
-        <ProductView images={productImages} />
+        {/* <div> */}
+        <ProductView
+          images={productImages}
+          // style={{ width: "600px", height: "500px" }}
+        />
+        {/* </div> */}
         <div className="flex flex-col gap-5">
           <h1 className="text-2xl font-bold">{name}</h1>
           <p className="text-gray-600 "> {description}</p>
@@ -129,13 +225,29 @@ const SingleProductView = ({ props }) => {
                     >
                       Add To Cart
                     </button>
-                    <button
-                      type="button"
-                      className="bg-yellow-500 rounded-full text-md font-sans py-2 px-5 hover:shadow-lg"
+                    {/* buy now model and logic  */}
+                    <Button
+                      // type='primary'
+                      color="default"
+                      variant="solid"
+                      onClick={handleBuyNow}
                       size="large"
+                      className="bg-yellow-500  rounded-full text-md font-sans py-2 px-5 hover:shadow-lg text-black"
                     >
                       Buy Now
-                    </button>
+                    </Button>
+
+                    {/* Checkout Modal */}
+                    <InstantCheckout
+                      visible={isModalOpen}
+                      onClose={() => setIsModalOpen(false)}
+                      product={props}
+                      quantity={quantity}
+                      size={size}
+                      onPayment={handlePayment}
+                      isLoading={isLoading}
+                    />
+
                     <Wishlistui product={_id} />
                   </div>
                 ) : (
@@ -165,13 +277,15 @@ const SingleProductView = ({ props }) => {
                       </button>
                     </div>
                     <div className="w-full">
-                      <button
-                        type="button"
-                        className="bg-yellow-500 w-full rounded-full text-md font-sans py-2 px-5 hover:shadow-lg"
+                      <Button
+                        color="default"
+                        variant="solid"
+                        onClick={handleBuyNow}
                         size="large"
+                        className="bg-yellow-500 w-full rounded-full text-md font-sans py-2 px-5 hover:shadow-lg text-black"
                       >
                         Buy Now
-                      </button>
+                      </Button>
                     </div>
                   </div>
                 ) : (
@@ -188,27 +302,31 @@ const SingleProductView = ({ props }) => {
         </div>
         <Divider />
         <div>
-          {reviews?.map((item) => (
-            <div className="mb-3">
-              <div className="flex-center gap-5 mb-2">
-                <Avatar shape="square" size={45}>
-                  {item?.name[0].toUpperCase()}
-                </Avatar>
-                <p>
-                  <p className="font-bold capitalize">{item.name}</p>
-                  <span>{moment(item.createdAt).format("DD MMM yyyy")}</span>
-                </p>
+          {reviews?.length > 0 ? (
+            reviews?.map((item) => (
+              <div className="mb-3">
+                <div className="flex-center gap-5 mb-2">
+                  <Avatar shape="square" size={45}>
+                    {item?.name[0].toUpperCase()}
+                  </Avatar>
+                  <p>
+                    <p className="font-bold capitalize">{item.name}</p>
+                    <span>{moment(item.createdAt).format("DD MMM yyyy")}</span>
+                  </p>
+                </div>
+                <div>
+                  <Rate
+                    value={item.rating}
+                    disabled
+                    className="text-yellow-500 "
+                  />
+                  <p>{item.comment}</p>
+                </div>
               </div>
-              <div>
-                <Rate
-                  value={item.rating}
-                  disabled
-                  className="text-yellow-500 "
-                />
-                <p>{item.comment}</p>
-              </div>
-            </div>
-          ))}
+            ))
+          ) : (
+            <p>No Reviews for this Product!</p>
+          )}
         </div>
       </div>
     </div>

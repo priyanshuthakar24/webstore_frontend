@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Divider } from "antd";
+import { Button, Divider, Card } from "antd";
 
 function OrderSummary({ cartItems, shippingInfo, onSubmit }) {
   const [summary, setSummary] = useState({
@@ -31,8 +31,11 @@ function OrderSummary({ cartItems, shippingInfo, onSubmit }) {
   };
 
   return (
-    <div className="px-4">
-      <h2 className="text-center font-bold">Order Summary</h2>
+    // <Card>
+    <div className="text-base">
+      <h2 className="text-center font-sans lg:text-4xl  text-2xl text-black/45">
+        Order Summary
+      </h2>
       <ul className="mt-4">
         {cartItems.items.map((item, index) => (
           <li key={index} className="flex justify-between ">
@@ -45,10 +48,12 @@ function OrderSummary({ cartItems, shippingInfo, onSubmit }) {
       </ul>
       <Divider />
       <div>
-        <h2 className="text-center">Address</h2>
+        <h2 className="text-black/55 font-sans text-xl">Address</h2>
+        <Divider className="my-2" />
         <p>+91 {shippingInfo.phone}</p>
         <p>{shippingInfo.address},</p>
         <p>{shippingInfo.city},</p>
+        <p>{shippingInfo.state},</p>
         <p>{shippingInfo.postalCode},</p>
         <p>{shippingInfo.country}.</p>
       </div>
@@ -78,6 +83,7 @@ function OrderSummary({ cartItems, shippingInfo, onSubmit }) {
         Proceed to Payment
       </Button>
     </div>
+    // </Card>
   );
 }
 

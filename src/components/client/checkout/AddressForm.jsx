@@ -74,10 +74,30 @@ function AddressForm({ onSubmit, shippingInfo }) {
         />
       </Form.Item>
       <Form.Item
+        name="state"
+        rules={[{ required: true, message: "Please enter State Name" }]}
+      >
+        <Input
+          name="state"
+          placeholder="State"
+          size="large"
+          onChange={(e) => {
+            const state =
+              e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1);
+            form.setFieldsValue({ state: state });
+          }}
+        />
+      </Form.Item>
+      <Form.Item
         name="postalCode"
         rules={[{ required: true, message: "Please input the Postal code" }]}
       >
-        <Input name="postalCode" placeholder="Postal Code" size="large" />
+        <Input
+          name="postalCode"
+          variant="filled"
+          placeholder="Postal Code"
+          size="large"
+        />
       </Form.Item>
       <Form.Item
         name="country"
@@ -87,7 +107,7 @@ function AddressForm({ onSubmit, shippingInfo }) {
           name="country"
           placeholder="Country"
           size="large"
-          variant="filled"
+          // variant="filled"
           onChange={(e) => {
             const uppercase =
               e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1);
