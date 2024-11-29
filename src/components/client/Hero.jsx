@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import { motion } from "framer-motion";
 import { Carousel } from "antd";
-
+import shopvideo from "../../assets/video/shop_video.mp4";
 const Hero = () => {
   const nav = useNavigate();
 
@@ -25,7 +25,7 @@ const Hero = () => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="text-center space-y-3  text-black"
+      className="text-center space-y-3  text-black "
     >
       <h1 className="text-5xl mt-28 font-bold font-serif ">
         Better clothing for the Planet
@@ -46,7 +46,18 @@ const Hero = () => {
       >
         Shop All
       </motion.button>
-      <Carousel
+      <div className="flex-center justify-center lg:w-3/4 mx-auto">
+        <video
+          className="w-[90vw] h-full rounded shadow-lg"
+          autoPlay
+          loop
+          muted
+          playsInline
+        >
+          <source src={shopvideo} type="video/mp4" />
+        </video>
+      </div>
+      {/* <Carousel
         autoplay
         arrows
         infinite={true}
@@ -65,7 +76,7 @@ const Hero = () => {
         <div>
           <h3 style={contentStyle}>4</h3>
         </div>
-      </Carousel>
+      </Carousel> */}
     </motion.div>
   );
 };

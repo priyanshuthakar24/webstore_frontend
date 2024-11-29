@@ -6,9 +6,9 @@ const Footer = () => {
   return (
     <>
       <Divider className="border-2 border-[#A9ABBD]" />
-      <div className="text-black/55 mt-5  flex justify-evenly mb-10 lg:flex-row flex-col mx-10">
+      <div className="text-black/55 mt-5  flex justify-evenly mb-10 lg:flex-row flex-col mx-10 text-sm lg:text-base">
         <div className="flex-center justify-center flex-col gap-5 ">
-          <p className="text-black text-4xl font-sans">
+          <p className="text-black lg:text-4xl font-sans text-2xl">
             Sign up for our newsletter{" "}
           </p>
           <p className="text-black ">
@@ -23,7 +23,7 @@ const Footer = () => {
           />
         </div>
         <div className="space-y-1">
-          <p className="text-black font-sans text-lg my-5">Shop</p>
+          <p className="text-black font-sans text-lg my-2 lg:my-5">Shop</p>
           <p className="hover:cursor-pointer hover:underline">Women’s</p>
           <p className="hover:cursor-pointer hover:underline">Men’s</p>
           <p className="hover:cursor-pointer hover:underline">Kids'</p>
@@ -34,7 +34,7 @@ const Footer = () => {
           <p className="hover:cursor-pointer hover:underline">Sale</p>
         </div>
         <div className="space-y-1">
-          <p className="text-black font-sans text-lg my-5">Help</p>
+          <p className="text-black font-sans text-lg my-2 lg:my-5">Help</p>
           <p className="hover:cursor-pointer hover:underline">Help Center</p>
           <p className="hover:cursor-pointer hover:underline">Order Status</p>
           <p className="hover:cursor-pointer hover:underline">Size Chart</p>
@@ -44,7 +44,7 @@ const Footer = () => {
           <p className="hover:cursor-pointer hover:underline">Contact Us</p>
         </div>
         <div className="space-y-1">
-          <p className="text-black font-sans text-lg my-5">About</p>
+          <p className="text-black font-sans text-lg my-2 lg:my-5">About</p>
           <p className="hover:cursor-pointer hover:underline">About Us</p>
           <p className="hover:cursor-pointer hover:underline">Responsibility</p>
           <p className="hover:cursor-pointer hover:underline">

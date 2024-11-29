@@ -6,9 +6,10 @@ import { Button, Flex, Form, Input, Typography } from "antd";
 
 const Login = () => {
   const { loading, loginUser } = useLogin();
-
+  const [form] = Form.useForm();
   const handleLogin = async (values) => {
-    await loginUser(values);
+    const email = values.email.toLowerCase();
+    await loginUser({ ...values, email });
   };
 
   return (
@@ -65,7 +66,9 @@ const Login = () => {
           </Form>
           {/* //! Forget-password Link */}
           <span className="text-center mb-2 text-gray-500">
-            <Link to="/auth/forgot-password" className="hover:underline">Forget Password?</Link>
+            <Link to="/auth/forgot-password" className="hover:underline">
+              Forget Password?
+            </Link>
           </span>
           <div className="text-center text-gray-600">
             <span>
