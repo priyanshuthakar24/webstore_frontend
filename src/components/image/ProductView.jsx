@@ -44,7 +44,7 @@ const ProductView = ({ images, style }) => {
             alt="no Product"
           />
         </div>
-        <div className="h-[40vh] lg:h-[60vh] lg:w-[20vw]">
+        <div className="h-[40vh] lg:h-[55vh] lg:w-[20vw]">
           <img
             src={images[currentImage]}
             alt="no Product"

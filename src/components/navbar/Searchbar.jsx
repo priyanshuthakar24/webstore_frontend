@@ -12,6 +12,7 @@ const Searchbar = () => {
 
   const search = async () => {
     if (query.trim() === "") {
+      navigate("/shop");
       message.info("Search query is empty");
       return;
     }

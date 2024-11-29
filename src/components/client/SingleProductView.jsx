@@ -11,10 +11,10 @@ import { useCartcontext } from "../../context/Cartcontext";
 
 import { Avatar, Button, Divider, Radio, Rate, message } from "antd";
 import { Dot } from "lucide-react";
-
+import { useAuth } from "../../context/Authcontext";
 const SingleProductView = ({ props }) => {
   const nav = useNavigate();
-
+  const { isAuthenticated } = useAuth();
   const { addToCart } = useCartcontext();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -48,6 +48,9 @@ const SingleProductView = ({ props }) => {
 
   // will open the instant checkout page
   const handleBuyNow = () => {
+    if (!isAuthenticated) {
+      return message.info("please Login!");
+    }
     setIsModalOpen(true);
   };
 

@@ -33,7 +33,7 @@ function OrderSummary({ cartItems, shippingInfo, onSubmit }) {
         Order Summary
       </h2>
       <ul className="mt-4">
-        {cartItems.items.map((item, index) => (
+        {cartItems.items?.map((item, index) => (
           <li key={index} className="flex justify-between ">
             <span>
               {item.productId.name} (x{item.quantity})
@@ -63,9 +63,9 @@ function OrderSummary({ cartItems, shippingInfo, onSubmit }) {
         </p>
         <p className="space-y-2">
           <p>₹{summary.itemsPrice}</p>
-          <p>₹{summary.taxPrice}</p>
+          <p>₹{summary?.taxPrice}</p>
           <p>₹{summary.shippingPrice}</p>
-          <p>₹{summary.totalPrice}</p>
+          <p>₹{summary?.totalPrice}</p>
         </p>
       </div>
       <Button

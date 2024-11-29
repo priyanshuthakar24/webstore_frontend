@@ -105,13 +105,13 @@ const ProductList = () => {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.9 }}
               transition={{ duration: 0.3 }}
-              className="grid  grid-cols-2 mx-2 lg:mx-20 gap-4  lg:grid-cols-4 my-10 place-items-center  "
+              className="grid  grid-cols-2 mx-2 lg:mx-20 gap-4  lg:grid-cols-5 my-8 place-items-center "
             >
               {filteredAndSortedProducts.length > 0 ? (
                 filteredAndSortedProducts.map((item) => (
                   <Link to={`/singleproduct/${item._id}`} key={item.name}>
-                    <div className="w-[175px] lg:w-[264.03px] h-[52vh]  rounded  hover:shadow  ">
-                      <div className=" px-0 w-[175px] lg:w-[264.03px] h-[30vh] bg-[#c4c4c4] relative rounded-lg">
+                    <div className="w-[175px] lg:w-[16vw] h-[52vh] rounded">
+                      <div className=" px-0 w-[175px] lg:w-[14vw] h-[30vh] bg-[#c4c4c4] relative rounded-lg">
                         <img
                           src={item.mainImage.url}
                           alt="nopic"

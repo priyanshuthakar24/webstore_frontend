@@ -21,15 +21,12 @@ const ReviewForm = () => {
 
   // ! fech the user review if the user have already filled it
   const fetchreviews = async () => {
-    const res = await axios.get(
-      `${process.env.REACT_APP_API}/api/review/userreview`,
-      {
-        withCredentials: true,
-        params: {
-          productId: id,
-        },
-      }
-    );
+    const res = await axios.get(`${process.env.REACT_APP_API}/api/review`, {
+      withCredentials: true,
+      params: {
+        productId: id,
+      },
+    });
     if (res) {
       setProduct(res.data);
     }
