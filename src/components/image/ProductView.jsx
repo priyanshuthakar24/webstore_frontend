@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const ProductView = ({ images, style }) => {
+const ProductView = ({ images }) => {
   const [currentImage, setCurrentImage] = useState(0);
 
   return (

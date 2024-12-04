@@ -61,7 +61,7 @@ const SingleProductView = ({ props }) => {
 
   // decremnet the product count
   const handleDecrement = () => {
-    if (quantity === 0) return;
+    if (quantity === 1) return;
     setQuantity((prevCount) => prevCount - 1);
   };
 
@@ -180,7 +180,7 @@ const SingleProductView = ({ props }) => {
       <div className="flex gap-20  flex-col  lg:flex-row ">
         <ProductView images={productImages} />
         <div className="flex flex-col gap-5">
-          <h1 className="text-2xl font-bold">{name}</h1>
+          <h1 className="text-2xl font-semibold capitalize">{name}</h1>
           <p className="text-gray-600 "> {description}</p>
           <p>{category}</p>
           <span>
