@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useCallback, useContext, useState } from "react";
 import axios from "axios";
 
 import { message } from "antd";
@@ -14,7 +14,7 @@ export const CartcontextProvider = ({ children }) => {
     const [isLoading, setIsLoading] = useState(false)
 
     // ! Fetch the cart detail 
-    const fetchCart = async () => {
+    const fetchCart = useCallback(async () => {
         try {
             const response = await axios.get(
                 `${process.env.REACT_APP_API}/api/cart`,
@@ -28,7 +28,7 @@ export const CartcontextProvider = ({ children }) => {
         } catch (error) {
             console.error("Error fetching cart:", error);
         }
-    };
+    }, [])
 
     // ! Add the product to cart 
     const addToCart = async (_id, quantity, size) => {

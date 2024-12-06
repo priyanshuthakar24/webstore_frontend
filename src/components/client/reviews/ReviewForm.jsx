@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import React, { useCallback, useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { motion } from "framer-motion";
 
@@ -10,6 +10,8 @@ import { Rate, Button, Input, Form, notification, Card } from "antd";
 const { TextArea } = Input;
 
 const ReviewForm = () => {
+  const nav = useNavigate();
+
   const [form] = Form.useForm();
 
   const { id } = useParams();
@@ -20,7 +22,7 @@ const ReviewForm = () => {
   const [product, setProduct] = useState([]);
 
   // ! fech the user review if the user have already filled it
-  const fetchreviews = async () => {
+  const fetchreviews = useCallback(async () => {
     const res = await axios.get(`${process.env.REACT_APP_API}/api/review`, {
       withCredentials: true,
       params: {
@@ -30,7 +32,7 @@ const ReviewForm = () => {
     if (res) {
       setProduct(res.data);
     }
-  };
+  }, [id]);
 
   // ! submit the review and show the notification
   const handleSubmit = async (values) => {
@@ -51,7 +53,7 @@ const ReviewForm = () => {
               ? "Your review has been updated!"
               : "Your review has been added!",
         });
-
+        nav(`/singleproduct/${id}`);
         form.resetFields();
       }
     } catch (error) {
@@ -67,7 +69,7 @@ const ReviewForm = () => {
   // ?will fetch the review
   useEffect(() => {
     fetchreviews();
-  }, []);
+  }, [fetchreviews]);
 
   // !Prefill the form with user's existing review
   useEffect(() => {

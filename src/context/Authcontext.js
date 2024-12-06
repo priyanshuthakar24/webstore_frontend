@@ -34,7 +34,7 @@ export const Authprovider = ({ children }) => {
 
     useEffect(() => {
         validateToken();
-    }, [setIsAuthenticated]);
+    }, []);
 
     //! when user is hit the login api and user is valid than it will set the state 
     const login = (newData) => {

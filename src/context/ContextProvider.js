@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useCallback, useContext, useState } from "react";
 import axios from "axios";
 
 import { message } from "antd";
@@ -42,7 +42,7 @@ export const ContextProvider = ({ children }) => {
         setThemeSettings(false)
     };
     // ! Fetch the product detail
-    const fetchproductdetail = async (id) => {
+    const fetchproductdetail = useCallback(async (id) => {
         try {
             const res = await axios.get(
                 `${process.env.REACT_APP_API}/api/user/productdetail`,
@@ -56,7 +56,7 @@ export const ContextProvider = ({ children }) => {
         } catch (error) {
             message.error(error.response.data.message);
         }
-    };
+    }, [])
 
     const addNotification = (notification) => {
         setNotifications((prev) => [...prev, notification]);

@@ -11,7 +11,7 @@ const CartPage = () => {
 
   useEffect(() => {
     fetchCart();
-  }, []);
+  }, [fetchCart]);
 
   if (!cart) return <p>Loading cart...</p>;
 

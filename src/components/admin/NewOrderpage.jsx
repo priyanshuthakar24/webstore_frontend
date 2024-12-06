@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -12,7 +12,7 @@ const NewOrderpage = () => {
   const [order, setOrder] = useState([]);
 
   // //! fetch neworder from the backend
-  const fetchNewOrder = async () => {
+  const fetchNewOrder = useCallback(async () => {
     try {
       const res = await axios.get(
         `${process.env.REACT_APP_API}/api/admin/notification/neworder`,
@@ -24,7 +24,7 @@ const NewOrderpage = () => {
     } catch (error) {
       message.error(error.response.data.message);
     }
-  };
+  }, []);
 
   // //! remove the new order form the backend
   const handleRemove = async (id) => {
@@ -45,7 +45,7 @@ const NewOrderpage = () => {
 
   useEffect(() => {
     fetchNewOrder();
-  }, []);
+  }, [fetchNewOrder]);
 
   // //? onclike of the order message will nevigate to order detail page
   const handleRowClick = async (value) => {
@@ -59,8 +59,8 @@ const NewOrderpage = () => {
       </h1>
       <div className="space-y-2">
         {order.length > 0 ? (
-          order.map((item) => (
-            <Card>
+          order.map((item, index) => (
+            <Card key={index}>
               <div className="flex-center justify-between">
                 <div>
                   <p
@@ -69,9 +69,9 @@ const NewOrderpage = () => {
                   >
                     {item.message}
                   </p>
-                  <p>
+                  <div>
                     <FormateDate timestamp={item.date} />
-                  </p>
+                  </div>
                 </div>
                 <Button danger onClick={() => handleRemove(item._id)}>
                   Remove

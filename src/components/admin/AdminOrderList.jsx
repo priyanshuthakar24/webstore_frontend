@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import axios from "axios";
 import {
   ColumnDirective,
@@ -30,7 +30,7 @@ function AdminOrderList() {
   const [loading, setisLoading] = useState(false);
 
   // //! fetch all the order
-  const fetchOrders = async (page = 1, search = "") => {
+  const fetchOrders = useCallback(async (page = 1) => {
     setisLoading(true);
     try {
       const res = await axios.get(
@@ -51,7 +51,7 @@ function AdminOrderList() {
     } catch (error) {
       message.error("Error fetching orders");
     }
-  };
+  }, []);
 
   // //! Fetch orders function (search functionality)
   const fetchsearchOrders = async (page = 1, search = "") => {
@@ -118,7 +118,7 @@ function AdminOrderList() {
 
     // Clean up on component unmount
     return () => socket.off("orderUpdate");
-  }, []);
+  }, [fetchOrders]);
 
   return (
     <>

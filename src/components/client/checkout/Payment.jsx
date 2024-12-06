@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
@@ -10,15 +10,15 @@ function Payment({ orderSummary, shippingInfo, cartItems }) {
   // Transform cart items to order items format
   const [orderTotalPrice, setorderTotalPrice] = useState([]);
 
-  let pricecal = 0;
+  const pricecal = useRef(0);
   // ?calculate the toalalPrice
-  const totalpricecal = () => {
-    pricecal =
+  const totalpricecal = useCallback(() => {
+    pricecal.current =
       cartItems.totalCost * 0.1 +
       orderSummary.shippingPrice +
       cartItems.totalCost;
-    return setorderTotalPrice(pricecal);
-  };
+    return setorderTotalPrice(pricecal.current);
+  }, [cartItems.totalCost, orderSummary.shippingPrice, pricecal]);
   // map the cartItems
   const orderItems = cartItems.items.map((item) => ({
     product: item.productId._id, // Use the product ID only
@@ -95,7 +95,7 @@ function Payment({ orderSummary, shippingInfo, cartItems }) {
 
   useEffect(() => {
     totalpricecal();
-  }, [cartItems]);
+  }, [cartItems, totalpricecal]);
 
   return (
     <div className="mt-4 space-y-4">

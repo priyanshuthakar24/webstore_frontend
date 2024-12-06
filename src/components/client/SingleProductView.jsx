@@ -185,8 +185,8 @@ const SingleProductView = ({ props }) => {
           <p>{category}</p>
           <span>
             {bulletPoints &&
-              bulletPoints.map((item) => (
-                <span className=" flex lg:items-center" key={item}>
+              bulletPoints.map((item, index) => (
+                <span className=" flex lg:items-center" key={index}>
                   <Dot size={25} />
                   {item}
                 </span>
@@ -327,16 +327,16 @@ const SingleProductView = ({ props }) => {
         <Divider />
         <div>
           {reviews?.length > 0 ? (
-            reviews?.map((item) => (
-              <div className="mb-3">
+            reviews?.map((item, index) => (
+              <div className="mb-3" key={item._id || index}>
                 <div className="flex-center gap-5 mb-2">
                   <Avatar shape="square" size={45}>
                     {item?.name[0].toUpperCase()}
                   </Avatar>
-                  <p>
+                  <div>
                     <p className="font-bold capitalize">{item.name}</p>
                     <span>{moment(item.createdAt).format("DD MMM yyyy")}</span>
-                  </p>
+                  </div>
                 </div>
                 <div>
                   <Rate

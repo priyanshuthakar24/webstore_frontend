@@ -1,28 +1,27 @@
 import React from "react";
 
-import { Input, Button, Form, Select, InputNumber } from "antd";
+import { Input, Button, Form, InputNumber } from "antd";
 
 function AddressForm({ onSubmit, shippingInfo }) {
   const [form] = Form.useForm();
 
-  const Option = Select;
+  // const Option = Select;
 
   const handleSubmit = (value) => {
     onSubmit(value);
   };
 
-  const prefixSelector = (
-    <Form.Item name="prefix" noStyle>
-      <Select
-        style={{
-          width: 70,
-        }}
-        defaultValue={"+91"}
-      >
-        <Option value="86">+91</Option>
-      </Select>
-    </Form.Item>
-  );
+  // const prefixSelector = (
+  //   <Select
+  //     style={{
+  //       width: 70,
+  //     }}
+  //     defaultValue="+91"
+  //     name="prefix"
+  //   >
+  //     <Option value="91">+91</Option>
+  //   </Select>
+  // );
 
   return (
     <Form
@@ -41,7 +40,7 @@ function AddressForm({ onSubmit, shippingInfo }) {
         ]}
       >
         <InputNumber
-          addonBefore={prefixSelector}
+          addonBefore="+91"
           maxLength={10}
           minLength={10}
           style={{

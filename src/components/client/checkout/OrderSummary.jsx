@@ -25,7 +25,7 @@ function OrderSummary({ cartItems, shippingInfo, onSubmit }) {
       shippingPrice: summary.shippingPrice,
       totalPrice,
     });
-  }, [cartItems]);
+  }, [cartItems, summary.shippingPrice]);
 
   return (
     <div className="text-base">
@@ -55,18 +55,18 @@ function OrderSummary({ cartItems, shippingInfo, onSubmit }) {
       </div>
       <Divider />
       <div className="my-4 flex-center-between ">
-        <p className="space-y-2">
+        <div className="space-y-2">
           <p>Items Price</p>
           <p>Tax Price</p>
           <p>Shipping Price</p>
           <p>Total Price</p>
-        </p>
-        <p className="space-y-2">
+        </div>
+        <div className="space-y-2">
           <p>₹{summary.itemsPrice}</p>
           <p>₹{summary?.taxPrice}</p>
           <p>₹{summary.shippingPrice}</p>
           <p>₹{summary?.totalPrice}</p>
-        </p>
+        </div>
       </div>
       <Button
         type="primary"

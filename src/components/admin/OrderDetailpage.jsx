@@ -116,8 +116,8 @@ const OrderDetailpage = () => {
                 </tr>
               </thead>
               <tbody className="bg-white/90">
-                {orderData.orderItems?.map((item) => (
-                  <tr>
+                {orderData.orderItems?.map((item, index) => (
+                  <tr key={index}>
                     <td className="pl-3 py-5 w-1/3">
                       <div className="flex gap-5 h-[10vh]">
                         <img
@@ -125,17 +125,19 @@ const OrderDetailpage = () => {
                           alt=""
                           className="object-contain h-full rounded shadow"
                         />
-                        <p className="lg:text-start text-xs lg:text-lg">
-                          <p className="text-black font-sans">
+                        <div className="lg:text-start text-xs lg:text-lg">
+                          <p className="text-black font-sans text-xs lg:text-lg">
                             {item.product.name}
                           </p>
                           <span>Size:{item.size}</span>
-                        </p>
+                        </div>
                       </div>
                     </td>
-                    <td className="pl-5">₹ {item.price}</td>
+                    <td className="pl-10 lg:pl-5 text-xs lg:text-lg">₹{item.price}</td>
                     <td className="pl-5">X {item.quantity}</td>
-                    <td>₹ {item.price * item.quantity}.00</td>
+                    <td className="text-sm lg:text-xl">
+                      ₹ {item.price * item.quantity}.00
+                    </td>
                   </tr>
                 ))}
                 <tr>
@@ -160,7 +162,7 @@ const OrderDetailpage = () => {
                     <p>₹ {orderData.shippingPrice}.00</p>
                     <p>₹ {orderData.taxPrice}.00</p>
                     <Divider />
-                    <p className="font-bold">₹ {orderData.totalPrice}.00</p>
+                    <p className="font-bold">₹{orderData.totalPrice}.00</p>
                   </td>
                 </tr>
                 <tr>

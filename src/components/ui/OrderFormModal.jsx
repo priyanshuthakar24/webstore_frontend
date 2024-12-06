@@ -35,7 +35,7 @@ const OrderFormModal = ({ onOrderUpdate, logisticdata }) => {
 
       // Assuming the backend returns the updated order data
       if (response.status === 200) {
-        message.success("Order successfully created!");
+        message.success("Logistics Detail updated!");
         onOrderUpdate(response.data.data); // Update UI with new data
         setIsModalVisible(false); // Close the modal
         form.resetFields(); // Clear the form fields

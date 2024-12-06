@@ -17,7 +17,7 @@ const SingleProduct = () => {
     setIsLoadinng(true);
     fetchproductdetail(id);
     setIsLoadinng(false);
-  }, []);
+  }, [id, fetchproductdetail]);
 
   return (
     <>

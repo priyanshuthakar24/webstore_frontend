@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from 'react'
+import { createContext, useCallback, useContext, useEffect, useState } from 'react'
 import axios from "axios";
 
 import { message } from 'antd';
@@ -42,7 +42,7 @@ export const WishlistcontextProvider = ({ children }) => {
     };
 
     // ! fetch the wishlist data according to login user 
-    const fetchWishlist = async () => {
+    const fetchWishlist = useCallback(async () => {
         try {
             const response = await axios.get(`${process.env.REACT_APP_API}/api/wishlist/all`, { withCredentials: true });
             if (response) {
@@ -52,11 +52,11 @@ export const WishlistcontextProvider = ({ children }) => {
         } catch (error) {
             console.error('Error fetching wishlist:', error);
         }
-    };
+    }, [])
 
     useEffect(() => {
         fetchWishlist()
-    }, [setWishlist])
+    }, [fetchWishlist])
 
     return (<Wishlistcontext.Provider value={{ addToWishlist, wishlist, fetchWishlist, removeFromWishlist, wishlistarray, setWishlistarray }} >{children}</Wishlistcontext.Provider>)
 }

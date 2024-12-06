@@ -24,7 +24,7 @@ const Ordermodel = ({ orderdata }) => {
         title="Order Invoice"
         open={isModalVisible}
         onCancel={() => setIsModalVisible(false)}
-        footer=""
+        footer={false}
       >
         <div>
           <Result
@@ -32,17 +32,17 @@ const Ordermodel = ({ orderdata }) => {
             title=" Purchased Successfully!"
             subTitle={orderdata.paymentInfo.id}
           />
-          {orderdata.orderItems?.map((item) => (
-            <>
-              <p className="grid grid-cols-3 gap-2">
+          {orderdata.orderItems?.map((item, index) => (
+            <div key={index}>
+              <div className="grid grid-cols-3 gap-2">
                 <p>{item.product.name}</p>
                 <p className="text-end">X {item.quantity}</p>
                 <p className="text-end">₹ {item.price * item.quantity}.00</p>
-              </p>
+              </div>
               <Divider className="m-4" />
-            </>
+            </div>
           ))}
-          <p className="grid  grid-cols-2 gap-2">
+          <div className="grid  grid-cols-2 gap-2">
             <Card>
               <span>ItemPrice : </span>
               <span>₹{orderdata.itemsPrice}.00</span>
@@ -59,7 +59,7 @@ const Ordermodel = ({ orderdata }) => {
               <span className="font-sans font-bold">TotalPrice : </span>
               <span className="font-bold">₹{orderdata.totalPrice}.00</span>
             </Card>
-          </p>
+          </div>
         </div>
       </Modal>
     </>

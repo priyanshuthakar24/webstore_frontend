@@ -49,16 +49,17 @@ const InstantCheckout = ({
   };
 
   const prefixSelector = (
-    <Form.Item name="prefix" noStyle>
-      <Select
-        style={{
-          width: 70,
-        }}
-        defaultValue={"+91"}
-      >
-        <Option value="86">+91</Option>
-      </Select>
-    </Form.Item>
+    // <Form.Item name="prefix" noStyle>
+    <Select
+      style={{
+        width: 70,
+      }}
+      defaultValue="+91"
+      name="prefix"
+    >
+      <Option value="91">+91</Option>
+    </Select>
+    // </Form.Item>
   );
 
   const steps = [
